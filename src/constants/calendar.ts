@@ -20,8 +20,8 @@ export const MIN_BLOCK_DURATION = 15;
 /** Snap interval for time blocks in minutes */
 export const TIME_SNAP_INTERVAL = 15;
 
-/** Default goal in minutes (8 hours) */
-export const DEFAULT_GOAL_MINUTES = 480;
+/** Default goal in minutes (8 hours 30 minutes) */
+export const DEFAULT_GOAL_MINUTES = 510;
 
 /** Update interval for current time indicator in milliseconds */
 export const TIME_UPDATE_INTERVAL = 60000; // 1 minute
