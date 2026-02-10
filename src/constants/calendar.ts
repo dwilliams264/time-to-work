@@ -3,10 +3,10 @@
  */
 
 /** Starting hour for the calendar display (24-hour format) */
-export const HOURS_START = 6;
+export const HOURS_START = 5;
 
 /** Ending hour for the calendar display (24-hour format) */
-export const HOURS_END = 22;
+export const HOURS_END = 20;
 
 /** Total hours displayed in the calendar */
 export const TOTAL_HOURS = HOURS_END - HOURS_START;
