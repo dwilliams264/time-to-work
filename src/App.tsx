@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import './App.css';
+import { SpeedInsights } from '@vercel/speed-insights/react';
+
 import DayCalendar from './components/DayCalendar';
 import GoalSetter from './components/GoalSetter';
 import TimeStats from './components/TimeStats';
@@ -42,6 +44,7 @@ function App() {
 
   return (
     <div className="app">
+      <SpeedInsights />
       <header className="app-header">
         <h1>Time to Work</h1>
         <p className="current-date">{currentDate}</p>
