@@ -1,0 +1,261 @@
+.calendar-container {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar-header {
+    margin-bottom: 24px;
+}
+
+.calendar-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.calendar-header h2 {
+    margin: 0;
+    color: #1a1a2e;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.clear-all-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 2px solid #fecaca;
+    background: white;
+    color: #dc2626;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.clear-all-button:hover:not(:disabled) {
+    border-color: #dc2626;
+    background: #fef2f2;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.15);
+    transform: translateY(-1px);
+}
+
+.clear-all-button:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.clear-all-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    color: #9ca3af;
+    border-color: #e5e7eb;
+    box-shadow: none;
+}
+
+.c .calendar-hint {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.calendar {
+    position: relative;
+    flex: 1;
+    background: #fafafa;
+    border-radius: 12px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    cursor: crosshair;
+    user-select: none;
+    touch-action: none;
+}
+
+.hour-row {
+    position: relative;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.hour-label {
+    position: absolute;
+    left: 12px;
+    top: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #9ca3af;
+    background: #fafafa;
+    padding: 2px 6px;
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.hour-line {
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background: #e5e7eb;
+    top: 0;
+}
+
+.time-block {
+    position: absolute;
+    left: 80px;
+    right: 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    cursor: move;
+    display: flex;
+    flex-direction: column;
+    min-height: 20px;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    transition: box-shadow 0.2s ease;
+    z-index: 10;
+}
+
+.time-block:hover {
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.time-block.preview {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.4) 0%, rgba(118, 75, 162, 0.4) 100%);
+    border: 2px dashed #667eea;
+    pointer-events: none;
+    cursor: default;
+}
+
+.time-block-content {
+    flex: 1;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    position: relative;
+}
+
+.time-block-time {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.time-block-duration {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.delete-button {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    padding: 0;
+}
+
+.delete-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.resize-handle {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 8px;
+    cursor: ns-resize;
+    z-index: 20;
+}
+
+.resize-top {
+    top: -4px;
+}
+
+.resize-bottom {
+    bottom: -4px;
+}
+
+.resize-handle:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.current-time-line {
+    position: absolute;
+    left: 80px;
+    right: 12px;
+    height: 2px;
+    background: rgba(239, 68, 68, 0.4);
+    pointer-events: none;
+    z-index: 15;
+}
+
+.current-time-indicator {
+    position: absolute;
+    left: -6px;
+    top: -4px;
+    width: 10px;
+    height: 10px;
+    background: rgba(239, 68, 68, 0.6);
+    border-radius: 50%;
+}
+
+/* Mobile improvements */
+@media (max-width: 768px) {
+    .calendar {
+        cursor: default;
+    }
+
+    .resize-handle {
+        height: 12px;
+    }
+
+    .resize-top {
+        top: -6px;
+    }
+
+    .resize-bottom {
+        bottom: -6px;
+    }
+
+    .delete-button {
+        width: 28px;
+        height: 28px;
+        font-size: 20px;
+    }
+
+    .hour-label {
+        font-size: 11px;
+    }
+
+    .time-block-time {
+        font-size: 12px;
+    }
+
+    .time-block-duration {
+        font-size: 11px;
+    }
+
+    .calendar-hint {
+        font-size: 13px;
+    }
+
+    .current-time-line {
+        left: 60px;
+    }
+}
