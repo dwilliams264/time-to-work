@@ -328,6 +328,7 @@ function DayCalendar({
               }}
             />
             <div className="time-block-content">
+              <span className="time-block-title">💻 Work</span>
               <span className="time-block-time">
                 {formatTime(block.startTime)} - {formatTime(block.startTime + block.duration)}
               </span>
@@ -374,8 +375,7 @@ function DayCalendar({
             }}
           >
             <div className="lunch-content">
-              <span className="lunch-emoji">🍽️</span>
-              <span className="lunch-label">Lunch</span>
+              <span className="lunch-title">🍽️ Lunch</span>
               <span className="lunch-time">{formatTime(lunchStartTime)}</span>
             </div>
           </div>
