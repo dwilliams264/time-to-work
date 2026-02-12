@@ -12,12 +12,14 @@ interface TimeStatsProps {
  * Component displaying time worked statistics and progress towards daily goal
  */
 function TimeStats({ totalMinutes, goalMinutes, lunchEnabled, lunchMinutes }: TimeStatsProps) {
-  // When lunch is enabled, the total goal includes lunch time
-  const effectiveGoal = lunchEnabled ? goalMinutes + lunchMinutes : goalMinutes;
-  const remainingMinutes = effectiveGoal - totalMinutes;
-  const progressPercentage = Math.min(100, (totalMinutes / effectiveGoal) * 100);
-  const isComplete = totalMinutes >= effectiveGoal;
-  const isOverGoal = totalMinutes > effectiveGoal;
+  // Calculate remaining work time based on work goal (not including lunch)
+  const remainingMinutes = goalMinutes - totalMinutes;
+  const progressPercentage = Math.min(100, (totalMinutes / goalMinutes) * 100);
+  const isComplete = totalMinutes >= goalMinutes;
+  const isOverGoal = totalMinutes > goalMinutes;
+  
+  // Total time at work (for display purposes when lunch is enabled)
+  const totalTimeAtWork = lunchEnabled ? goalMinutes + lunchMinutes : goalMinutes;
 
   return (
     <div className="time-stats">
@@ -38,7 +40,7 @@ function TimeStats({ totalMinutes, goalMinutes, lunchEnabled, lunchMinutes }: Ti
           </div>
           <div className="breakdown-item total">
             <span className="breakdown-label">Total:</span>
-            <span className="breakdown-value">{formatDuration(effectiveGoal)}</span>
+            <span className="breakdown-value">{formatDuration(totalTimeAtWork)}</span>
           </div>
         </div>
       )}
