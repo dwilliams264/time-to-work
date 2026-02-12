@@ -1,15 +1,15 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
-import type { TimeBlock, ResizeState } from '../types';
+import { useRef } from 'react';
+import type { TimeBlock } from '../types';
 import {
   HOURS_START,
   TOTAL_HOURS,
   HOUR_HEIGHT,
   MIN_BLOCK_DURATION,
   TIME_UPDATE_INTERVAL,
-  TIME_SNAP_INTERVAL,
 } from '../constants/calendar';
-import { timeToY, yToTime, getCurrentTimeMinutes } from '../utils/timeCalculations';
+import { timeToY, getCurrentTimeMinutes } from '../utils/timeCalculations';
 import { formatTime, formatDuration } from '../utils/timeFormatters';
+import { useCalendarInteractions, useCurrentTime } from '../hooks/useCalendarInteractions';
 import './DayCalendar.css';
 
 interface DayCalendarProps {
@@ -42,213 +42,29 @@ function DayCalendar({
   onLunchTimeChange,
   snapBlockToValid
 }: DayCalendarProps) {
-  const [dragStart, setDragStart] = useState<number | null>(null);
-  const [dragEnd, setDragEnd] = useState<number | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [movingBlock, setMovingBlock] = useState<string | null>(null);
-  const [resizingBlock, setResizingBlock] = useState<ResizeState | null>(null);
-  const [movingLunch, setMovingLunch] = useState(false);
-  const [currentTime, setCurrentTime] = useState(new Date());
   const calendarRef = useRef<HTMLDivElement>(null);
 
-  /**
-   * Handles mouse down event to start creating a new time block
-   */
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!calendarRef.current) return;
+  // Use custom hooks for all interactions
+  const {
+    handlePointerDown,
+    handlePointerMove,
+    handlePointerUp,
+    previewBlock,
+    startMovingBlock,
+    startResizingBlock,
+    startMovingLunch,
+  } = useCalendarInteractions(
+    calendarRef,
+    timeBlocks,
+    lunchDuration,
+    onAddBlock,
+    onUpdateBlock,
+    onLunchTimeChange,
+    snapBlockToValid
+  );
 
-    const target = e.target as HTMLElement;
-    const isTimeBlock = target.closest('.time-block');
-    const isLunchIndicator = target.closest('.lunch-indicator');
-    if (isTimeBlock || isLunchIndicator) return;
-
-    const rect = calendarRef.current.getBoundingClientRect();
-    const y = e.clientY - rect.top - 12;
-    const minutes = yToTime(y);
-
-    setDragStart(minutes);
-    setDragEnd(minutes);
-    setIsDragging(true);
-  };
-
-  /**
-   * Handles mouse move for dragging, moving, or resizing
-   */
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!calendarRef.current) return;
-
-    const rect = calendarRef.current.getBoundingClientRect();
-    const y = e.clientY - rect.top - 12;
-    const minutes = yToTime(y);
-
-    if (isDragging && dragStart !== null) {
-      setDragEnd(minutes);
-    } else if (movingLunch) {
-      const rawStartTime = minutes - lunchDuration / 2;
-      const snappedStartTime = Math.round(rawStartTime / TIME_SNAP_INTERVAL) * TIME_SNAP_INTERVAL;
-      const newStartTime = Math.max(
-        0,
-        Math.min(snappedStartTime, TOTAL_HOURS * 60 - lunchDuration)
-      );
-      onLunchTimeChange(newStartTime);
-    } else if (movingBlock) {
-      const block = timeBlocks.find((b) => b.id === movingBlock);
-      if (block) {
-        const rawStartTime = minutes - block.duration / 2;
-        const snappedStartTime = Math.round(rawStartTime / TIME_SNAP_INTERVAL) * TIME_SNAP_INTERVAL;
-        const newStartTime = Math.max(
-          0,
-          Math.min(snappedStartTime, TOTAL_HOURS * 60 - block.duration)
-        );
-        
-        // Snap to valid position
-        const snapped = snapBlockToValid(newStartTime, block.duration, block.id);
-        onUpdateBlock(block.id, snapped.startTime, snapped.duration);
-      }
-    } else if (resizingBlock) {
-      const block = timeBlocks.find((b) => b.id === resizingBlock.id);
-      if (block) {
-        if (resizingBlock.direction === 'bottom') {
-          const newDuration = Math.max(MIN_BLOCK_DURATION, minutes - block.startTime);
-          
-          // Snap to valid position
-          const snapped = snapBlockToValid(block.startTime, newDuration, block.id);
-          onUpdateBlock(block.id, snapped.startTime, snapped.duration);
-        } else {
-          const newStartTime = Math.max(0, minutes);
-          const newDuration = Math.max(
-            MIN_BLOCK_DURATION,
-            block.startTime + block.duration - newStartTime
-          );
-          
-          // Snap to valid position
-          const snapped = snapBlockToValid(newStartTime, newDuration, block.id);
-          onUpdateBlock(block.id, snapped.startTime, snapped.duration);
-        }
-      }
-    }
-  };
-
-  /**
-   * Handles mouse up to finish creating a time block
-   */
-  const handleMouseUp = useCallback(() => {
-    if (isDragging && dragStart !== null && dragEnd !== null) {
-      const startTime = Math.min(dragStart, dragEnd);
-      const endTime = Math.max(dragStart, dragEnd);
-      const duration = endTime - startTime;
-
-      if (duration >= MIN_BLOCK_DURATION) {
-        const snapped = snapBlockToValid(startTime, duration);
-        onAddBlock(snapped.startTime, snapped.duration);
-      }
-    }
-
-    setIsDragging(false);
-    setDragStart(null);
-    setDragEnd(null);
-    setMovingBlock(null);
-    setResizingBlock(null);
-    setMovingLunch(false);
-  }, [isDragging, dragStart, dragEnd, onAddBlock, snapBlockToValid]);
-
-  /**
-   * Touch event handlers for mobile support
-   */
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (!calendarRef.current) return;
-
-    const target = e.target as HTMLElement;
-    const isTimeBlock = target.closest('.time-block');
-    const isLunchIndicator = target.closest('.lunch-indicator');
-    if (isTimeBlock || isLunchIndicator) return;
-
-    const rect = calendarRef.current.getBoundingClientRect();
-    const touch = e.touches[0];
-    const y = touch.clientY - rect.top - 12;
-    const minutes = yToTime(y);
-
-    setDragStart(minutes);
-    setDragEnd(minutes);
-    setIsDragging(true);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (!calendarRef.current) return;
-
-    e.preventDefault();
-
-    const rect = calendarRef.current.getBoundingClientRect();
-    const touch = e.touches[0];
-    const y = touch.clientY - rect.top - 12;
-    const minutes = yToTime(y);
-
-    if (isDragging && dragStart !== null) {
-      setDragEnd(minutes);
-    } else if (movingLunch) {
-      const rawStartTime = minutes - lunchDuration / 2;
-      const snappedStartTime = Math.round(rawStartTime / TIME_SNAP_INTERVAL) * TIME_SNAP_INTERVAL;
-      const newStartTime = Math.max(
-        0,
-        Math.min(snappedStartTime, TOTAL_HOURS * 60 - lunchDuration)
-      );
-      onLunchTimeChange(newStartTime);
-    } else if (movingBlock) {
-      const block = timeBlocks.find((b) => b.id === movingBlock);
-      if (block) {
-        const rawStartTime = minutes - block.duration / 2;
-        const snappedStartTime = Math.round(rawStartTime / TIME_SNAP_INTERVAL) * TIME_SNAP_INTERVAL;
-        const newStartTime = Math.max(
-          0,
-          Math.min(snappedStartTime, TOTAL_HOURS * 60 - block.duration)
-        );
-        
-        // Snap to valid position
-        const snapped = snapBlockToValid(newStartTime, block.duration, block.id);
-        onUpdateBlock(block.id, snapped.startTime, snapped.duration);
-      }
-    } else if (resizingBlock) {
-      const block = timeBlocks.find((b) => b.id === resizingBlock.id);
-      if (block) {
-        if (resizingBlock.direction === 'bottom') {
-          const newDuration = Math.max(MIN_BLOCK_DURATION, minutes - block.startTime);
-          
-          // Snap to valid position
-          const snapped = snapBlockToValid(block.startTime, newDuration, block.id);
-          onUpdateBlock(block.id, snapped.startTime, snapped.duration);
-        } else {
-          const newStartTime = Math.max(0, minutes);
-          const newDuration = Math.max(
-            MIN_BLOCK_DURATION,
-            block.startTime + block.duration - newStartTime
-          );
-          
-          // Snap to valid position
-          const snapped = snapBlockToValid(newStartTime, newDuration, block.id);
-          onUpdateBlock(block.id, snapped.startTime, snapped.duration);
-        }
-      }
-    }
-  };
-
-  const handleTouchEnd = () => {
-    handleMouseUp();
-  };
-
-  // Global mouse up handler
-  useEffect(() => {
-    window.addEventListener('mouseup', handleMouseUp);
-    return () => window.removeEventListener('mouseup', handleMouseUp);
-  }, [handleMouseUp]);
-
-  // Update current time periodically
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, TIME_UPDATE_INTERVAL);
-
-    return () => clearInterval(timer);
-  }, []);
+  // Track current time
+  const currentTime = useCurrentTime(TIME_UPDATE_INTERVAL);
 
   const currentTimeMinutes = getCurrentTimeMinutes(currentTime, HOURS_START);
   const showCurrentTimeLine =
@@ -256,13 +72,24 @@ function DayCalendar({
 
   const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => HOURS_START + i);
 
-  const previewBlock =
-    isDragging && dragStart !== null && dragEnd !== null
-      ? {
-          startTime: Math.min(dragStart, dragEnd),
-          duration: Math.abs(dragEnd - dragStart),
-        }
-      : null;
+  // Unified event handlers for mouse and touch
+  const handlePointerDownEvent = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    if ('touches' in e) {
+      e.preventDefault();
+    }
+    handlePointerDown(e);
+  };
+
+  const handlePointerMoveEvent = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    if ('touches' in e) {
+      e.preventDefault();
+    }
+    handlePointerMove(e);
+  };
+
+  const handlePointerUpEvent = () => {
+    handlePointerUp();
+  };
 
   return (
     <div className="calendar-container">
@@ -283,11 +110,11 @@ function DayCalendar({
       <div
         ref={calendarRef}
         className="calendar"
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
+        onMouseDown={handlePointerDownEvent}
+        onMouseMove={handlePointerMoveEvent}
+        onTouchStart={handlePointerDownEvent}
+        onTouchMove={handlePointerMoveEvent}
+        onTouchEnd={handlePointerUpEvent}
         style={{ height: `${TOTAL_HOURS * HOUR_HEIGHT}px` }}
       >
         {hours.map((hour) => (
@@ -309,22 +136,22 @@ function DayCalendar({
             }}
             onMouseDown={(e) => {
               e.stopPropagation();
-              setMovingBlock(block.id);
+              startMovingBlock(block.id);
             }}
             onTouchStart={(e) => {
               e.stopPropagation();
-              setMovingBlock(block.id);
+              startMovingBlock(block.id);
             }}
           >
             <div
               className="resize-handle resize-top"
               onMouseDown={(e) => {
                 e.stopPropagation();
-                setResizingBlock({ id: block.id, direction: 'top' });
+                startResizingBlock(block.id, 'top');
               }}
               onTouchStart={(e) => {
                 e.stopPropagation();
-                setResizingBlock({ id: block.id, direction: 'top' });
+                startResizingBlock(block.id, 'top');
               }}
             />
             <div className="time-block-content">
@@ -348,11 +175,11 @@ function DayCalendar({
               className="resize-handle resize-bottom"
               onMouseDown={(e) => {
                 e.stopPropagation();
-                setResizingBlock({ id: block.id, direction: 'bottom' });
+                startResizingBlock(block.id, 'bottom');
               }}
               onTouchStart={(e) => {
                 e.stopPropagation();
-                setResizingBlock({ id: block.id, direction: 'bottom' });
+                startResizingBlock(block.id, 'bottom');
               }}
             />
           </div>
@@ -367,11 +194,11 @@ function DayCalendar({
             }}
             onMouseDown={(e) => {
               e.stopPropagation();
-              setMovingLunch(true);
+              startMovingLunch();
             }}
             onTouchStart={(e) => {
               e.stopPropagation();
-              setMovingLunch(true);
+              startMovingLunch();
             }}
           >
             <div className="lunch-content">

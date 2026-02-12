@@ -26,5 +26,21 @@ export const DEFAULT_GOAL_MINUTES = 450;
 /** Default lunch time in minutes from HOURS_START (12:00 PM = 420 minutes from 5 AM) */
 export const DEFAULT_LUNCH_TIME = 420;
 
+/** Default lunch duration in minutes (1 hour) */
+export const DEFAULT_LUNCH_MINUTES = 60;
+
 /** Update interval for current time indicator in milliseconds */
 export const TIME_UPDATE_INTERVAL = 60000; // 1 minute
+
+/** Quick goal presets in minutes */
+export const QUICK_GOALS = {
+    LONG: 510, // 8.5 hours
+    MEDIUM: 450, // 7.5 hours
+    SHORT: 390, // 6.5 hours
+} as const;
+
+/** Maximum hours for goal setting */
+export const MAX_GOAL_HOURS = 24;
+
+/** Maximum hours for lunch break */
+export const MAX_LUNCH_HOURS = 4;

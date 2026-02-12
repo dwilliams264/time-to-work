@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { formatDuration } from '../utils/timeFormatters';
+import { QUICK_GOALS, MAX_GOAL_HOURS, MAX_LUNCH_HOURS } from '../constants/calendar';
 import './GoalSetter.css';
 
 interface GoalSetterProps {
@@ -41,7 +42,7 @@ function GoalSetter({
   }, [lunchMinutes]);
 
   const handleHoursChange = (newHours: number) => {
-    const validHours = Math.max(0, Math.min(24, newHours));
+    const validHours = Math.max(0, Math.min(MAX_GOAL_HOURS, newHours));
     setHours(validHours);
     onGoalChange(validHours * 60 + minutes);
   };
@@ -53,7 +54,7 @@ function GoalSetter({
   };
 
   const handleLunchHoursChange = (newHours: number) => {
-    const validHours = Math.max(0, Math.min(4, newHours));
+    const validHours = Math.max(0, Math.min(MAX_LUNCH_HOURS, newHours));
     setLunchHours(validHours);
     onLunchMinutesChange(validHours * 60 + lunchMins);
   };
@@ -87,7 +88,7 @@ function GoalSetter({
                 id="hours"
                 type="number"
                 min="0"
-                max="24"
+                max={MAX_GOAL_HOURS}
                 value={hours}
                 onChange={(e) => handleHoursChange(parseInt(e.target.value) || 0)}
                 className="time-input"
@@ -109,13 +110,13 @@ function GoalSetter({
             </div>
           </div>
           <div className="quick-goals">
-            <button onClick={() => setQuickGoal(510)} aria-label="Set goal to 8.5 hours">
+            <button onClick={() => setQuickGoal(QUICK_GOALS.LONG)} aria-label="Set goal to 8.5 hours">
               8.5h
             </button>
-            <button onClick={() => setQuickGoal(450)} aria-label="Set goal to 7.5 hours">
+            <button onClick={() => setQuickGoal(QUICK_GOALS.MEDIUM)} aria-label="Set goal to 7.5 hours">
               7.5h
             </button>
-            <button onClick={() => setQuickGoal(390)} aria-label="Set goal to 6.5 hours">
+            <button onClick={() => setQuickGoal(QUICK_GOALS.SHORT)} aria-label="Set goal to 6.5 hours">
               6.5h
             </button>
           </div>
@@ -137,7 +138,7 @@ function GoalSetter({
                   <input
                     type="number"
                     min="0"
-                    max="4"
+                    max={MAX_LUNCH_HOURS}
                     value={lunchHours}
                     onChange={(e) => handleLunchHoursChange(parseInt(e.target.value) || 0)}
                     className="time-input small"
