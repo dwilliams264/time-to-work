@@ -1,90 +1,90 @@
 .app {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 24px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 24px;
 }
 
 .app-header {
-  text-align: center;
-  color: white;
-  margin-bottom: 32px;
+    text-align: center;
+    color: white;
+    margin-bottom: 32px;
 }
 
 .app-header h1 {
-  margin: 0 0 8px 0;
-  font-size: 42px;
-  font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0 0 8px 0;
+    font-size: 42px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .current-date {
-  margin: 0;
-  font-size: 16px;
-  opacity: 0.95;
-  font-weight: 500;
+    margin: 0;
+    font-size: 16px;
+    opacity: 0.95;
+    font-weight: 500;
 }
 
 .app-content {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 24px;
-  align-items: start;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+    align-items: start;
 }
 
 .sidebar {
-  display: flex;
-  flex-direction: column;
-  position: sticky;
-  top: 24px;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 24px;
 }
 
 .main-content {
-  min-height: 80vh;
+    min-height: 80vh;
 }
 
 @media (max-width: 1024px) {
-  .app-content {
-    grid-template-columns: 1fr;
-  }
+    .app-content {
+        grid-template-columns: 1fr;
+    }
 
-  .sidebar {
-    position: static;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
+    .sidebar {
+        position: static;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 @media (max-width: 768px) {
-  .app {
-    padding: 12px;
-    padding-bottom: 80px; /* Space for floating stats bar */
-  }
+    .app {
+        padding: 12px;
+        padding-bottom: 80px; /* Space for floating stats bar */
+    }
 
-  .app-header {
-    margin-bottom: 12px;
-  }
+    .app-header {
+        margin-bottom: 12px;
+    }
 
-  .app-header h1 {
-    font-size: 24px;
-    margin-bottom: 2px;
-  }
+    .app-header h1 {
+        font-size: 24px;
+        margin-bottom: 2px;
+    }
 
-  .current-date {
-    font-size: 13px;
-  }
+    .current-date {
+        font-size: 13px;
+    }
 
-  .app-content {
-    gap: 0px;
-  }
+    .app-content {
+        gap: 0px;
+    }
 
-  .sidebar {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
+    .sidebar {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
 
-  .main-content {
-    min-height: 60vh;
-  }
+    .main-content {
+        min-height: 60vh;
+    }
 }
