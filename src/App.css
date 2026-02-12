@@ -56,16 +56,35 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .app {
-    padding: 16px;
+    padding: 12px;
+    padding-bottom: 80px; /* Space for floating stats bar */
+  }
+
+  .app-header {
+    margin-bottom: 12px;
   }
 
   .app-header h1 {
-    font-size: 32px;
+    font-size: 24px;
+    margin-bottom: 2px;
+  }
+
+  .current-date {
+    font-size: 13px;
+  }
+
+  .app-content {
+    gap: 0px;
   }
 
   .sidebar {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .main-content {
+    min-height: 60vh;
   }
 }

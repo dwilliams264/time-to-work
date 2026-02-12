@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { formatDuration } from '../utils/timeFormatters';
 import './GoalSetter.css';
 
 interface GoalSetterProps {
@@ -26,6 +27,7 @@ function GoalSetter({
   const [minutes, setMinutes] = useState(goalMinutes % 60);
   const [lunchHours, setLunchHours] = useState(Math.floor(lunchMinutes / 60));
   const [lunchMins, setLunchMins] = useState(lunchMinutes % 60);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // Sync local state with prop changes
   useEffect(() => {
@@ -70,85 +72,95 @@ function GoalSetter({
 
   return (
     <div className="goal-setter">
-      <h3>Daily Goal</h3>
-      <div className="goal-inputs">
-        <div className="input-group">
-          <input
-            id="hours"
-            type="number"
-            min="0"
-            max="24"
-            value={hours}
-            onChange={(e) => handleHoursChange(parseInt(e.target.value) || 0)}
-            className="time-input"
-          />
-          <label htmlFor="hours">Hours</label>
-        </div>
-        <span className="input-separator">:</span>
-        <div className="input-group">
-          <input
-            id="minutes"  
-            type="number"
-            min="0"
-            max="59"
-            value={minutes}
-            onChange={(e) => handleMinutesChange(parseInt(e.target.value) || 0)}
-            className="time-input"
-          />
-          <label htmlFor="minutes">Mins</label>
-        </div>
-      </div>
-      <div className="quick-goals">
-        <button onClick={() => setQuickGoal(510)} aria-label="Set goal to 8.5 hours">
-          8.5h
-        </button>
-        <button onClick={() => setQuickGoal(450)} aria-label="Set goal to 7.5 hours">
-          7.5h
-        </button>
-        <button onClick={() => setQuickGoal(390)} aria-label="Set goal to 6.5 hours">
-          6.5h
+      <div className="goal-setter-header" onClick={() => setIsExpanded(!isExpanded)}>
+        <h3>Daily Goal: {formatDuration(goalMinutes)}</h3>
+        <button className="toggle-button" aria-label={isExpanded ? "Collapse" : "Expand"}>
+          {isExpanded ? '−' : '+'}
         </button>
       </div>
-
-      <div className="lunch-break-section">
-        <label className="checkbox-label">
-          <input
-            type="checkbox"
-            checked={lunchEnabled}
-            onChange={(e) => onLunchEnabledChange(e.target.checked)}
-            className="lunch-checkbox"
-          />
-          <span>Include lunch</span>
-        </label>
-
-        {lunchEnabled && (
-          <div className="lunch-inputs">
-            <div className="input-group small">
+      
+      {isExpanded && (
+        <>
+          <div className="goal-inputs">
+            <div className="input-group">
               <input
+                id="hours"
                 type="number"
                 min="0"
-                max="4"
-                value={lunchHours}
-                onChange={(e) => handleLunchHoursChange(parseInt(e.target.value) || 0)}
-                className="time-input small"
+                max="24"
+                value={hours}
+                onChange={(e) => handleHoursChange(parseInt(e.target.value) || 0)}
+                className="time-input"
               />
-              <label>Hours</label>
+              <label htmlFor="hours">Hours</label>
             </div>
-            <span className="input-separator small">:</span>
-            <div className="input-group small">
+            <span className="input-separator">:</span>
+            <div className="input-group">
               <input
+                id="minutes"  
                 type="number"
                 min="0"
                 max="59"
-                value={lunchMins}
-                onChange={(e) => handleLunchMinsChange(parseInt(e.target.value) || 0)}
-                className="time-input small"
+                value={minutes}
+                onChange={(e) => handleMinutesChange(parseInt(e.target.value) || 0)}
+                className="time-input"
               />
-              <label>Mins</label>
+              <label htmlFor="minutes">Mins</label>
             </div>
           </div>
-        )}
-      </div>
+          <div className="quick-goals">
+            <button onClick={() => setQuickGoal(510)} aria-label="Set goal to 8.5 hours">
+              8.5h
+            </button>
+            <button onClick={() => setQuickGoal(450)} aria-label="Set goal to 7.5 hours">
+              7.5h
+            </button>
+            <button onClick={() => setQuickGoal(390)} aria-label="Set goal to 6.5 hours">
+              6.5h
+            </button>
+          </div>
+
+          <div className="lunch-break-section">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={lunchEnabled}
+                onChange={(e) => onLunchEnabledChange(e.target.checked)}
+                className="lunch-checkbox"
+              />
+              <span>Include lunch</span>
+            </label>
+
+            {lunchEnabled && (
+              <div className="lunch-inputs">
+                <div className="input-group small">
+                  <input
+                    type="number"
+                    min="0"
+                    max="4"
+                    value={lunchHours}
+                    onChange={(e) => handleLunchHoursChange(parseInt(e.target.value) || 0)}
+                    className="time-input small"
+                  />
+                  <label>Hours</label>
+                </div>
+                <span className="input-separator small">:</span>
+                <div className="input-group small">
+                  <input
+                    type="number"
+                    min="0"
+                    max="59"
+                    value={lunchMins}
+                    onChange={(e) => handleLunchMinsChange(parseInt(e.target.value) || 0)}
+                    className="time-input small"
+                  />
+                  <label>Mins</label>
+                </div>
+              </div>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }

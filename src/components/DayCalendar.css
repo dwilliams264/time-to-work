@@ -274,6 +274,33 @@
 
 /* Mobile improvements */
 @media (max-width: 768px) {
+    .calendar-container {
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .calendar-header {
+        margin-bottom: 16px;
+    }
+
+    .calendar-header-top {
+        margin-bottom: 6px;
+    }
+
+    .calendar-header h2 {
+        font-size: 20px;
+    }
+
+    .clear-all-button {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+
+    .calendar-hint {
+        font-size: 12px;
+        margin: 0;
+    }
+
     .calendar {
         cursor: default;
     }
@@ -297,22 +324,50 @@
     }
 
     .hour-label {
-        font-size: 11px;
+        font-size: 10px;
+        left: 8px;
+        padding: 1px 4px;
+    }
+
+    .time-block {
+        left: 60px;
+        right: 8px;
+    }
+
+    .time-block-title {
+        font-size: 10px;
+        margin-bottom: 2px;
     }
 
     .time-block-time {
-        font-size: 12px;
-    }
-
-    .time-block-duration {
         font-size: 11px;
     }
 
-    .calendar-hint {
-        font-size: 13px;
+    .time-block-duration {
+        font-size: 10px;
+    }
+
+    .lunch-indicator {
+        left: 60px;
+        right: 8px;
+        min-height: 36px;
+    }
+
+    .lunch-content {
+        padding: 6px 10px;
+    }
+
+    .lunch-title {
+        font-size: 10px;
+        margin-bottom: 2px;
+    }
+
+    .lunch-time {
+        font-size: 11px;
     }
 
     .current-time-line {
         left: 60px;
+        right: 8px;
     }
 }
