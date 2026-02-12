@@ -22,6 +22,7 @@ interface DayCalendarProps {
   lunchStartTime: number;
   lunchDuration: number;
   onLunchTimeChange: (startTime: number) => void;
+  snapBlockToValid: (startTime: number, duration: number, excludeId?: string) => { startTime: number; duration: number };
 }
 
 /**
@@ -38,7 +39,8 @@ function DayCalendar({
   lunchEnabled,
   lunchStartTime,
   lunchDuration,
-  onLunchTimeChange
+  onLunchTimeChange,
+  snapBlockToValid
 }: DayCalendarProps) {
   const [dragStart, setDragStart] = useState<number | null>(null);
   const [dragEnd, setDragEnd] = useState<number | null>(null);
@@ -98,21 +100,30 @@ function DayCalendar({
           0,
           Math.min(snappedStartTime, TOTAL_HOURS * 60 - block.duration)
         );
-        onUpdateBlock(block.id, newStartTime, block.duration);
+        
+        // Snap to valid position
+        const snapped = snapBlockToValid(newStartTime, block.duration, block.id);
+        onUpdateBlock(block.id, snapped.startTime, snapped.duration);
       }
     } else if (resizingBlock) {
       const block = timeBlocks.find((b) => b.id === resizingBlock.id);
       if (block) {
         if (resizingBlock.direction === 'bottom') {
           const newDuration = Math.max(MIN_BLOCK_DURATION, minutes - block.startTime);
-          onUpdateBlock(block.id, block.startTime, newDuration);
+          
+          // Snap to valid position
+          const snapped = snapBlockToValid(block.startTime, newDuration, block.id);
+          onUpdateBlock(block.id, snapped.startTime, snapped.duration);
         } else {
           const newStartTime = Math.max(0, minutes);
           const newDuration = Math.max(
             MIN_BLOCK_DURATION,
             block.startTime + block.duration - newStartTime
           );
-          onUpdateBlock(block.id, newStartTime, newDuration);
+          
+          // Snap to valid position
+          const snapped = snapBlockToValid(newStartTime, newDuration, block.id);
+          onUpdateBlock(block.id, snapped.startTime, snapped.duration);
         }
       }
     }
@@ -128,7 +139,8 @@ function DayCalendar({
       const duration = endTime - startTime;
 
       if (duration >= MIN_BLOCK_DURATION) {
-        onAddBlock(startTime, duration);
+        const snapped = snapBlockToValid(startTime, duration);
+        onAddBlock(snapped.startTime, snapped.duration);
       }
     }
 
@@ -138,7 +150,7 @@ function DayCalendar({
     setMovingBlock(null);
     setResizingBlock(null);
     setMovingLunch(false);
-  }, [isDragging, dragStart, dragEnd, onAddBlock]);
+  }, [isDragging, dragStart, dragEnd, onAddBlock, snapBlockToValid]);
 
   /**
    * Touch event handlers for mobile support
@@ -190,21 +202,30 @@ function DayCalendar({
           0,
           Math.min(snappedStartTime, TOTAL_HOURS * 60 - block.duration)
         );
-        onUpdateBlock(block.id, newStartTime, block.duration);
+        
+        // Snap to valid position
+        const snapped = snapBlockToValid(newStartTime, block.duration, block.id);
+        onUpdateBlock(block.id, snapped.startTime, snapped.duration);
       }
     } else if (resizingBlock) {
       const block = timeBlocks.find((b) => b.id === resizingBlock.id);
       if (block) {
         if (resizingBlock.direction === 'bottom') {
           const newDuration = Math.max(MIN_BLOCK_DURATION, minutes - block.startTime);
-          onUpdateBlock(block.id, block.startTime, newDuration);
+          
+          // Snap to valid position
+          const snapped = snapBlockToValid(block.startTime, newDuration, block.id);
+          onUpdateBlock(block.id, snapped.startTime, snapped.duration);
         } else {
           const newStartTime = Math.max(0, minutes);
           const newDuration = Math.max(
             MIN_BLOCK_DURATION,
             block.startTime + block.duration - newStartTime
           );
-          onUpdateBlock(block.id, newStartTime, newDuration);
+          
+          // Snap to valid position
+          const snapped = snapBlockToValid(newStartTime, newDuration, block.id);
+          onUpdateBlock(block.id, snapped.startTime, snapped.duration);
         }
       }
     }

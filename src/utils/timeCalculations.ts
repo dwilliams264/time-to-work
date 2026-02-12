@@ -32,3 +32,36 @@ export function getCurrentTimeMinutes(currentTime: Date, hoursStart: number): nu
     const minutes = currentTime.getMinutes();
     return (hours - hoursStart) * 60 + minutes;
 }
+
+/**
+ * Checks if two time ranges overlap
+ * @param start1 - Start time of first range in minutes
+ * @param end1 - End time of first range in minutes
+ * @param start2 - Start time of second range in minutes
+ * @param end2 - End time of second range in minutes
+ * @returns True if ranges overlap
+ */
+export function hasOverlap(start1: number, end1: number, start2: number, end2: number): boolean {
+    return start1 < end2 && start2 < end1;
+}
+
+/**
+ * Calculates the overlap duration between two time ranges
+ * @param start1 - Start time of first range in minutes
+ * @param duration1 - Duration of first range in minutes
+ * @param start2 - Start time of second range in minutes
+ * @param duration2 - Duration of second range in minutes
+ * @returns Duration of overlap in minutes (0 if no overlap)
+ */
+export function calculateOverlap(start1: number, duration1: number, start2: number, duration2: number): number {
+    const end1 = start1 + duration1;
+    const end2 = start2 + duration2;
+
+    if (!hasOverlap(start1, end1, start2, end2)) {
+        return 0;
+    }
+
+    const overlapStart = Math.max(start1, start2);
+    const overlapEnd = Math.min(end1, end2);
+    return overlapEnd - overlapStart;
+}
