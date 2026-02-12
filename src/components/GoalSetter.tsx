@@ -4,21 +4,39 @@ import './GoalSetter.css';
 interface GoalSetterProps {
   goalMinutes: number;
   onGoalChange: (minutes: number) => void;
+  lunchEnabled: boolean;
+  lunchMinutes: number;
+  onLunchEnabledChange: (enabled: boolean) => void;
+  onLunchMinutesChange: (minutes: number) => void;
 }
 
 /**
  * Component for setting daily work hour goals
  * Allows input via hours/minutes fields or quick preset buttons
  */
-function GoalSetter({ goalMinutes, onGoalChange }: GoalSetterProps) {
+function GoalSetter({ 
+  goalMinutes, 
+  onGoalChange,
+  lunchEnabled,
+  lunchMinutes,
+  onLunchEnabledChange,
+  onLunchMinutesChange
+}: GoalSetterProps) {
   const [hours, setHours] = useState(Math.floor(goalMinutes / 60));
   const [minutes, setMinutes] = useState(goalMinutes % 60);
+  const [lunchHours, setLunchHours] = useState(Math.floor(lunchMinutes / 60));
+  const [lunchMins, setLunchMins] = useState(lunchMinutes % 60);
 
   // Sync local state with prop changes
   useEffect(() => {
     setHours(Math.floor(goalMinutes / 60));
     setMinutes(goalMinutes % 60);
   }, [goalMinutes]);
+
+  useEffect(() => {
+    setLunchHours(Math.floor(lunchMinutes / 60));
+    setLunchMins(lunchMinutes % 60);
+  }, [lunchMinutes]);
 
   const handleHoursChange = (newHours: number) => {
     const validHours = Math.max(0, Math.min(24, newHours));
@@ -30,6 +48,18 @@ function GoalSetter({ goalMinutes, onGoalChange }: GoalSetterProps) {
     const validMinutes = Math.max(0, Math.min(59, newMinutes));
     setMinutes(validMinutes);
     onGoalChange(hours * 60 + validMinutes);
+  };
+
+  const handleLunchHoursChange = (newHours: number) => {
+    const validHours = Math.max(0, Math.min(4, newHours));
+    setLunchHours(validHours);
+    onLunchMinutesChange(validHours * 60 + lunchMins);
+  };
+
+  const handleLunchMinsChange = (newMins: number) => {
+    const validMins = Math.max(0, Math.min(59, newMins));
+    setLunchMins(validMins);
+    onLunchMinutesChange(lunchHours * 60 + validMins);
   };
 
   const setQuickGoal = (totalMinutes: number) => {
@@ -78,6 +108,46 @@ function GoalSetter({ goalMinutes, onGoalChange }: GoalSetterProps) {
         <button onClick={() => setQuickGoal(390)} aria-label="Set goal to 6.5 hours">
           6.5h
         </button>
+      </div>
+
+      <div className="lunch-break-section">
+        <label className="checkbox-label">
+          <input
+            type="checkbox"
+            checked={lunchEnabled}
+            onChange={(e) => onLunchEnabledChange(e.target.checked)}
+            className="lunch-checkbox"
+          />
+          <span>Include lunch</span>
+        </label>
+
+        {lunchEnabled && (
+          <div className="lunch-inputs">
+            <div className="input-group small">
+              <input
+                type="number"
+                min="0"
+                max="4"
+                value={lunchHours}
+                onChange={(e) => handleLunchHoursChange(parseInt(e.target.value) || 0)}
+                className="time-input small"
+              />
+              <label>Hours</label>
+            </div>
+            <span className="input-separator small">:</span>
+            <div className="input-group small">
+              <input
+                type="number"
+                min="0"
+                max="59"
+                value={lunchMins}
+                onChange={(e) => handleLunchMinsChange(parseInt(e.target.value) || 0)}
+                className="time-input small"
+              />
+              <label>Mins</label>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

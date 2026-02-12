@@ -18,6 +18,10 @@ interface DayCalendarProps {
   onRemoveBlock: (id: string) => void;
   onUpdateBlock: (id: string, startTime: number, duration: number) => void;
   onClearAll: () => void;
+  lunchEnabled: boolean;
+  lunchStartTime: number;
+  lunchDuration: number;
+  onLunchTimeChange: (startTime: number) => void;
 }
 
 /**
@@ -25,12 +29,23 @@ interface DayCalendarProps {
  * Supports drag-and-drop to create blocks, move blocks, and resize blocks
  * Works with both mouse and touch events for mobile support
  */
-function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onClearAll }: DayCalendarProps) {
+function DayCalendar({ 
+  timeBlocks, 
+  onAddBlock, 
+  onRemoveBlock, 
+  onUpdateBlock, 
+  onClearAll,
+  lunchEnabled,
+  lunchStartTime,
+  lunchDuration,
+  onLunchTimeChange
+}: DayCalendarProps) {
   const [dragStart, setDragStart] = useState<number | null>(null);
   const [dragEnd, setDragEnd] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [movingBlock, setMovingBlock] = useState<string | null>(null);
   const [resizingBlock, setResizingBlock] = useState<ResizeState | null>(null);
+  const [movingLunch, setMovingLunch] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -42,7 +57,8 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
 
     const target = e.target as HTMLElement;
     const isTimeBlock = target.closest('.time-block');
-    if (isTimeBlock) return;
+    const isLunchIndicator = target.closest('.lunch-indicator');
+    if (isTimeBlock || isLunchIndicator) return;
 
     const rect = calendarRef.current.getBoundingClientRect();
     const y = e.clientY - rect.top - 12;
@@ -65,6 +81,14 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
 
     if (isDragging && dragStart !== null) {
       setDragEnd(minutes);
+    } else if (movingLunch) {
+      const rawStartTime = minutes - lunchDuration / 2;
+      const snappedStartTime = Math.round(rawStartTime / TIME_SNAP_INTERVAL) * TIME_SNAP_INTERVAL;
+      const newStartTime = Math.max(
+        0,
+        Math.min(snappedStartTime, TOTAL_HOURS * 60 - lunchDuration)
+      );
+      onLunchTimeChange(newStartTime);
     } else if (movingBlock) {
       const block = timeBlocks.find((b) => b.id === movingBlock);
       if (block) {
@@ -113,6 +137,7 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
     setDragEnd(null);
     setMovingBlock(null);
     setResizingBlock(null);
+    setMovingLunch(false);
   }, [isDragging, dragStart, dragEnd, onAddBlock]);
 
   /**
@@ -123,7 +148,8 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
 
     const target = e.target as HTMLElement;
     const isTimeBlock = target.closest('.time-block');
-    if (isTimeBlock) return;
+    const isLunchIndicator = target.closest('.lunch-indicator');
+    if (isTimeBlock || isLunchIndicator) return;
 
     const rect = calendarRef.current.getBoundingClientRect();
     const touch = e.touches[0];
@@ -147,6 +173,14 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
 
     if (isDragging && dragStart !== null) {
       setDragEnd(minutes);
+    } else if (movingLunch) {
+      const rawStartTime = minutes - lunchDuration / 2;
+      const snappedStartTime = Math.round(rawStartTime / TIME_SNAP_INTERVAL) * TIME_SNAP_INTERVAL;
+      const newStartTime = Math.max(
+        0,
+        Math.min(snappedStartTime, TOTAL_HOURS * 60 - lunchDuration)
+      );
+      onLunchTimeChange(newStartTime);
     } else if (movingBlock) {
       const block = timeBlocks.find((b) => b.id === movingBlock);
       if (block) {
@@ -249,7 +283,7 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
             key={block.id}
             className="time-block"
             style={{
-              top: `${timeToY(block.startTime) + 50}px`,
+              top: `${timeToY(block.startTime) + 12}px`,
               height: `${timeToY(block.duration)}px`
             }}
             onMouseDown={(e) => {
@@ -301,6 +335,30 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
             />
           </div>
         ))}
+
+        {lunchEnabled && (
+          <div
+            className="lunch-indicator"
+            style={{
+              top: `${timeToY(lunchStartTime) + 12}px`,
+              height: `${timeToY(lunchDuration)}px`
+            }}
+            onMouseDown={(e) => {
+              e.stopPropagation();
+              setMovingLunch(true);
+            }}
+            onTouchStart={(e) => {
+              e.stopPropagation();
+              setMovingLunch(true);
+            }}
+          >
+            <div className="lunch-content">
+              <span className="lunch-emoji">🍽️</span>
+              <span className="lunch-label">Lunch</span>
+              <span className="lunch-time">{formatTime(lunchStartTime)}</span>
+            </div>
+          </div>
+        )}
 
         {previewBlock && previewBlock.duration >= MIN_BLOCK_DURATION && (
           <div

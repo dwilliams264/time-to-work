@@ -6,7 +6,7 @@ import DayCalendar from './components/DayCalendar';
 import GoalSetter from './components/GoalSetter';
 import TimeStats from './components/TimeStats';
 import type { TimeBlock } from './types';
-import { DEFAULT_GOAL_MINUTES } from './constants/calendar';
+import { DEFAULT_GOAL_MINUTES, DEFAULT_LUNCH_TIME } from './constants/calendar';
 import { formatDate } from './utils/timeFormatters';
 
 /**
@@ -15,6 +15,9 @@ import { formatDate } from './utils/timeFormatters';
 function App() {
   const [timeBlocks, setTimeBlocks] = useState<TimeBlock[]>([]);
   const [goalMinutes, setGoalMinutes] = useState(DEFAULT_GOAL_MINUTES);
+  const [lunchEnabled, setLunchEnabled] = useState(true);
+  const [lunchMinutes, setLunchMinutes] = useState(60);
+  const [lunchStartTime, setLunchStartTime] = useState(DEFAULT_LUNCH_TIME);
 
   const currentDate = formatDate(new Date());
   const totalMinutesWorked = timeBlocks.reduce((sum, block) => sum + block.duration, 0);
@@ -52,10 +55,19 @@ function App() {
 
       <div className="app-content">
         <div className="sidebar">
-          <GoalSetter goalMinutes={goalMinutes} onGoalChange={setGoalMinutes} />
+          <GoalSetter 
+            goalMinutes={goalMinutes} 
+            onGoalChange={setGoalMinutes}
+            lunchEnabled={lunchEnabled}
+            lunchMinutes={lunchMinutes}
+            onLunchEnabledChange={setLunchEnabled}
+            onLunchMinutesChange={setLunchMinutes}
+          />
           <TimeStats
             totalMinutes={totalMinutesWorked}
             goalMinutes={goalMinutes}
+            lunchEnabled={lunchEnabled}
+            lunchMinutes={lunchMinutes}
           />
         </div>
 
@@ -66,6 +78,10 @@ function App() {
             onRemoveBlock={handleRemoveBlock}
             onUpdateBlock={handleUpdateBlock}
             onClearAll={handleClearAll}
+            lunchEnabled={lunchEnabled}
+            lunchStartTime={lunchStartTime}
+            lunchDuration={lunchMinutes}
+            onLunchTimeChange={setLunchStartTime}
           />
         </main>
       </div>
