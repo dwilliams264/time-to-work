@@ -74,16 +74,10 @@ function DayCalendar({
 
   // Unified event handlers for mouse and touch
   const handlePointerDownEvent = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-    if ('touches' in e) {
-      e.preventDefault();
-    }
     handlePointerDown(e);
   };
 
   const handlePointerMoveEvent = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-    if ('touches' in e) {
-      e.preventDefault();
-    }
     handlePointerMove(e);
   };
 

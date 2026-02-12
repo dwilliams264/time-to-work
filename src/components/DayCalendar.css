@@ -117,6 +117,7 @@
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
     transition: box-shadow 0.2s ease;
     z-index: 10;
+    touch-action: none;
 }
 
 .time-block:hover {
@@ -191,6 +192,7 @@
     height: 8px;
     cursor: ns-resize;
     z-index: 20;
+    touch-action: none;
 }
 
 .resize-top {
@@ -221,6 +223,7 @@
     transition:
         opacity 0.2s ease,
         box-shadow 0.2s ease;
+    touch-action: none;
 }
 
 .lunch-indicator:hover {
