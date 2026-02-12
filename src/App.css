@@ -58,12 +58,14 @@
 
 @media (max-width: 768px) {
     .app {
-        padding: 12px;
+        padding: 0;
+        padding-top: 12px;
         padding-bottom: 80px; /* Space for floating stats bar */
     }
 
     .app-header {
         margin-bottom: 12px;
+        padding: 0 12px;
     }
 
     .app-header h1 {
@@ -77,6 +79,7 @@
 
     .app-content {
         gap: 0px;
+        padding: 0 12px;
     }
 
     .sidebar {
@@ -86,5 +89,7 @@
 
     .main-content {
         min-height: 60vh;
+        margin: 0 -12px;
+        padding: 0 24px;
     }
 }
