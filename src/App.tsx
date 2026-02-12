@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
@@ -10,17 +10,124 @@ import { DEFAULT_GOAL_MINUTES, DEFAULT_LUNCH_TIME, TOTAL_HOURS } from './constan
 import { formatDate } from './utils/timeFormatters';
 import { calculateOverlap, hasOverlap } from './utils/timeCalculations';
 
+interface DayData {
+  timeBlocks: TimeBlock[];
+  goalMinutes: number;
+  lunchEnabled: boolean;
+  lunchMinutes: number;
+  lunchStartTime: number;
+}
+
 /**
  * Main application component for the Time to Work daily time tracker
  */
 function App() {
-  const [timeBlocks, setTimeBlocks] = useState<TimeBlock[]>([]);
-  const [goalMinutes, setGoalMinutes] = useState(DEFAULT_GOAL_MINUTES);
-  const [lunchEnabled, setLunchEnabled] = useState(true);
-  const [lunchMinutes, setLunchMinutes] = useState(60);
-  const [lunchStartTime, setLunchStartTime] = useState(DEFAULT_LUNCH_TIME);
-
   const currentDate = formatDate(new Date());
+  const today = new Date();
+  const storageKey = `timeToWork_${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+  // Initialize state from localStorage
+  const [timeBlocks, setTimeBlocks] = useState<TimeBlock[]>(() => {
+    try {
+      const savedData = localStorage.getItem(storageKey);
+      if (savedData) {
+        const data: DayData = JSON.parse(savedData);
+        return data.timeBlocks || [];
+      }
+    } catch (error) {
+      console.error('Failed to load time blocks from localStorage:', error);
+    }
+    return [];
+  });
+
+  const [goalMinutes, setGoalMinutes] = useState(() => {
+    try {
+      const savedData = localStorage.getItem(storageKey);
+      if (savedData) {
+        const data: DayData = JSON.parse(savedData);
+        return data.goalMinutes ?? DEFAULT_GOAL_MINUTES;
+      }
+    } catch (error) {
+      console.error('Failed to load goal minutes from localStorage:', error);
+    }
+    return DEFAULT_GOAL_MINUTES;
+  });
+
+  const [lunchEnabled, setLunchEnabled] = useState(() => {
+    try {
+      const savedData = localStorage.getItem(storageKey);
+      if (savedData) {
+        const data: DayData = JSON.parse(savedData);
+        return data.lunchEnabled ?? true;
+      }
+    } catch (error) {
+      console.error('Failed to load lunch enabled from localStorage:', error);
+    }
+    return true;
+  });
+
+  const [lunchMinutes, setLunchMinutes] = useState(() => {
+    try {
+      const savedData = localStorage.getItem(storageKey);
+      if (savedData) {
+        const data: DayData = JSON.parse(savedData);
+        return data.lunchMinutes ?? 60;
+      }
+    } catch (error) {
+      console.error('Failed to load lunch minutes from localStorage:', error);
+    }
+    return 60;
+  });
+
+  const [lunchStartTime, setLunchStartTime] = useState(() => {
+    try {
+      const savedData = localStorage.getItem(storageKey);
+      if (savedData) {
+        const data: DayData = JSON.parse(savedData);
+        return data.lunchStartTime ?? DEFAULT_LUNCH_TIME;
+      }
+    } catch (error) {
+      console.error('Failed to load lunch start time from localStorage:', error);
+    }
+    return DEFAULT_LUNCH_TIME;
+  });
+
+  // Save data to localStorage whenever state changes
+  useEffect(() => {
+    try {
+      const data: DayData = {
+        timeBlocks,
+        goalMinutes,
+        lunchEnabled,
+        lunchMinutes,
+        lunchStartTime,
+      };
+      localStorage.setItem(storageKey, JSON.stringify(data));
+    } catch (error) {
+      console.error('Failed to save data to localStorage:', error);
+    }
+  }, [storageKey, timeBlocks, goalMinutes, lunchEnabled, lunchMinutes, lunchStartTime]);
+
+  // Clean up old data (older than 7 days)
+  useEffect(() => {
+    try {
+      const keys = Object.keys(localStorage);
+      const timeToWorkKeys = keys.filter(key => key.startsWith('timeToWork_'));
+      const today = new Date();
+      
+      timeToWorkKeys.forEach(key => {
+        const dateStr = key.replace('timeToWork_', '');
+        const itemDate = new Date(dateStr);
+        const daysDiff = Math.floor((today.getTime() - itemDate.getTime()) / (1000 * 60 * 60 * 24));
+        
+        if (daysDiff > 7) {
+          localStorage.removeItem(key);
+        }
+      });
+    } catch (error) {
+      console.error('Failed to clean up old localStorage data:', error);
+    }
+  }, [currentDate]);
   
   // Calculate total minutes worked, excluding lunch time overlaps
   const totalMinutesWorked = timeBlocks.reduce((sum, block) => {
