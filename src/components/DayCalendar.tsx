@@ -6,6 +6,7 @@ import {
   HOUR_HEIGHT,
   MIN_BLOCK_DURATION,
   TIME_UPDATE_INTERVAL,
+  TIME_SNAP_INTERVAL,
 } from '../constants/calendar';
 import { timeToY, yToTime, getCurrentTimeMinutes } from '../utils/timeCalculations';
 import { formatTime, formatDuration } from '../utils/timeFormatters';
@@ -44,7 +45,7 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
     if (isTimeBlock) return;
 
     const rect = calendarRef.current.getBoundingClientRect();
-    const y = e.clientY - rect.top;
+    const y = e.clientY - rect.top - 12;
     const minutes = yToTime(y);
 
     setDragStart(minutes);
@@ -59,7 +60,7 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
     if (!calendarRef.current) return;
 
     const rect = calendarRef.current.getBoundingClientRect();
-    const y = e.clientY - rect.top;
+    const y = e.clientY - rect.top - 12;
     const minutes = yToTime(y);
 
     if (isDragging && dragStart !== null) {
@@ -67,9 +68,11 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
     } else if (movingBlock) {
       const block = timeBlocks.find((b) => b.id === movingBlock);
       if (block) {
+        const rawStartTime = minutes - block.duration / 2;
+        const snappedStartTime = Math.round(rawStartTime / TIME_SNAP_INTERVAL) * TIME_SNAP_INTERVAL;
         const newStartTime = Math.max(
           0,
-          Math.min(minutes - block.duration / 2, TOTAL_HOURS * 60 - block.duration)
+          Math.min(snappedStartTime, TOTAL_HOURS * 60 - block.duration)
         );
         onUpdateBlock(block.id, newStartTime, block.duration);
       }
@@ -124,7 +127,7 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
 
     const rect = calendarRef.current.getBoundingClientRect();
     const touch = e.touches[0];
-    const y = touch.clientY - rect.top;
+    const y = touch.clientY - rect.top - 12;
     const minutes = yToTime(y);
 
     setDragStart(minutes);
@@ -139,7 +142,7 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
 
     const rect = calendarRef.current.getBoundingClientRect();
     const touch = e.touches[0];
-    const y = touch.clientY - rect.top;
+    const y = touch.clientY - rect.top - 12;
     const minutes = yToTime(y);
 
     if (isDragging && dragStart !== null) {
@@ -147,9 +150,11 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
     } else if (movingBlock) {
       const block = timeBlocks.find((b) => b.id === movingBlock);
       if (block) {
+        const rawStartTime = minutes - block.duration / 2;
+        const snappedStartTime = Math.round(rawStartTime / TIME_SNAP_INTERVAL) * TIME_SNAP_INTERVAL;
         const newStartTime = Math.max(
           0,
-          Math.min(minutes - block.duration / 2, TOTAL_HOURS * 60 - block.duration)
+          Math.min(snappedStartTime, TOTAL_HOURS * 60 - block.duration)
         );
         onUpdateBlock(block.id, newStartTime, block.duration);
       }
@@ -244,7 +249,7 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
             key={block.id}
             className="time-block"
             style={{
-              top: `${timeToY(block.startTime)}px`,
+              top: `${timeToY(block.startTime) + 50}px`,
               height: `${timeToY(block.duration)}px`
             }}
             onMouseDown={(e) => {
@@ -301,7 +306,7 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
           <div
             className="time-block preview"
             style={{
-              top: `${timeToY(previewBlock.startTime)}px`,
+              top: `${timeToY(previewBlock.startTime) + 12}px`,
               height: `${timeToY(previewBlock.duration)}px`,
             }}
           >
@@ -314,7 +319,7 @@ function DayCalendar({ timeBlocks, onAddBlock, onRemoveBlock, onUpdateBlock, onC
         {showCurrentTimeLine && (
           <div
             className="current-time-line"
-            style={{ top: `${timeToY(currentTimeMinutes)}px` }}
+            style={{ top: `${timeToY(currentTimeMinutes) + 12}px` }}
           >
             <div className="current-time-indicator" />
           </div>

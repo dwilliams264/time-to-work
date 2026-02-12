@@ -75,7 +75,7 @@
     cursor: crosshair;
     user-select: none;
     touch-action: none;
-    padding-top: 12px;
+    padding-top: 50px;
 }
 
 .hour-row {
