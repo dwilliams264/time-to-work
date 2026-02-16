@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { formatDuration } from '../../utils/timeFormatters';
 import { QUICK_GOALS, MAX_GOAL_HOURS, MAX_LUNCH_HOURS } from '../../constants/calendar';
+import TimeInputGroup from './time-input-group/time-input-group.component';
 import './goal-setter.css';
 
 interface GoalSetterProps {
@@ -83,31 +84,15 @@ function GoalSetter({
       {isExpanded && (
         <>
           <div className="goal-inputs">
-            <div className="input-group">
-              <input
-                id="hours"
-                type="number"
-                min="0"
-                max={MAX_GOAL_HOURS}
-                value={hours}
-                onChange={(e) => handleHoursChange(parseInt(e.target.value) || 0)}
-                className="time-input"
-              />
-              <label htmlFor="hours">Hours</label>
-            </div>
-            <span className="input-separator">:</span>
-            <div className="input-group">
-              <input
-                id="minutes"  
-                type="number"
-                min="0"
-                max="59"
-                value={minutes}
-                onChange={(e) => handleMinutesChange(parseInt(e.target.value) || 0)}
-                className="time-input"
-              />
-              <label htmlFor="minutes">Mins</label>
-            </div>
+            <TimeInputGroup
+              hours={hours}
+              minutes={minutes}
+              onHoursChange={handleHoursChange}
+              onMinutesChange={handleMinutesChange}
+              maxHours={MAX_GOAL_HOURS}
+              hoursId="hours"
+              minutesId="minutes"
+            />
           </div>
           <div className="quick-goals">
             <button onClick={() => setQuickGoal(QUICK_GOALS.LONG)} aria-label="Set goal to 8.5 hours">
@@ -134,29 +119,14 @@ function GoalSetter({
 
             {lunchEnabled && (
               <div className="lunch-inputs">
-                <div className="input-group small">
-                  <input
-                    type="number"
-                    min="0"
-                    max={MAX_LUNCH_HOURS}
-                    value={lunchHours}
-                    onChange={(e) => handleLunchHoursChange(parseInt(e.target.value) || 0)}
-                    className="time-input small"
-                  />
-                  <label>Hours</label>
-                </div>
-                <span className="input-separator small">:</span>
-                <div className="input-group small">
-                  <input
-                    type="number"
-                    min="0"
-                    max="59"
-                    value={lunchMins}
-                    onChange={(e) => handleLunchMinsChange(parseInt(e.target.value) || 0)}
-                    className="time-input small"
-                  />
-                  <label>Mins</label>
-                </div>
+                <TimeInputGroup
+                  hours={lunchHours}
+                  minutes={lunchMins}
+                  onHoursChange={handleLunchHoursChange}
+                  onMinutesChange={handleLunchMinsChange}
+                  maxHours={MAX_LUNCH_HOURS}
+                  size="small"
+                />
               </div>
             )}
           </div>

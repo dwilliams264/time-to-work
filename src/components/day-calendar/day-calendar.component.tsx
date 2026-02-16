@@ -8,8 +8,11 @@ import {
   TIME_UPDATE_INTERVAL,
 } from '../../constants/calendar';
 import { timeToY, getCurrentTimeMinutes } from '../../utils/timeCalculations';
-import { formatTime, formatDuration } from '../../utils/timeFormatters';
+import { formatDuration } from '../../utils/timeFormatters';
 import { useCalendarInteractions, useCurrentTime } from '../../hooks/useCalendarInteractions';
+import TimeBlockComponent from './time-block/time-block.component';
+import HourRow from './hour-row/hour-row.component';
+import LunchIndicator from './lunch-indicator/lunch-indicator.component';
 import './day-calendar.css';
 
 interface DayCalendarProps {
@@ -112,94 +115,25 @@ function DayCalendar({
         style={{ height: `${TOTAL_HOURS * HOUR_HEIGHT}px` }}
       >
         {hours.map((hour) => (
-          <div key={hour} className="hour-row" style={{ height: `${HOUR_HEIGHT}px` }}>
-            <div className="hour-label">
-              {hour.toString().padStart(2, '0')}:00
-            </div>
-            <div className="hour-line" />
-          </div>
+          <HourRow key={hour} hour={hour} />
         ))}
 
         {timeBlocks.map((block) => (
-          <div
+          <TimeBlockComponent
             key={block.id}
-            className="time-block"
-            style={{
-              top: `${timeToY(block.startTime) + 12}px`,
-              height: `${timeToY(block.duration)}px`
-            }}
-            onMouseDown={(e) => {
-              e.stopPropagation();
-              startMovingBlock(block.id);
-            }}
-            onTouchStart={(e) => {
-              e.stopPropagation();
-              startMovingBlock(block.id);
-            }}
-          >
-            <div
-              className="resize-handle resize-top"
-              onMouseDown={(e) => {
-                e.stopPropagation();
-                startResizingBlock(block.id, 'top');
-              }}
-              onTouchStart={(e) => {
-                e.stopPropagation();
-                startResizingBlock(block.id, 'top');
-              }}
-            />
-            <div className="time-block-content">
-              <span className="time-block-title">💻 Work</span>
-              <span className="time-block-time">
-                {formatTime(block.startTime)} - {formatTime(block.startTime + block.duration)}
-              </span>
-              <span className="time-block-duration">{formatDuration(block.duration)}</span>
-              <button
-                className="delete-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onRemoveBlock(block.id);
-                }}
-                aria-label="Delete time block"
-              >
-                ×
-              </button>
-            </div>
-            <div
-              className="resize-handle resize-bottom"
-              onMouseDown={(e) => {
-                e.stopPropagation();
-                startResizingBlock(block.id, 'bottom');
-              }}
-              onTouchStart={(e) => {
-                e.stopPropagation();
-                startResizingBlock(block.id, 'bottom');
-              }}
-            />
-          </div>
+            block={block}
+            onRemove={onRemoveBlock}
+            onStartMove={startMovingBlock}
+            onStartResize={startResizingBlock}
+          />
         ))}
 
         {lunchEnabled && (
-          <div
-            className="lunch-indicator"
-            style={{
-              top: `${timeToY(lunchStartTime) + 12}px`,
-              height: `${timeToY(lunchDuration)}px`
-            }}
-            onMouseDown={(e) => {
-              e.stopPropagation();
-              startMovingLunch();
-            }}
-            onTouchStart={(e) => {
-              e.stopPropagation();
-              startMovingLunch();
-            }}
-          >
-            <div className="lunch-content">
-              <span className="lunch-title">🍽️ Lunch</span>
-              <span className="lunch-time">{formatTime(lunchStartTime)}</span>
-            </div>
-          </div>
+          <LunchIndicator
+            startTime={lunchStartTime}
+            duration={lunchDuration}
+            onStartMove={startMovingLunch}
+          />
         )}
 
         {previewBlock && previewBlock.duration >= MIN_BLOCK_DURATION && (

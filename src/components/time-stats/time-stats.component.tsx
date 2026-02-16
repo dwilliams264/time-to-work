@@ -1,4 +1,6 @@
 import { formatDuration } from '../../utils/timeFormatters';
+import StatCard from './stat-card/stat-card.component';
+import ProgressBar from './progress-bar/progress-bar.component';
 import './time-stats.css';
 
 interface TimeStatsProps {
@@ -23,10 +25,7 @@ function TimeStats({ totalMinutes, goalMinutes, lunchEnabled, lunchMinutes }: Ti
 
   return (
     <div className="time-stats">
-      <div className="stat-card">
-        <h3>Time Worked</h3>
-        <div className="stat-value primary">{formatDuration(totalMinutes)}</div>
-      </div>
+      <StatCard title="Time Worked" value={formatDuration(totalMinutes)} variant="primary" />
 
       {lunchEnabled && (
         <div className="goal-breakdown">
@@ -45,29 +44,14 @@ function TimeStats({ totalMinutes, goalMinutes, lunchEnabled, lunchMinutes }: Ti
         </div>
       )}
 
-      <div className="progress-bar">
-        <div
-          className={`progress-fill ${isComplete ? 'complete' : ''}`}
-          style={{ width: `${progressPercentage}%` }}
-          role="progressbar"
-          aria-valuenow={progressPercentage}
-          aria-valuemin={0}
-          aria-valuemax={100}
-        />
-      </div>
+      <ProgressBar percentage={progressPercentage} isComplete={isComplete} />
 
       {!isComplete && (
-        <div className="stat-card">
-          <h3>Remaining</h3>
-          <div className="stat-value secondary">{formatDuration(remainingMinutes)}</div>
-        </div>
+        <StatCard title="Remaining" value={formatDuration(remainingMinutes)} variant="secondary" />
       )}
 
       {isOverGoal && (
-        <div className="stat-card">
-          <h3>Over Goal</h3>
-          <div className="stat-value success">+{formatDuration(-remainingMinutes)}</div>
-        </div>
+        <StatCard title="Over Goal" value={`+${formatDuration(-remainingMinutes)}`} variant="success" />
       )}
 
       {isComplete && (
