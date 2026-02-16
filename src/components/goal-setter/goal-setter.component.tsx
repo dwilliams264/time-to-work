@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { formatDuration } from '../utils/timeFormatters';
-import { QUICK_GOALS, MAX_GOAL_HOURS, MAX_LUNCH_HOURS } from '../constants/calendar';
-import './GoalSetter.css';
+import { formatDuration } from '../../utils/timeFormatters';
+import { QUICK_GOALS, MAX_GOAL_HOURS, MAX_LUNCH_HOURS } from '../../constants/calendar';
+import './goal-setter.css';
 
 interface GoalSetterProps {
   goalMinutes: number;

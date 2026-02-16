@@ -1,5 +1,5 @@
-import { formatDuration } from '../utils/timeFormatters';
-import './TimeStats.css';
+import { formatDuration } from '../../utils/timeFormatters';
+import './time-stats.css';
 
 interface TimeStatsProps {
   totalMinutes: number;

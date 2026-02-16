@@ -1,16 +1,16 @@
 import { useRef } from 'react';
-import type { TimeBlock } from '../types';
+import type { TimeBlock } from '../../types';
 import {
   HOURS_START,
   TOTAL_HOURS,
   HOUR_HEIGHT,
   MIN_BLOCK_DURATION,
   TIME_UPDATE_INTERVAL,
-} from '../constants/calendar';
-import { timeToY, getCurrentTimeMinutes } from '../utils/timeCalculations';
-import { formatTime, formatDuration } from '../utils/timeFormatters';
-import { useCalendarInteractions, useCurrentTime } from '../hooks/useCalendarInteractions';
-import './DayCalendar.css';
+} from '../../constants/calendar';
+import { timeToY, getCurrentTimeMinutes } from '../../utils/timeCalculations';
+import { formatTime, formatDuration } from '../../utils/timeFormatters';
+import { useCalendarInteractions, useCurrentTime } from '../../hooks/useCalendarInteractions';
+import './day-calendar.css';
 
 interface DayCalendarProps {
   timeBlocks: TimeBlock[];

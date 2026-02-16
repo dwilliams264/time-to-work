@@ -1,9 +1,9 @@
-import './App.css';
+import './app.css';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
-import DayCalendar from './components/DayCalendar';
-import GoalSetter from './components/GoalSetter';
-import TimeStats from './components/TimeStats';
+import DayCalendar from './components/day-calendar/day-calendar.component';
+import GoalSetter from './components/goal-setter/goal-setter.component';
+import TimeStats from './components/time-stats/time-stats.component';
 import type { TimeBlock } from './types';
 import { formatDate } from './utils/timeFormatters';
 import { snapBlockToValid, calculateTotalWorkTime } from './utils/blockOperations';
