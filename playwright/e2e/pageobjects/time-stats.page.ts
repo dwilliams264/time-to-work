@@ -2,81 +2,57 @@ import { Page } from '@playwright/test';
 
 export class TimeStatsPage {
     readonly page: Page;
-    readonly timeStatsContainer: string;
-    readonly statCards: string;
-    readonly timeWorkedCard: string;
-    readonly timeWorkedValue: string;
-    readonly remainingCard: string;
-    readonly remainingValue: string;
-    readonly overGoalCard: string;
-    readonly overGoalValue: string;
-    readonly progressBar: string;
-    readonly progressFill: string;
-    readonly completionMessage: string;
-    readonly goalBreakdown: string;
 
     constructor(page: Page) {
         this.page = page;
-        this.timeStatsContainer = '.time-stats';
-        this.statCards = '.stat-card';
-        this.timeWorkedCard = '.stat-card:has-text("Time Worked")';
-        this.timeWorkedValue = '.stat-card:has-text("Time Worked") .stat-value';
-        this.remainingCard = '.stat-card:has-text("Remaining")';
-        this.remainingValue = '.stat-card:has-text("Remaining") .stat-value';
-        this.overGoalCard = '.stat-card:has-text("Over Goal")';
-        this.overGoalValue = '.stat-card:has-text("Over Goal") .stat-value';
-        this.progressBar = '.progress-bar';
-        this.progressFill = '.progress-fill';
-        this.completionMessage = '.completion-message';
-        this.goalBreakdown = '.goal-breakdown';
     }
 
     getTimeStatsContainer() {
-        return this.page.locator(this.timeStatsContainer);
+        return this.page.getByTestId('time-stats-container');
     }
 
     getStatCards() {
-        return this.page.locator(this.statCards);
+        return this.page.locator('.stat-card');
     }
 
     getTimeWorkedCard() {
-        return this.page.locator(this.timeWorkedCard);
+        return this.page.getByTestId('time-stats-time-worked');
     }
 
     getTimeWorkedValue() {
-        return this.page.locator(this.timeWorkedValue);
+        return this.page.getByTestId('time-stats-time-worked').locator('.stat-value');
     }
 
     getRemainingCard() {
-        return this.page.locator(this.remainingCard);
+        return this.page.getByTestId('time-stats-remaining');
     }
 
     getRemainingValue() {
-        return this.page.locator(this.remainingValue);
+        return this.page.getByTestId('time-stats-remaining').locator('.stat-value');
     }
 
     getOverGoalCard() {
-        return this.page.locator(this.overGoalCard);
+        return this.page.getByTestId('time-stats-over-goal');
     }
 
     getOverGoalValue() {
-        return this.page.locator(this.overGoalValue);
+        return this.page.getByTestId('time-stats-over-goal').locator('.stat-value');
     }
 
     getProgressBar() {
-        return this.page.locator(this.progressBar);
+        return this.page.getByTestId('time-stats-progress-bar');
     }
 
     getProgressFill() {
-        return this.page.locator(this.progressFill);
+        return this.page.getByTestId('time-stats-progress-fill');
     }
 
     getCompletionMessage() {
-        return this.page.locator(this.completionMessage);
+        return this.page.getByTestId('time-stats-completion-message');
     }
 
     getGoalBreakdown() {
-        return this.page.locator(this.goalBreakdown);
+        return this.page.getByTestId('time-stats-goal-breakdown');
     }
 
     async getTimeWorkedText() {

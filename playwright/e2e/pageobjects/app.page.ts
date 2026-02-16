@@ -2,39 +2,29 @@ import { Page } from '@playwright/test';
 
 export class AppPage {
     readonly page: Page;
-    readonly headerTitle: string;
-    readonly currentDate: string;
-    readonly appContainer: string;
-    readonly sidebar: string;
-    readonly mainContent: string;
 
     constructor(page: Page) {
         this.page = page;
-        this.headerTitle = 'h1';
-        this.currentDate = '.current-date';
-        this.appContainer = '.app';
-        this.sidebar = '.sidebar';
-        this.mainContent = '.main-content';
     }
 
     getHeaderTitle() {
-        return this.page.locator(this.headerTitle);
+        return this.page.getByTestId('app-header-title');
     }
 
     getCurrentDate() {
-        return this.page.locator(this.currentDate);
+        return this.page.getByTestId('app-current-date');
     }
 
     getAppContainer() {
-        return this.page.locator(this.appContainer);
+        return this.page.getByTestId('app-container');
     }
 
     getSidebar() {
-        return this.page.locator(this.sidebar);
+        return this.page.getByTestId('app-sidebar');
     }
 
     getMainContent() {
-        return this.page.locator(this.mainContent);
+        return this.page.getByTestId('app-main-content');
     }
 
     async navigate() {

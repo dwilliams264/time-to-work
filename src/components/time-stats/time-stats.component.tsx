@@ -24,11 +24,11 @@ function TimeStats({ totalMinutes, goalMinutes, lunchEnabled, lunchMinutes }: Ti
   const totalTimeAtWork = lunchEnabled ? goalMinutes + lunchMinutes : goalMinutes;
 
   return (
-    <div className="time-stats">
-      <StatCard title="Time Worked" value={formatDuration(totalMinutes)} variant="primary" />
+    <div className="time-stats" data-testid="time-stats-container">
+      <StatCard title="Time Worked" value={formatDuration(totalMinutes)} variant="primary" testId="time-stats-time-worked" />
 
       {lunchEnabled && (
-        <div className="goal-breakdown">
+        <div className="goal-breakdown" data-testid="time-stats-goal-breakdown">
           <div className="breakdown-item">
             <span className="breakdown-label">Work Goal:</span>
             <span className="breakdown-value">{formatDuration(goalMinutes)}</span>
@@ -47,15 +47,15 @@ function TimeStats({ totalMinutes, goalMinutes, lunchEnabled, lunchMinutes }: Ti
       <ProgressBar percentage={progressPercentage} isComplete={isComplete} />
 
       {!isComplete && (
-        <StatCard title="Remaining" value={formatDuration(remainingMinutes)} variant="secondary" />
+        <StatCard title="Remaining" value={formatDuration(remainingMinutes)} variant="secondary" testId="time-stats-remaining" />
       )}
 
       {isOverGoal && (
-        <StatCard title="Over Goal" value={`+${formatDuration(-remainingMinutes)}`} variant="success" />
+        <StatCard title="Over Goal" value={`+${formatDuration(-remainingMinutes)}`} variant="success" testId="time-stats-over-goal" />
       )}
 
       {isComplete && (
-        <div className="completion-message" role="status" aria-live="polite">
+        <div className="completion-message" data-testid="time-stats-completion-message" role="status" aria-live="polite">
           🎉 Goal achieved!
         </div>
       )}

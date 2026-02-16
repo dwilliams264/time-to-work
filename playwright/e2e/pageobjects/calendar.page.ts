@@ -2,99 +2,69 @@ import { Page } from '@playwright/test';
 
 export class CalendarPage {
     readonly page: Page;
-    readonly calendarContainer: string;
-    readonly calendarHeader: string;
-    readonly calendarTitle: string;
-    readonly clearAllButton: string;
-    readonly calendarHint: string;
-    readonly calendar: string;
-    readonly hourRows: string;
-    readonly timeBlocks: string;
-    readonly timeBlock: string;
-    readonly timeBlockContent: string;
-    readonly timeBlockDeleteButton: string;
-    readonly lunchIndicator: string;
-    readonly currentTimeLine: string;
-    readonly currentTimeIndicator: string;
-    readonly previewBlock: string;
 
     constructor(page: Page) {
         this.page = page;
-        this.calendarContainer = '.calendar-container';
-        this.calendarHeader = '.calendar-header';
-        this.calendarTitle = '.calendar-header h2';
-        this.clearAllButton = '.clear-all-button';
-        this.calendarHint = '.calendar-hint';
-        this.calendar = '.calendar';
-        this.hourRows = '.hour-row';
-        this.timeBlocks = '.time-block';
-        this.timeBlock = '.time-block';
-        this.timeBlockContent = '.time-block-content';
-        this.timeBlockDeleteButton = '.time-block .delete-button';
-        this.lunchIndicator = '.lunch-indicator';
-        this.currentTimeLine = '.current-time-line';
-        this.currentTimeIndicator = '.current-time-indicator';
-        this.previewBlock = '.time-block.preview';
     }
 
     getCalendarContainer() {
-        return this.page.locator(this.calendarContainer);
+        return this.page.getByTestId('calendar-container');
     }
 
     getCalendarHeader() {
-        return this.page.locator(this.calendarHeader);
+        return this.page.getByTestId('calendar-header');
     }
 
     getCalendarTitle() {
-        return this.page.locator(this.calendarTitle);
+        return this.page.getByTestId('calendar-title');
     }
 
     getClearAllButton() {
-        return this.page.locator(this.clearAllButton);
+        return this.page.getByTestId('calendar-clear-all');
     }
 
     getCalendarHint() {
-        return this.page.locator(this.calendarHint);
+        return this.page.getByTestId('calendar-hint');
     }
 
     getCalendar() {
-        return this.page.locator(this.calendar);
+        return this.page.getByTestId('calendar-grid');
     }
 
     getHourRows() {
-        return this.page.locator(this.hourRows);
+        return this.page.locator('.hour-row');
     }
 
     getTimeBlocks() {
-        return this.page.locator(this.timeBlocks);
+        return this.page.getByTestId('calendar-time-block');
     }
 
     getTimeBlock() {
-        return this.page.locator(this.timeBlock);
+        return this.page.getByTestId('calendar-time-block');
     }
 
     getTimeBlockContent() {
-        return this.page.locator(this.timeBlockContent);
+        return this.page.getByTestId('calendar-time-block-content');
     }
 
     getTimeBlockDeleteButton() {
-        return this.page.locator(this.timeBlockDeleteButton);
+        return this.page.getByTestId('calendar-time-block-delete');
     }
 
     getLunchIndicator() {
-        return this.page.locator(this.lunchIndicator);
+        return this.page.getByTestId('calendar-lunch-indicator');
     }
 
     getCurrentTimeLine() {
-        return this.page.locator(this.currentTimeLine);
+        return this.page.getByTestId('calendar-current-time-line');
     }
 
     getCurrentTimeIndicator() {
-        return this.page.locator(this.currentTimeIndicator);
+        return this.page.getByTestId('calendar-current-time-indicator');
     }
 
     getPreviewBlock() {
-        return this.page.locator(this.previewBlock);
+        return this.page.getByTestId('calendar-preview-block');
     }
 
     async clearAllBlocks() {

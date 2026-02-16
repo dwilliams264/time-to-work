@@ -73,17 +73,17 @@ function GoalSetter({
   };
 
   return (
-    <div className="goal-setter">
-      <div className="goal-setter-header" onClick={() => setIsExpanded(!isExpanded)}>
+    <div className="goal-setter" data-testid="goal-setter-container">
+      <div className="goal-setter-header" onClick={() => setIsExpanded(!isExpanded)} data-testid="goal-setter-header">
         <h3>Daily Goal: {formatDuration(goalMinutes)}</h3>
-        <button className="toggle-button" aria-label={isExpanded ? "Collapse" : "Expand"}>
+        <button className="toggle-button" data-testid="goal-setter-toggle" aria-label={isExpanded ? "Collapse" : "Expand"}>
           {isExpanded ? '−' : '+'}
         </button>
       </div>
       
       {isExpanded && (
         <>
-          <div className="goal-inputs">
+          <div className="goal-inputs" data-testid="goal-setter-inputs">
             <TimeInputGroup
               hours={hours}
               minutes={minutes}
@@ -95,30 +95,31 @@ function GoalSetter({
             />
           </div>
           <div className="quick-goals">
-            <button onClick={() => setQuickGoal(QUICK_GOALS.LONG)} aria-label="Set goal to 8.5 hours">
+            <button onClick={() => setQuickGoal(QUICK_GOALS.LONG)} data-testid="goal-setter-quick-long" aria-label="Set goal to 8.5 hours">
               8.5h
             </button>
-            <button onClick={() => setQuickGoal(QUICK_GOALS.MEDIUM)} aria-label="Set goal to 7.5 hours">
+            <button onClick={() => setQuickGoal(QUICK_GOALS.MEDIUM)} data-testid="goal-setter-quick-medium" aria-label="Set goal to 7.5 hours">
               7.5h
             </button>
-            <button onClick={() => setQuickGoal(QUICK_GOALS.SHORT)} aria-label="Set goal to 6.5 hours">
+            <button onClick={() => setQuickGoal(QUICK_GOALS.SHORT)} data-testid="goal-setter-quick-short" aria-label="Set goal to 6.5 hours">
               6.5h
             </button>
           </div>
 
-          <div className="lunch-break-section">
+          <div className="lunch-break-section" data-testid="goal-setter-lunch-section">
             <label className="checkbox-label">
               <input
                 type="checkbox"
                 checked={lunchEnabled}
                 onChange={(e) => onLunchEnabledChange(e.target.checked)}
                 className="lunch-checkbox"
+                data-testid="goal-setter-lunch-checkbox"
               />
               <span>Include lunch</span>
             </label>
 
             {lunchEnabled && (
-              <div className="lunch-inputs">
+              <div className="lunch-inputs" data-testid="goal-setter-lunch-inputs">
                 <TimeInputGroup
                   hours={lunchHours}
                   minutes={lunchMins}

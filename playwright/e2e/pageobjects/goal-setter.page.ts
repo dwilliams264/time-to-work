@@ -2,77 +2,53 @@ import { Page } from '@playwright/test';
 
 export class GoalSetterPage {
     readonly page: Page;
-    readonly goalSetterContainer: string;
-    readonly goalSetterHeader: string;
-    readonly toggleButton: string;
-    readonly goalInputs: string;
-    readonly hoursInput: string;
-    readonly minutesInput: string;
-    readonly quickGoalLongButton: string;
-    readonly quickGoalMediumButton: string;
-    readonly quickGoalShortButton: string;
-    readonly lunchBreakSection: string;
-    readonly lunchCheckbox: string;
-    readonly lunchInputs: string;
 
     constructor(page: Page) {
         this.page = page;
-        this.goalSetterContainer = '.goal-setter';
-        this.goalSetterHeader = '.goal-setter h3';
-        this.toggleButton = '.toggle-button';
-        this.goalInputs = '.goal-inputs';
-        this.hoursInput = '#hours';
-        this.minutesInput = '#minutes';
-        this.quickGoalLongButton = 'button:has-text("8.5h")';
-        this.quickGoalMediumButton = 'button:has-text("7.5h")';
-        this.quickGoalShortButton = 'button:has-text("6.5h")';
-        this.lunchBreakSection = '.lunch-break-section';
-        this.lunchCheckbox = '.lunch-checkbox';
-        this.lunchInputs = '.lunch-inputs';
     }
 
     getGoalSetterContainer() {
-        return this.page.locator(this.goalSetterContainer);
+        return this.page.getByTestId('goal-setter-container');
     }
 
     getGoalSetterHeader() {
-        return this.page.locator(this.goalSetterHeader);
+        return this.page.getByTestId('goal-setter-header');
     }
 
     getToggleButton() {
-        return this.page.locator(this.toggleButton);
+        return this.page.getByTestId('goal-setter-toggle');
     }
 
     getGoalInputs() {
-        return this.page.locator(this.goalInputs);
+        return this.page.getByTestId('goal-setter-inputs');
     }
 
     getHoursInput() {
-        return this.page.locator(this.hoursInput);
+        return this.page.getByTestId('hours');
     }
 
     getMinutesInput() {
-        return this.page.locator(this.minutesInput);
+        return this.page.getByTestId('minutes');
     }
 
     getQuickGoalLongButton() {
-        return this.page.locator(this.quickGoalLongButton);
+        return this.page.getByTestId('goal-setter-quick-long');
     }
 
     getQuickGoalMediumButton() {
-        return this.page.locator(this.quickGoalMediumButton);
+        return this.page.getByTestId('goal-setter-quick-medium');
     }
 
     getQuickGoalShortButton() {
-        return this.page.locator(this.quickGoalShortButton);
+        return this.page.getByTestId('goal-setter-quick-short');
     }
 
     getLunchCheckbox() {
-        return this.page.locator(this.lunchCheckbox);
+        return this.page.getByTestId('goal-setter-lunch-checkbox');
     }
 
     getLunchInputs() {
-        return this.page.locator(this.lunchInputs);
+        return this.page.getByTestId('goal-setter-lunch-inputs');
     }
 
     async expandIfCollapsed() {

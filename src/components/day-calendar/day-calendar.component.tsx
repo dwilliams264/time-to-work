@@ -89,19 +89,20 @@ function DayCalendar({
   };
 
   return (
-    <div className="calendar-container">
-      <div className="calendar-header">
+    <div className="calendar-container" data-testid="calendar-container">
+      <div className="calendar-header" data-testid="calendar-header">
         <div className="calendar-header-top">
-          <h2>Today's Schedule</h2>
+          <h2 data-testid="calendar-title">Today's Schedule</h2>
           <button 
             className="clear-all-button"
             onClick={onClearAll}
             disabled={timeBlocks.length === 0}
+            data-testid="calendar-clear-all"
           >
             Clear All
           </button>
         </div>
-        <p className="calendar-hint">Drag to create a time block</p>
+        <p className="calendar-hint" data-testid="calendar-hint">Drag to create a time block</p>
       </div>
 
       <div
@@ -113,6 +114,7 @@ function DayCalendar({
         onTouchMove={handlePointerMoveEvent}
         onTouchEnd={handlePointerUpEvent}
         style={{ height: `${TOTAL_HOURS * HOUR_HEIGHT}px` }}
+        data-testid="calendar-grid"
       >
         {hours.map((hour) => (
           <HourRow key={hour} hour={hour} />
@@ -143,6 +145,7 @@ function DayCalendar({
               top: `${timeToY(previewBlock.startTime) + 12}px`,
               height: `${timeToY(previewBlock.duration)}px`,
             }}
+            data-testid="calendar-preview-block"
           >
             <div className="time-block-content">
               <span className="time-block-duration">{formatDuration(previewBlock.duration)}</span>
@@ -154,8 +157,9 @@ function DayCalendar({
           <div
             className="current-time-line"
             style={{ top: `${timeToY(currentTimeMinutes) + 12}px` }}
+            data-testid="calendar-current-time-line"
           >
-            <div className="current-time-indicator" />
+            <div className="current-time-indicator" data-testid="calendar-current-time-indicator" />
           </div>
         )}
       </div>

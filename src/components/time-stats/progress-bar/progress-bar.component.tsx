@@ -10,7 +10,7 @@ interface ProgressBarProps {
  */
 function ProgressBar({ percentage, isComplete }: ProgressBarProps) {
   return (
-    <div className="progress-bar">
+    <div className="progress-bar" data-testid="time-stats-progress-bar">
       <div
         className={`progress-fill ${isComplete ? 'complete' : ''}`}
         style={{ width: `${percentage}%` }}
@@ -18,6 +18,7 @@ function ProgressBar({ percentage, isComplete }: ProgressBarProps) {
         aria-valuenow={percentage}
         aria-valuemin={0}
         aria-valuemax={100}
+        data-testid="time-stats-progress-fill"
       />
     </div>
   );

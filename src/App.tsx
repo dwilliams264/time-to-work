@@ -75,15 +75,15 @@ function App() {
   };
 
   return (
-    <div className="app">
+    <div className="app" data-testid="app-container">
       <SpeedInsights />
-      <header className="app-header">
-        <h1>Time to Work</h1>
-        <p className="current-date">{currentDate}</p>
+      <header className="app-header" data-testid="app-header">
+        <h1 data-testid="app-header-title">Time to Work</h1>
+        <p className="current-date" data-testid="app-current-date">{currentDate}</p>
       </header>
 
       <div className="app-content">
-        <div className="sidebar">
+        <div className="sidebar" data-testid="app-sidebar">
           <GoalSetter 
             goalMinutes={goalMinutes} 
             onGoalChange={setGoalMinutes}
@@ -100,7 +100,7 @@ function App() {
           />
         </div>
 
-        <main className="main-content">
+        <main className="main-content" data-testid="app-main-content">
           <DayCalendar
             timeBlocks={timeBlocks}
             onAddBlock={handleAddBlock}

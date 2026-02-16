@@ -29,6 +29,7 @@ function TimeBlockComponent({ block, onRemove, onStartMove, onStartResize }: Tim
         e.stopPropagation();
         onStartMove(block.id);
       }}
+      data-testid="calendar-time-block"
     >
       <div
         className="resize-handle resize-top"
@@ -41,7 +42,7 @@ function TimeBlockComponent({ block, onRemove, onStartMove, onStartResize }: Tim
           onStartResize(block.id, 'top');
         }}
       />
-      <div className="time-block-content">
+      <div className="time-block-content" data-testid="calendar-time-block-content">
         <span className="time-block-title">💻 Work</span>
         <span className="time-block-time">
           {formatTime(block.startTime)} - {formatTime(block.startTime + block.duration)}
@@ -54,6 +55,7 @@ function TimeBlockComponent({ block, onRemove, onStartMove, onStartResize }: Tim
             onRemove(block.id);
           }}
           aria-label="Delete time block"
+          data-testid="calendar-time-block-delete"
         >
           ×
         </button>

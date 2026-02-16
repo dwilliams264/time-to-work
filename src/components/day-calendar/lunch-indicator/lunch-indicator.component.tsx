@@ -27,6 +27,7 @@ function LunchIndicator({ startTime, duration, onStartMove }: LunchIndicatorProp
         e.stopPropagation();
         onStartMove();
       }}
+      data-testid="calendar-lunch-indicator"
     >
       <div className="lunch-content">
         <span className="lunch-title">🍽️ Lunch</span>

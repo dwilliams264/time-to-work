@@ -37,6 +37,7 @@ function TimeInputGroup({
           value={hours}
           onChange={(e) => onHoursChange(parseInt(e.target.value) || 0)}
           className={`time-input ${sizeClass}`}
+          data-testid={hoursId}
         />
         <label htmlFor={hoursId}>Hours</label>
       </div>
@@ -50,6 +51,7 @@ function TimeInputGroup({
           value={minutes}
           onChange={(e) => onMinutesChange(parseInt(e.target.value) || 0)}
           className={`time-input ${sizeClass}`}
+          data-testid={minutesId}
         />
         <label htmlFor={minutesId}>Mins</label>
       </div>
