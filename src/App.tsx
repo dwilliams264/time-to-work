@@ -1,4 +1,4 @@
-import './app.css';
+import './App.css';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
 import DayCalendar from './components/day-calendar/day-calendar.component';
