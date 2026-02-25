@@ -30,3 +30,4 @@ package-lock.json
 /playwright-report/
 /test-results/
 /allure-results/
+/allure-report/
