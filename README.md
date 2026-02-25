@@ -108,6 +108,24 @@ yarn lint
 yarn build
 ```
 
+### Running Tests
+
+This project uses [Playwright](https://playwright.dev/) for end-to-end testing.
+
+```bash
+# Run all tests
+yarn test
+
+# Run tests with UI mode (interactive)
+yarn test:ui
+
+# Run only e2e tests
+yarn test:e2e
+
+# View test report (Allure)
+yarn test:report
+```
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
