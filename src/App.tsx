@@ -1,5 +1,6 @@
 import './App.css';
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import { Analytics } from '@vercel/analytics/react';
 import { useState } from 'react';
 
 import DayCalendar from './components/day-calendar/day-calendar.component';
@@ -103,6 +104,7 @@ function App() {
   return (
     <div className="app" data-testid="app-container">
       <SpeedInsights />
+      <Analytics />
       <header className="app-header" data-testid="app-header">
         <h1 data-testid="app-header-title">Time to Work</h1>
         <div className="date-navigation" data-testid="date-navigation">
