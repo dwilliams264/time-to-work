@@ -1,0 +1,34 @@
+name: E2E Tests
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - 'next'
+      - 'main'
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      checks: write
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.14
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build
+        id: build
+        run: yarn build
+      - name: Run tests
+        run: npx allure run -- yarn test:e2e
+      - name: Generate test report
+        uses: allure-framework/allure-action@v0
+        with:
+          report-directory: './allure-report'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
