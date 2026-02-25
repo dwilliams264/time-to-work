@@ -22,7 +22,7 @@ A minimal, beautiful daily time tracker that helps you visualise and manage your
 
 ### Prerequisites
 
-- Node.js 18+ and npm
+- Node.js 18+ and Yarn
 
 ### Installation
 
@@ -32,10 +32,10 @@ git clone https://github.com/yourusername/time-to-work.git
 cd time-to-work
 
 # Install dependencies
-npm install
+yarn install
 
 # Start development server
-npm run dev
+yarn dev
 ```
 
 Visit [http://localhost:5173](http://localhost:5173) to view the app.
@@ -90,10 +90,10 @@ src/
 
 ```bash
 # Build the application
-npm run build
+yarn build
 
 # Preview production build
-npm run preview
+yarn preview
 ```
 
 The build output will be in the `dist/` directory.
@@ -102,10 +102,10 @@ The build output will be in the `dist/` directory.
 
 ```bash
 # Run linter
-npm run lint
+yarn lint
 
 # Build TypeScript
-npm run build
+yarn build
 ```
 
 ## 🤝 Contributing
