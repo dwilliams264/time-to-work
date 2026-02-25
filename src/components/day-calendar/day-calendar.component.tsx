@@ -26,6 +26,7 @@ interface DayCalendarProps {
   lunchDuration: number;
   onLunchTimeChange: (startTime: number) => void;
   snapBlockToValid: (startTime: number, duration: number, excludeId?: string) => { startTime: number; duration: number };
+  isToday?: boolean;
 }
 
 /**
@@ -43,7 +44,8 @@ function DayCalendar({
   lunchStartTime,
   lunchDuration,
   onLunchTimeChange,
-  snapBlockToValid
+  snapBlockToValid,
+  isToday = true
 }: DayCalendarProps) {
   const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -71,7 +73,7 @@ function DayCalendar({
 
   const currentTimeMinutes = getCurrentTimeMinutes(currentTime, HOURS_START);
   const showCurrentTimeLine =
-    currentTimeMinutes >= 0 && currentTimeMinutes <= TOTAL_HOURS * 60;
+    isToday && currentTimeMinutes >= 0 && currentTimeMinutes <= TOTAL_HOURS * 60;
 
   const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => HOURS_START + i);
 
@@ -92,7 +94,7 @@ function DayCalendar({
     <div className="calendar-container" data-testid="calendar-container">
       <div className="calendar-header" data-testid="calendar-header">
         <div className="calendar-header-top">
-          <h2 data-testid="calendar-title">Today's Schedule</h2>
+          <h2 data-testid="calendar-title">{isToday ? "Today's Schedule" : "Day's Schedule"}</h2>
           <button 
             className="clear-all-button"
             onClick={onClearAll}
