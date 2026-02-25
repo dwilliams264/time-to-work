@@ -92,6 +92,9 @@ export class CalendarPage {
         await this.page.mouse.down();
         await this.page.mouse.move(centerX, endY);
         await this.page.mouse.up();
+
+        // Wait a bit for the block to be created and rendered
+        await this.page.waitForTimeout(100);
     }
 
     async createBlockAtPosition(yOffset: number, height: number) {

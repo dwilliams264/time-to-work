@@ -1,5 +1,6 @@
 import './App.css';
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import { useState } from 'react';
 
 import DayCalendar from './components/day-calendar/day-calendar.component';
 import GoalSetter from './components/goal-setter/goal-setter.component';
@@ -14,9 +15,18 @@ import { useDayData, useStorageCleanup } from './hooks/usePersistedState';
  * Main application component for the Time to Work daily time tracker
  */
 function App() {
-  const currentDate = formatDate(new Date());
+  const [selectedDate, setSelectedDate] = useState(() => new Date());
+  
+  const currentDate = formatDate(selectedDate);
   const today = new Date();
-  const storageKey = StorageService.generateKey(today);
+  today.setHours(0, 0, 0, 0); // Reset to start of day for comparison
+  
+  const selectedDateNormalized = new Date(selectedDate);
+  selectedDateNormalized.setHours(0, 0, 0, 0);
+  
+  const isToday = selectedDateNormalized.getTime() === today.getTime();
+  
+  const storageKey = StorageService.generateKey(selectedDate);
 
   // Use custom hook for persisted state
   const {
@@ -74,12 +84,47 @@ function App() {
     setTimeBlocks([]);
   };
 
+  const goToPreviousDay = () => {
+    const newDate = new Date(selectedDate);
+    newDate.setDate(newDate.getDate() - 1);
+    setSelectedDate(newDate);
+  };
+
+  const goToNextDay = () => {
+    const newDate = new Date(selectedDate);
+    newDate.setDate(newDate.getDate() + 1);
+    newDate.setHours(0, 0, 0, 0); // Normalize for comparison
+    // Don't allow navigation beyond today
+    if (newDate <= today) {
+      setSelectedDate(newDate);
+    }
+  };
+
   return (
     <div className="app" data-testid="app-container">
       <SpeedInsights />
       <header className="app-header" data-testid="app-header">
         <h1 data-testid="app-header-title">Time to Work</h1>
-        <p className="current-date" data-testid="app-current-date">{currentDate}</p>
+        <div className="date-navigation" data-testid="date-navigation">
+          <button 
+            className="nav-button" 
+            onClick={goToPreviousDay}
+            data-testid="previous-day-button"
+            aria-label="Previous day"
+          >
+            ←
+          </button>
+          <p className="current-date" data-testid="app-current-date">{currentDate}</p>
+          <button 
+            className="nav-button" 
+            onClick={goToNextDay}
+            disabled={isToday}
+            data-testid="next-day-button"
+            aria-label="Next day"
+          >
+            →
+          </button>
+        </div>
       </header>
 
       <div className="app-content">
@@ -112,6 +157,7 @@ function App() {
             lunchDuration={lunchMinutes}
             onLunchTimeChange={setLunchStartTime}
             snapBlockToValid={handleSnapBlockToValid}
+            isToday={isToday}
           />
         </main>
       </div>
