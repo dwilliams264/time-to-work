@@ -5,4 +5,6 @@ updates:
     schedule:
       interval: "monthly"
     groups:
-      - dependency-type: "all"
+      all-updates:
+        patterns:
+          - "*"
