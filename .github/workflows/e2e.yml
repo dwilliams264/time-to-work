@@ -44,6 +44,9 @@ jobs:
       url: ${{ steps.report.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: test
+    permissions:
+      pages: write
+      id-token: write
     steps:
       - name: Deploy to GitHub Pages
         id: report
