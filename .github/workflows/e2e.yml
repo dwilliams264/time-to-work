@@ -32,3 +32,19 @@ jobs:
         with:
           report-directory: './allure-report'
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload test report
+        id: report
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './allure-report'
+  # Deploy Allure Report to GitHub Pages
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.report.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Deploy to GitHub Pages
+        id: report
+        uses: actions/deploy-pages@v4
