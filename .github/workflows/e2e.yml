@@ -46,7 +46,7 @@ jobs:
         continue-on-error: true
       - name: Generate test report
         if: always()
-        run: npx allure generate allure-results --output allure-report --clean
+        run: npx allure generate --output allure-report allure-results
       - name: Save Allure history
         if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
         uses: actions/upload-artifact@v4
