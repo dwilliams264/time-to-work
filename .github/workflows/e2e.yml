@@ -45,7 +45,10 @@ jobs:
           report-directory: './allure-report'
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Save Allure history
+        run: mkdir -p ./allure-report/history
+      - name: Cache Allure history
         uses: actions/cache/save@v4
+        continue-on-error: true
         with:
           key: allure-history
           path: ./allure-report/history
