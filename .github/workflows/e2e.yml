@@ -36,7 +36,7 @@ jobs:
         continue-on-error: true
         with:
           name: allure-history
-          path: ./
+          path: ./.allure/
           workflow: e2e.yml
           branch: main
           if_no_artifact_found: ignore
@@ -51,16 +51,16 @@ jobs:
         run: |
           echo "=== workspace root ==="
           ls -la ./
+          echo "=== .allure dir ==="
+          ls -la ./.allure/ || echo "not found"
           echo "=== allure-report ==="
           ls -la ./allure-report/ || echo "not found"
-          echo "=== allure-results ==="
-          ls -la ./allure-results/ || echo "not found"
       - name: Save Allure history
         if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
         uses: actions/upload-artifact@v4
         with:
           name: allure-history
-          path: ./allure-history.jsonl
+          path: ./.allure/history.jsonl
           overwrite: true
           if-no-files-found: warn
       - name: Upload test report
