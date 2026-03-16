@@ -37,7 +37,8 @@ jobs:
         if: ${{ steps.build.outcome == 'success' && always() }}
         uses: actions/cache/restore@v4
         with:
-          key: allure-history
+          key: allure-history-${{ github.run_id }}
+          restore-keys: allure-history-
           path: ./allure-results/history
       - name: Generate test report
         uses: allure-framework/allure-action@v0
@@ -50,7 +51,7 @@ jobs:
         uses: actions/cache/save@v4
         continue-on-error: true
         with:
-          key: allure-history
+          key: allure-history-${{ github.run_id }}
           path: ./allure-report/history
       - name: Upload test report
         id: report
