@@ -33,11 +33,22 @@ jobs:
         run: yarn build
       - name: Run tests
         run: npx allure run -- yarn test:e2e
+      - name: Restore Allure history
+        if: ${{ steps.build.outcome == 'success' && always() }}
+        uses: actions/cache/restore@v4
+        with:
+          key: allure-history
+          path: ./allure-results/history
       - name: Generate test report
         uses: allure-framework/allure-action@v0
         with:
           report-directory: './allure-report'
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Save Allure history
+        uses: actions/cache/save@v4
+        with:
+          key: allure-history
+          path: ./allure-report/history
       - name: Upload test report
         id: report
         uses: actions/upload-pages-artifact@v3
