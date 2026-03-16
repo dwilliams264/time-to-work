@@ -32,14 +32,14 @@ jobs:
         id: build
         run: yarn build
       - name: Restore Allure history
-        if: ${{ steps.build.outcome == 'success' && always() }}
-        uses: actions/cache/restore@v4
+        uses: dawidd6/action-download-artifact@v6
+        continue-on-error: true
         with:
-          key: allure-history-${{ github.ref_name }}-${{ github.run_id }}
-          restore-keys: |
-            allure-history-${{ github.ref_name }}-
-            allure-history-main-
+          name: allure-history
           path: ./allure-results/history
+          workflow: e2e.yml
+          branch: main
+          if_no_artifact_found: ignore
       - name: Run tests
         run: npx allure run -- yarn test:e2e
       - name: Generate test report
@@ -48,14 +48,12 @@ jobs:
           report-directory: './allure-report'
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Save Allure history
-        run: mkdir -p ./allure-report/history
-      - name: Cache Allure history
         if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
-        uses: actions/cache/save@v4
-        continue-on-error: true
+        uses: actions/upload-artifact@v4
         with:
-          key: allure-history-${{ github.ref_name }}-${{ github.run_id }}
+          name: allure-history
           path: ./allure-report/history
+          overwrite: true
       - name: Upload test report
         id: report
         uses: actions/upload-pages-artifact@v3
