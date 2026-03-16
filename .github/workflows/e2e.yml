@@ -31,8 +31,6 @@ jobs:
       - name: Build
         id: build
         run: yarn build
-      - name: Run tests
-        run: npx allure run -- yarn test:e2e
       - name: Restore Allure history
         if: ${{ steps.build.outcome == 'success' && always() }}
         uses: actions/cache/restore@v4
@@ -40,6 +38,8 @@ jobs:
           key: allure-history-${{ github.run_id }}
           restore-keys: allure-history-
           path: ./allure-results/history
+      - name: Run tests
+        run: npx allure run -- yarn test:e2e
       - name: Generate test report
         uses: allure-framework/allure-action@v0
         with:
@@ -48,6 +48,7 @@ jobs:
       - name: Save Allure history
         run: mkdir -p ./allure-report/history
       - name: Cache Allure history
+        if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
         uses: actions/cache/save@v4
         continue-on-error: true
         with:
