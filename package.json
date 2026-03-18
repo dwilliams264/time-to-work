@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "test:unit": "vitest run",
     "test": "yarn test:report:clean && playwright test",
     "test:e2e": "yarn test:report:clean && playwright test --project=e2e",
     "test:ui": "yarn test:report:clean && playwright test --ui",
@@ -35,6 +36,7 @@
     "globals": "^17.4.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.56.1",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "vitest": "2"
   }
 }

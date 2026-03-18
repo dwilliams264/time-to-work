@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { StorageService, type DayData } from '../utils/storage';
 import { DEFAULT_GOAL_MINUTES, DEFAULT_LUNCH_TIME, DEFAULT_LUNCH_MINUTES } from '../constants/calendar';
 
@@ -21,11 +21,18 @@ export function useDayData(storageKey: string) {
         };
     };
 
-    const [timeBlocks, setTimeBlocks] = useState<DayData['timeBlocks']>(() => loadData(storageKey).timeBlocks);
-    const [goalMinutes, setGoalMinutes] = useState<number>(() => loadData(storageKey).goalMinutes);
-    const [lunchEnabled, setLunchEnabled] = useState<boolean>(() => loadData(storageKey).lunchEnabled);
-    const [lunchMinutes, setLunchMinutes] = useState<number>(() => loadData(storageKey).lunchMinutes);
-    const [lunchStartTime, setLunchStartTime] = useState<number>(() => loadData(storageKey).lunchStartTime);
+    // Cache the initial load to avoid reading localStorage once per useState call
+    const initialRef = useRef<DayData | null>(null);
+    if (!initialRef.current) {
+        initialRef.current = loadData(storageKey);
+    }
+    const initial = initialRef.current;
+
+    const [timeBlocks, setTimeBlocks] = useState<DayData['timeBlocks']>(initial.timeBlocks);
+    const [goalMinutes, setGoalMinutes] = useState<number>(initial.goalMinutes);
+    const [lunchEnabled, setLunchEnabled] = useState<boolean>(initial.lunchEnabled);
+    const [lunchMinutes, setLunchMinutes] = useState<number>(initial.lunchMinutes);
+    const [lunchStartTime, setLunchStartTime] = useState<number>(initial.lunchStartTime);
 
     // Reload all data when storage key changes (e.g., when navigating between days)
     useEffect(() => {

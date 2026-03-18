@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import type { TimeBlock, ResizeState } from '../types';
 import { yToTime } from '../utils/timeCalculations';
 import { getPointerY, isTargetOrParent } from '../utils/pointerEvents';
-import { MIN_BLOCK_DURATION, TIME_SNAP_INTERVAL, TOTAL_HOURS } from '../constants/calendar';
+import { MIN_BLOCK_DURATION, TIME_SNAP_INTERVAL, TOTAL_HOURS, CALENDAR_PADDING_TOP } from '../constants/calendar';
 
 /**
  * Hook for managing drag-to-create block functionality
@@ -30,7 +30,7 @@ export function useBlockCreation(
             }
 
             const rect = calendarRef.current.getBoundingClientRect();
-            const y = getPointerY(e, rect, 12);
+            const y = getPointerY(e, rect, CALENDAR_PADDING_TOP);
             const minutes = yToTime(y);
 
             setDragStart(minutes);
@@ -95,15 +95,15 @@ export function useBlockMovement(
         excludeId?: string,
     ) => { startTime: number; duration: number },
 ) {
-    const [movingBlock, setMovingBlock] = useState<string | null>(null);
+    const [movingBlock, setMovingBlock] = useState<{ id: string; grabOffset: number } | null>(null);
 
     const handlePointerMove = useCallback(
         (minutes: number) => {
             if (!movingBlock) return false;
 
-            const block = timeBlocks.find((b) => b.id === movingBlock);
+            const block = timeBlocks.find((b) => b.id === movingBlock.id);
             if (block) {
-                const rawStartTime = minutes - block.duration / 2;
+                const rawStartTime = minutes - movingBlock.grabOffset;
                 const snappedStartTime = Math.round(rawStartTime / TIME_SNAP_INTERVAL) * TIME_SNAP_INTERVAL;
                 const newStartTime = Math.max(0, Math.min(snappedStartTime, TOTAL_HOURS * 60 - block.duration));
 
@@ -120,8 +120,8 @@ export function useBlockMovement(
         setMovingBlock(null);
     }, []);
 
-    const startMoving = useCallback((blockId: string) => {
-        setMovingBlock(blockId);
+    const startMoving = useCallback((blockId: string, grabOffset: number) => {
+        setMovingBlock({ id: blockId, grabOffset });
     }, []);
 
     return {
@@ -247,7 +247,7 @@ export function useCalendarInteractions(
             if (!calendarRef.current) return;
 
             const rect = calendarRef.current.getBoundingClientRect();
-            const y = getPointerY(e, rect, 12);
+            const y = getPointerY(e, rect, CALENDAR_PADDING_TOP);
             const minutes = yToTime(y);
 
             // Handle different interaction types in priority order
@@ -267,10 +267,14 @@ export function useCalendarInteractions(
         lunch.handlePointerUp();
     }, [creation, movement, resize, lunch]);
 
-    // Set up global mouse up listener
+    // Set up global pointer up listeners (handles drag ending outside the calendar)
     useEffect(() => {
         window.addEventListener('mouseup', handlePointerUp);
-        return () => window.removeEventListener('mouseup', handlePointerUp);
+        window.addEventListener('touchend', handlePointerUp);
+        return () => {
+            window.removeEventListener('mouseup', handlePointerUp);
+            window.removeEventListener('touchend', handlePointerUp);
+        };
     }, [handlePointerUp]);
 
     return {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { formatDuration } from '../../utils/timeFormatters';
 import { QUICK_GOALS, MAX_GOAL_HOURS, MAX_LUNCH_HOURS } from '../../constants/calendar';
 import TimeInputGroup from './time-input-group/time-input-group.component';
@@ -25,58 +25,42 @@ function GoalSetter({
   onLunchEnabledChange,
   onLunchMinutesChange
 }: GoalSetterProps) {
-  const [hours, setHours] = useState(Math.floor(goalMinutes / 60));
-  const [minutes, setMinutes] = useState(goalMinutes % 60);
-  const [lunchHours, setLunchHours] = useState(Math.floor(lunchMinutes / 60));
-  const [lunchMins, setLunchMins] = useState(lunchMinutes % 60);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Sync local state with prop changes
-  useEffect(() => {
-    setHours(Math.floor(goalMinutes / 60));
-    setMinutes(goalMinutes % 60);
-  }, [goalMinutes]);
-
-  useEffect(() => {
-    setLunchHours(Math.floor(lunchMinutes / 60));
-    setLunchMins(lunchMinutes % 60);
-  }, [lunchMinutes]);
+  const hours = Math.floor(goalMinutes / 60);
+  const minutes = goalMinutes % 60;
+  const lunchHours = Math.floor(lunchMinutes / 60);
+  const lunchMins = lunchMinutes % 60;
 
   const handleHoursChange = (newHours: number) => {
     const validHours = Math.max(0, Math.min(MAX_GOAL_HOURS, newHours));
-    setHours(validHours);
     onGoalChange(validHours * 60 + minutes);
   };
 
   const handleMinutesChange = (newMinutes: number) => {
     const validMinutes = Math.max(0, Math.min(59, newMinutes));
-    setMinutes(validMinutes);
     onGoalChange(hours * 60 + validMinutes);
   };
 
   const handleLunchHoursChange = (newHours: number) => {
     const validHours = Math.max(0, Math.min(MAX_LUNCH_HOURS, newHours));
-    setLunchHours(validHours);
     onLunchMinutesChange(validHours * 60 + lunchMins);
   };
 
   const handleLunchMinsChange = (newMins: number) => {
     const validMins = Math.max(0, Math.min(59, newMins));
-    setLunchMins(validMins);
     onLunchMinutesChange(lunchHours * 60 + validMins);
   };
 
   const setQuickGoal = (totalMinutes: number) => {
-    setHours(Math.floor(totalMinutes / 60));
-    setMinutes(totalMinutes % 60);
     onGoalChange(totalMinutes);
   };
 
   return (
     <div className="goal-setter" data-testid="goal-setter-container">
-      <div className="goal-setter-header" onClick={() => setIsExpanded(!isExpanded)} data-testid="goal-setter-header">
+      <div className="goal-setter-header" data-testid="goal-setter-header">
         <h3>Daily Goal: {formatDuration(goalMinutes)}</h3>
-        <button className="toggle-button" data-testid="goal-setter-toggle" aria-label={isExpanded ? "Collapse" : "Expand"}>
+        <button className="toggle-button" data-testid="goal-setter-toggle" aria-label={isExpanded ? "Collapse" : "Expand"} onClick={() => setIsExpanded(!isExpanded)}>
           {isExpanded ? '−' : '+'}
         </button>
       </div>
@@ -127,6 +111,8 @@ function GoalSetter({
                   onMinutesChange={handleLunchMinsChange}
                   maxHours={MAX_LUNCH_HOURS}
                   size="small"
+                  hoursId="lunch-hours"
+                  minutesId="lunch-minutes"
                 />
               </div>
             )}

@@ -1,12 +1,13 @@
 import type { TimeBlock } from '../../../types';
 import { timeToY } from '../../../utils/timeCalculations';
 import { formatTime, formatDuration } from '../../../utils/timeFormatters';
+import { HOUR_HEIGHT, CALENDAR_PADDING_TOP } from '../../../constants/calendar';
 import './time-block.css';
 
 interface TimeBlockProps {
   block: TimeBlock;
   onRemove: (id: string) => void;
-  onStartMove: (id: string) => void;
+  onStartMove: (id: string, grabOffset: number) => void;
   onStartResize: (id: string, edge: 'top' | 'bottom') => void;
 }
 
@@ -18,16 +19,18 @@ function TimeBlockComponent({ block, onRemove, onStartMove, onStartResize }: Tim
     <div
       className="time-block"
       style={{
-        top: `${timeToY(block.startTime) + 12}px`,
+        top: `${timeToY(block.startTime) + CALENDAR_PADDING_TOP}px`,
         height: `${timeToY(block.duration)}px`
       }}
       onMouseDown={(e) => {
         e.stopPropagation();
-        onStartMove(block.id);
+        const grabOffset = (e.clientY - e.currentTarget.getBoundingClientRect().top) * 60 / HOUR_HEIGHT;
+        onStartMove(block.id, grabOffset);
       }}
       onTouchStart={(e) => {
         e.stopPropagation();
-        onStartMove(block.id);
+        const grabOffset = (e.touches[0].clientY - e.currentTarget.getBoundingClientRect().top) * 60 / HOUR_HEIGHT;
+        onStartMove(block.id, grabOffset);
       }}
       data-testid="calendar-time-block"
     >

@@ -25,10 +25,10 @@ test.describe('Time Blocks', () => {
             await expect(calendarPage.getTimeBlock()).toBeVisible();
         });
 
-        test('should create multiple time blocks', async ({ page }) => {
+        test('should create multiple time blocks', async () => {
             // Create first block
             await calendarPage.createBlockAtPosition(200, 80);
-            await page.waitForTimeout(100);
+            await expect(calendarPage.getTimeBlocks()).toHaveCount(1);
 
             // Create second block
             await calendarPage.createBlockAtPosition(350, 80);
@@ -106,10 +106,10 @@ test.describe('Time Blocks', () => {
             await expect(calendarPage.getTimeBlockDeleteButton()).toBeVisible();
         });
 
-        test('should delete first block when multiple exist', async ({ page }) => {
+        test('should delete first block when multiple exist', async () => {
             // Create two blocks
             await calendarPage.createBlockAtPosition(200, 80);
-            await page.waitForTimeout(100);
+            await expect(calendarPage.getTimeBlocks()).toHaveCount(1);
             await calendarPage.createBlockAtPosition(350, 80);
 
             await expect(calendarPage.getTimeBlocks()).toHaveCount(2);
@@ -123,10 +123,10 @@ test.describe('Time Blocks', () => {
     });
 
     test.describe('Clear All Functionality', () => {
-        test('should clear all time blocks', async ({ page }) => {
+        test('should clear all time blocks', async () => {
             // Create multiple blocks
             await calendarPage.createBlockAtPosition(200, 80);
-            await page.waitForTimeout(100);
+            await expect(calendarPage.getTimeBlocks()).toHaveCount(1);
             await calendarPage.createBlockAtPosition(350, 80);
 
             await expect(calendarPage.getTimeBlocks()).toHaveCount(2);
@@ -183,10 +183,10 @@ test.describe('Time Blocks', () => {
             expect(afterDelete).not.toBe(withBlock);
         });
 
-        test('should reset stats when all blocks cleared', async ({ page }) => {
+        test('should reset stats when all blocks cleared', async () => {
             // Create blocks
             await calendarPage.createBlockAtPosition(200, 80);
-            await page.waitForTimeout(100);
+            await expect(calendarPage.getTimeBlocks()).toHaveCount(1);
             await calendarPage.createBlockAtPosition(350, 80);
 
             // Clear all
@@ -215,7 +215,7 @@ test.describe('Time Blocks', () => {
         test('should persist multiple blocks after page reload', async ({ page }) => {
             // Create two blocks
             await calendarPage.createBlockAtPosition(200, 80);
-            await page.waitForTimeout(100);
+            await expect(calendarPage.getTimeBlocks()).toHaveCount(1);
             await calendarPage.createBlockAtPosition(350, 80);
 
             await expect(calendarPage.getTimeBlocks()).toHaveCount(2);

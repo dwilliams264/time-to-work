@@ -44,3 +44,6 @@ export const MAX_GOAL_HOURS = 24;
 
 /** Maximum hours for lunch break */
 export const MAX_LUNCH_HOURS = 4;
+
+/** Top padding offset in pixels for the calendar grid */
+export const CALENDAR_PADDING_TOP = 12;

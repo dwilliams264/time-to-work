@@ -177,7 +177,6 @@ test.describe('Date Navigation', () => {
 
             // Navigate away and back
             await appPage.goToPreviousDay();
-            await page.waitForTimeout(100);
             await appPage.goToNextDay();
 
             // Block should still be there
@@ -191,7 +190,6 @@ test.describe('Date Navigation', () => {
 
             // Navigate to yesterday (should be zero)
             await appPage.goToPreviousDay();
-            await page.waitForTimeout(100);
 
             const yesterdayStats = await timeStatsPage.getTimeWorkedText();
             expect(yesterdayStats).toContain('0');
@@ -201,22 +199,19 @@ test.describe('Date Navigation', () => {
         test('should clear correct day when using clear all', async ({ page }) => {
             // Add blocks on today
             await calendarPage.createBlockAtPosition(200, 80);
-            await page.waitForTimeout(100);
+            await expect(calendarPage.getTimeBlocks()).toHaveCount(1);
 
             // Navigate to yesterday and add block
             await appPage.goToPreviousDay();
-            await page.waitForTimeout(100);
             await calendarPage.createBlockAtPosition(300, 80);
             await expect(calendarPage.getTimeBlocks()).toHaveCount(1);
 
             // Clear yesterday's blocks
             await calendarPage.clearAllBlocks();
-            await page.waitForTimeout(100);
             await expect(calendarPage.getTimeBlock()).not.toBeVisible();
 
             // Go back to today - blocks should still exist
             await appPage.goToNextDay();
-            await page.waitForTimeout(100);
             await expect(calendarPage.getTimeBlocks()).toHaveCount(1);
         });
     });
@@ -249,12 +244,13 @@ test.describe('Date Navigation', () => {
     });
 
     test.describe('Current Time Indicator', () => {
-        test('should show current time line on today during work hours', async () => {
-            const currentHour = new Date().getHours();
+        test('should show current time line on today during work hours', async ({ page }) => {
+            // Install fake clock at 10:00 AM for deterministic result
+            await page.clock.install({ time: new Date('2026-03-18T10:00:00') });
+            await appPage.navigate();
+            await appPage.waitForAppToLoad();
 
-            if (currentHour >= 5 && currentHour < 20) {
-                await expect(calendarPage.getCurrentTimeLine()).toBeVisible();
-            }
+            await expect(calendarPage.getCurrentTimeLine()).toBeVisible();
         });
 
         test('should hide current time line on previous days', async () => {
@@ -265,23 +261,23 @@ test.describe('Date Navigation', () => {
         });
 
         test('should restore current time line when returning to today', async ({ page }) => {
-            const currentHour = new Date().getHours();
+            // Install fake clock at 10:00 AM for deterministic result
+            await page.clock.install({ time: new Date('2026-03-18T10:00:00') });
+            await appPage.navigate();
+            await appPage.waitForAppToLoad();
 
-            if (currentHour >= 5 && currentHour < 20) {
-                // Verify it's visible on today
-                await expect(calendarPage.getCurrentTimeLine()).toBeVisible();
+            // Verify it's visible on today
+            await expect(calendarPage.getCurrentTimeLine()).toBeVisible();
 
-                // Navigate away
-                await appPage.goToPreviousDay();
-                await expect(calendarPage.getCurrentTimeLine()).not.toBeVisible();
+            // Navigate away
+            await appPage.goToPreviousDay();
+            await expect(calendarPage.getCurrentTimeLine()).not.toBeVisible();
 
-                // Navigate back
-                await appPage.goToNextDay();
-                await page.waitForTimeout(100);
+            // Navigate back
+            await appPage.goToNextDay();
 
-                // Should be visible again
-                await expect(calendarPage.getCurrentTimeLine()).toBeVisible();
-            }
+            // Should be visible again
+            await expect(calendarPage.getCurrentTimeLine()).toBeVisible();
         });
     });
 
@@ -297,13 +293,11 @@ test.describe('Date Navigation', () => {
 
             // Navigate to yesterday and set different goal
             await appPage.goToPreviousDay();
-            await page.waitForTimeout(100);
             await goalSetterPage.setGoal(7, 0);
             await expect(goalSetterPage.getGoalSetterHeader()).toContainText('7h');
 
             // Navigate back to today
             await appPage.goToNextDay();
-            await page.waitForTimeout(100);
 
             // Should still have 8 hour goal
             await expect(goalSetterPage.getGoalSetterHeader()).toContainText('8h');
@@ -320,14 +314,12 @@ test.describe('Date Navigation', () => {
 
             // Navigate to yesterday
             await appPage.goToPreviousDay();
-            await page.waitForTimeout(100);
 
             // Lunch should be enabled (default) on yesterday
             await expect(calendarPage.getLunchIndicator()).toBeVisible();
 
             // Navigate back to today
             await appPage.goToNextDay();
-            await page.waitForTimeout(100);
 
             // Lunch should still be disabled
             await expect(calendarPage.getLunchIndicator()).not.toBeVisible();

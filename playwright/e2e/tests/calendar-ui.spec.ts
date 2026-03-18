@@ -92,42 +92,44 @@ test.describe('Calendar UI and Visual Elements', () => {
     });
 
     test.describe('Current Time Indicator', () => {
-        test('should display current time line during work hours', async () => {
-            const currentHour = new Date().getHours();
+        test('should display current time line during work hours', async ({ page }) => {
+            // Install fake clock at 10:00 AM for deterministic result
+            await page.clock.install({ time: new Date('2026-03-18T10:00:00') });
+            await appPage.navigate();
+            await appPage.waitForAppToLoad();
 
-            if (currentHour >= 5 && currentHour < 20) {
-                await expect(calendarPage.getCurrentTimeLine()).toBeVisible();
-            }
+            await expect(calendarPage.getCurrentTimeLine()).toBeVisible();
         });
 
-        test('should display current time indicator dot', async () => {
-            const currentHour = new Date().getHours();
+        test('should display current time indicator dot', async ({ page }) => {
+            await page.clock.install({ time: new Date('2026-03-18T10:00:00') });
+            await appPage.navigate();
+            await appPage.waitForAppToLoad();
 
-            if (currentHour >= 5 && currentHour < 20) {
-                await expect(calendarPage.getCurrentTimeIndicator()).toBeVisible();
-            }
+            await expect(calendarPage.getCurrentTimeIndicator()).toBeVisible();
         });
 
-        test('should not display time line outside calendar hours', async () => {
-            const currentHour = new Date().getHours();
+        test('should not display time line outside calendar hours', async ({ page }) => {
+            // Install fake clock at 2:00 AM (outside the 5 AM–8 PM range)
+            await page.clock.install({ time: new Date('2026-03-18T02:00:00') });
+            await appPage.navigate();
+            await appPage.waitForAppToLoad();
 
-            if (currentHour < 5 || currentHour >= 20) {
-                await expect(calendarPage.getCurrentTimeLine()).not.toBeVisible();
-            }
+            await expect(calendarPage.getCurrentTimeLine()).not.toBeVisible();
         });
 
-        test('should have red color for current time line', async () => {
-            const currentHour = new Date().getHours();
+        test('should have red color for current time line', async ({ page }) => {
+            await page.clock.install({ time: new Date('2026-03-18T10:00:00') });
+            await appPage.navigate();
+            await appPage.waitForAppToLoad();
 
-            if (currentHour >= 5 && currentHour < 20) {
-                const timeLine = calendarPage.getCurrentTimeLine();
-                const bgColor = await timeLine.evaluate((el) => {
-                    return window.getComputedStyle(el).backgroundColor;
-                });
+            const timeLine = calendarPage.getCurrentTimeLine();
+            const bgColor = await timeLine.evaluate((el) => {
+                return window.getComputedStyle(el).backgroundColor;
+            });
 
-                // Should contain red color
-                expect(bgColor).toBeTruthy();
-            }
+            // Should contain red color
+            expect(bgColor).toBeTruthy();
         });
     });
 

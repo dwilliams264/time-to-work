@@ -6,6 +6,7 @@ import {
   HOUR_HEIGHT,
   MIN_BLOCK_DURATION,
   TIME_UPDATE_INTERVAL,
+  CALENDAR_PADDING_TOP,
 } from '../../constants/calendar';
 import { timeToY, getCurrentTimeMinutes } from '../../utils/timeCalculations';
 import { formatDuration } from '../../utils/timeFormatters';
@@ -77,19 +78,6 @@ function DayCalendar({
 
   const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => HOURS_START + i);
 
-  // Unified event handlers for mouse and touch
-  const handlePointerDownEvent = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-    handlePointerDown(e);
-  };
-
-  const handlePointerMoveEvent = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-    handlePointerMove(e);
-  };
-
-  const handlePointerUpEvent = () => {
-    handlePointerUp();
-  };
-
   return (
     <div className="calendar-container" data-testid="calendar-container">
       <div className="calendar-header" data-testid="calendar-header">
@@ -110,11 +98,11 @@ function DayCalendar({
       <div
         ref={calendarRef}
         className="calendar"
-        onMouseDown={handlePointerDownEvent}
-        onMouseMove={handlePointerMoveEvent}
-        onTouchStart={handlePointerDownEvent}
-        onTouchMove={handlePointerMoveEvent}
-        onTouchEnd={handlePointerUpEvent}
+        onMouseDown={handlePointerDown}
+        onMouseMove={handlePointerMove}
+        onTouchStart={handlePointerDown}
+        onTouchMove={handlePointerMove}
+        onTouchEnd={handlePointerUp}
         style={{ height: `${TOTAL_HOURS * HOUR_HEIGHT}px` }}
         data-testid="calendar-grid"
       >
@@ -144,7 +132,7 @@ function DayCalendar({
           <div
             className="time-block preview"
             style={{
-              top: `${timeToY(previewBlock.startTime) + 12}px`,
+              top: `${timeToY(previewBlock.startTime) + CALENDAR_PADDING_TOP}px`,
               height: `${timeToY(previewBlock.duration)}px`,
             }}
             data-testid="calendar-preview-block"
@@ -158,7 +146,7 @@ function DayCalendar({
         {showCurrentTimeLine && (
           <div
             className="current-time-line"
-            style={{ top: `${timeToY(currentTimeMinutes) + 12}px` }}
+            style={{ top: `${timeToY(currentTimeMinutes) + CALENDAR_PADDING_TOP}px` }}
             data-testid="calendar-current-time-line"
           >
             <div className="current-time-indicator" data-testid="calendar-current-time-indicator" />

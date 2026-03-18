@@ -80,7 +80,7 @@ test.describe('Time Stats and Progress', () => {
 
             // Add work
             await calendarPage.createBlockAtPosition(200, 80);
-            await page.waitForTimeout(500);
+            await expect(calendarPage.getTimeBlock()).toBeVisible();
 
             // Progress should increase
             const newWidth = await progressBar.evaluate((el) => {
@@ -148,7 +148,7 @@ test.describe('Time Stats and Progress', () => {
             const firstRemaining = await timeStatsPage.getRemainingValue().textContent();
 
             // Add second hour
-            await page.waitForTimeout(100);
+            await expect(calendarPage.getTimeBlocks()).toHaveCount(1);
             await calendarPage.createBlockAtPosition(350, 80);
             const secondRemaining = await timeStatsPage.getRemainingValue().textContent();
 
@@ -197,24 +197,24 @@ test.describe('Time Stats and Progress', () => {
     });
 
     test.describe('Over Goal', () => {
-        test('should show over goal stat when exceeding target', async ({ page }) => {
+        test('should show over goal stat when exceeding target', async () => {
             // Set small goal
             await goalSetterPage.setGoal(0, 30);
 
             // Exceed the goal
             await calendarPage.createBlockAtPosition(200, 80);
-            await page.waitForTimeout(100);
+            await expect(calendarPage.getTimeBlocks()).toHaveCount(1);
             await calendarPage.createBlockAtPosition(350, 80);
 
             // Over goal should be visible
             await expect(timeStatsPage.getOverGoalCard()).toBeVisible();
         });
 
-        test('should display positive over goal value', async ({ page }) => {
+        test('should display positive over goal value', async () => {
             // Set and exceed goal
             await goalSetterPage.setGoal(1, 0);
             await calendarPage.createBlockAtPosition(200, 80);
-            await page.waitForTimeout(100);
+            await expect(calendarPage.getTimeBlocks()).toHaveCount(1);
             await calendarPage.createBlockAtPosition(350, 80);
 
             const overGoalText = await timeStatsPage.getOverGoalValue().textContent();
@@ -322,7 +322,7 @@ test.describe('Time Stats and Progress', () => {
 
             // Create first block
             await calendarPage.createBlockAtPosition(200, 80);
-            await page.waitForTimeout(500);
+            await expect(calendarPage.getTimeBlock()).toBeVisible();
 
             // Progress should be visible and filling
             await expect(timeStatsPage.getProgressBar()).toBeVisible();

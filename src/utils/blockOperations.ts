@@ -24,23 +24,32 @@ export function snapBlockToValid(
         .filter((block) => block.id !== excludeId)
         .sort((a, b) => a.startTime - b.startTime);
 
-    // Check each conflicting block
-    for (const block of conflictingBlocks) {
-        const blockEnd = block.startTime + block.duration;
-        const currentEnd = adjustedStart + adjustedDuration;
+    // Iteratively resolve conflicts until stable (handles 3+ adjacent blocks)
+    let changed = true;
+    while (changed) {
+        changed = false;
+        for (const block of conflictingBlocks) {
+            const blockEnd = block.startTime + block.duration;
+            const currentEnd = adjustedStart + adjustedDuration;
 
-        // If there's overlap
-        if (hasOverlap(adjustedStart, currentEnd, block.startTime, blockEnd)) {
-            // Determine which snap point is closer
-            const distanceToSnapBefore = Math.abs(currentEnd - block.startTime);
-            const distanceToSnapAfter = Math.abs(adjustedStart - blockEnd);
+            if (hasOverlap(adjustedStart, currentEnd, block.startTime, blockEnd)) {
+                // Determine which snap point is closer
+                const distanceToSnapBefore = Math.abs(currentEnd - block.startTime);
+                const distanceToSnapAfter = Math.abs(adjustedStart - blockEnd);
 
-            if (distanceToSnapBefore <= distanceToSnapAfter) {
-                // Snap the end to the start of the blocking block
-                adjustedDuration = Math.max(15, block.startTime - adjustedStart);
-            } else {
-                // Snap the start to the end of the blocking block
-                adjustedStart = blockEnd;
+                if (distanceToSnapBefore <= distanceToSnapAfter && block.startTime > adjustedStart) {
+                    // Snap the end to the start of the blocking block
+                    const newDuration = Math.max(15, block.startTime - adjustedStart);
+                    adjustedDuration = newDuration;
+                    // If gap is smaller than minimum duration, also push start past the block
+                    if (adjustedStart + adjustedDuration > block.startTime) {
+                        adjustedStart = blockEnd;
+                    }
+                } else {
+                    // Snap the start to the end of the blocking block
+                    adjustedStart = blockEnd;
+                }
+                changed = true;
             }
         }
     }
