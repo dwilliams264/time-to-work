@@ -32,10 +32,10 @@ git clone https://github.com/yourusername/time-to-work.git
 cd time-to-work
 
 # Install dependencies
-yarn install
+npm install
 
 # Start development server
-yarn dev
+npm run dev
 ```
 
 Visit [http://localhost:5173](http://localhost:5173) to view the app.
@@ -90,10 +90,10 @@ src/
 
 ```bash
 # Build the application
-yarn build
+npm run build
 
 # Preview production build
-yarn preview
+npm run preview
 ```
 
 The build output will be in the `dist/` directory.
@@ -102,10 +102,10 @@ The build output will be in the `dist/` directory.
 
 ```bash
 # Run linter
-yarn lint
+npm run lint
 
 # Build TypeScript
-yarn build
+npm run build
 ```
 
 ### Running Tests
@@ -114,16 +114,16 @@ This project uses [Playwright](https://playwright.dev/) for end-to-end testing.
 
 ```bash
 # Run all tests
-yarn test
+npm run test
 
 # Run tests with UI mode (interactive)
-yarn test:ui
+npm run test:ui
 
 # Run only e2e tests
-yarn test:e2e
+npm run test:e2e
 
 # View test report (Allure)
-yarn test:report
+npm run test:report
 ```
 
 ## 🤝 Contributing
