@@ -40,7 +40,7 @@ export class AppPage {
     }
 
     async navigate() {
-        await this.page.goto('/');
+        await this.page.goto('/time-to-work');
     }
 
     async waitForAppToLoad() {

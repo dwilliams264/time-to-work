@@ -1,0 +1,116 @@
+.day-cell {
+    border-radius: 12px;
+    padding: 14px 10px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: #f9fafb;
+    border: 2px solid #e5e7eb;
+    transition: all 0.15s ease;
+    min-height: 96px;
+    user-select: none;
+}
+
+.day-cell:hover:not(.day-cell-disabled) {
+    border-color: #667eea;
+    background: #f5f7ff;
+    transform: translateY(-1px);
+}
+
+.day-cell-disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.day-cell-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.day-cell-name {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #6b7280;
+}
+
+.day-cell-date {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1;
+}
+
+.day-type-chip {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.day-type-empty {
+    font-size: 18px;
+    color: #d1d5db;
+}
+
+/* Day type colour schemes */
+.day-type-office {
+    background: #d1fae5;
+    border-color: #6ee7b7;
+}
+.day-type-office .day-type-chip {
+    background: #6ee7b7;
+    color: #065f46;
+}
+
+.day-type-offsite {
+    background: #ccfbf1;
+    border-color: #5eead4;
+}
+.day-type-offsite .day-type-chip {
+    background: #5eead4;
+    color: #134e4a;
+}
+
+.day-type-wfh {
+    background: #dbeafe;
+    border-color: #93c5fd;
+}
+.day-type-wfh .day-type-chip {
+    background: #93c5fd;
+    color: #1e3a8a;
+}
+
+.day-type-annual-leave {
+    background: #fef3c7;
+    border-color: #fcd34d;
+}
+.day-type-annual-leave .day-type-chip {
+    background: #fcd34d;
+    color: #78350f;
+}
+
+.day-type-sick {
+    background: #ffedd5;
+    border-color: #fdba74;
+}
+.day-type-sick .day-type-chip {
+    background: #fdba74;
+    color: #7c2d12;
+}
+
+.day-type-public-holiday {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+}
+.day-type-public-holiday .day-type-chip {
+    background: #d1d5db;
+    color: #374151;
+}

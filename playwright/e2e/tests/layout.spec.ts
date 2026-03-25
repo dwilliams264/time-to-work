@@ -16,7 +16,7 @@ test.describe('Layout and Navigation', () => {
         timeStatsPage = new TimeStatsPage(page);
         calendarPage = new CalendarPage(page);
 
-        await appPage.navigate();
+        await page.goto('/time-to-work');
         await appPage.waitForAppToLoad();
     });
 

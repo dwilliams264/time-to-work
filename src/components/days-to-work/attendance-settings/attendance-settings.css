@@ -1,0 +1,70 @@
+.attendance-settings {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+.attendance-settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.attendance-settings-header h3 {
+    margin: 0;
+    color: #1a1a2e;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.attendance-settings-body {
+    margin-top: 16px;
+}
+
+.settings-label {
+    margin: 0 0 10px;
+    font-size: 14px;
+    color: #374151;
+    font-weight: 500;
+}
+
+.days-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.days-button {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 2px solid #e5e7eb;
+    background: white;
+    color: #6b7280;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.days-button:hover {
+    border-color: #667eea;
+    color: #667eea;
+    background: #f5f7ff;
+}
+
+.days-button.active {
+    border-color: #667eea;
+    background: #667eea;
+    color: white;
+}
+
+.settings-target-note {
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+}
