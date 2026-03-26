@@ -1,7 +1,7 @@
 .calendar-container {
     background: var(--color-surface);
     border-radius: var(--radius-lg);
-    padding: var(--space-lg);
+    padding: var(--space-md);
     box-shadow: var(--shadow-card);
     height: 100%;
     display: flex;
@@ -9,7 +9,7 @@
 }
 
 .calendar-header {
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .calendar-header-top {
@@ -22,7 +22,7 @@
 .calendar-header h2 {
     margin: 0;
     color: var(--color-text-primary);
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 600;
     letter-spacing: -0.01em;
 }

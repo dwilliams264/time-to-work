@@ -1,11 +1,11 @@
 .time-stats {
     background: var(--color-surface);
     border-radius: var(--radius-lg);
-    padding: var(--space-lg);
+    padding: var(--space-md);
     box-shadow: var(--shadow-card);
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 10px;
 }
 
 /* ── Featured stat cards ──────────────────────────────────────────────── */
@@ -14,7 +14,7 @@
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.06) 0%, rgba(118, 75, 162, 0.04) 100%);
     border: 1px solid rgba(102, 126, 234, 0.14);
     border-radius: var(--radius-md);
-    padding: 14px 16px;
+    padding: 10px 14px;
 }
 
 /* ── Goal breakdown card ──────────────────────────────────────────────── */
