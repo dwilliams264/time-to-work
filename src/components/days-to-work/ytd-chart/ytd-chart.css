@@ -1,155 +1,86 @@
 .ytd-chart-wrapper {
-    margin: -20px; /* full-bleed within the padded stats body */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 4px 0;
 }
 
-.ytd-chart {
-    width: 100%;
-    height: auto;
-    display: block;
+/* ── Row ─────────────────────────────────────────── */
+.ytd-row {
+    display: grid;
+    grid-template-columns: 28px 1fr 36px;
+    align-items: center;
+    gap: 8px;
+}
+
+.ytd-month {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-align: right;
+}
+
+/* ── Track + fill ────────────────────────────────── */
+.ytd-track {
+    position: relative;
+    height: 10px;
+    background: var(--color-border-subtle);
+    border-radius: var(--radius-pill);
     overflow: visible;
 }
 
-/* Grid lines — very faint, just enough for reference */
-.ytd-grid-line {
-    stroke: rgba(102, 126, 234, 0.08);
-    stroke-width: 1;
+.ytd-fill {
+    height: 100%;
+    border-radius: var(--radius-pill);
+    transition: width 0.4s ease;
 }
 
-.ytd-grid-line--axis {
-    stroke: rgba(102, 126, 234, 0.18);
+.ytd-fill--met {
+    background: var(--brand-gradient-h);
 }
 
-/* Bar tracks — barely visible ghost */
-.ytd-bar-track {
-    fill: rgba(0, 0, 0, 0.03);
+.ytd-fill--missed {
+    background: linear-gradient(90deg, var(--color-warning-from), var(--color-warning-to));
 }
 
-.ytd-bar-track--future {
-    fill: rgba(0, 0, 0, 0.02);
+.ytd-fill--progress {
+    background: linear-gradient(90deg, #c7d2fe, var(--brand-from));
+    opacity: 0.85;
 }
 
-/* Bar fills — overridden by inline style gradient, these are fallbacks */
-.ytd-bar--met {
-    fill: #4f46e5;
+/* Target marker — vertical notch on the track */
+.ytd-target-marker {
+    position: absolute;
+    top: -3px;
+    width: 2px;
+    height: 16px;
+    background: var(--color-text-muted);
+    border-radius: 1px;
+    transform: translateX(-50%);
+    opacity: 0.45;
 }
 
-.ytd-bar--missed {
-    fill: var(--color-warning-from);
-}
-
-.ytd-bar--in-progress {
-    fill: #818cf8;
-    opacity: 0.9;
-}
-
-/* Target line */
-.ytd-target-line {
-    stroke: var(--brand-from);
-    stroke-width: 1.5;
-    opacity: 0.7;
-}
-
-/* Labels */
-.ytd-label {
-    font-size: 8.5px;
-    fill: var(--color-text-muted);
-    font-family: inherit;
-}
-
-.ytd-label--y {
-    font-size: 8px;
-}
-
-.ytd-label--x {
-    fill: var(--color-text-secondary);
-    font-weight: 500;
-}
-
-.ytd-label--future {
-    fill: var(--color-border);
-}
-
-.ytd-label--in-progress {
-    fill: var(--brand-from);
+/* ── Percentage label ────────────────────────────── */
+.ytd-pct {
+    font-size: 11px;
     font-weight: 600;
+    text-align: right;
+}
+
+.ytd-pct--met {
+    color: var(--brand-from);
+}
+
+.ytd-pct--missed {
+    color: var(--color-warning-from);
+}
+
+.ytd-pct--progress {
+    color: var(--brand-from);
     font-style: italic;
 }
 
-.ytd-target-label {
-    font-size: 8px;
-    fill: var(--brand-from);
-    font-weight: 600;
-    font-family: inherit;
-    opacity: 0.7;
-}
-
-/* Per-bar value labels */
-.ytd-bar-value {
-    font-size: 7.5px;
-    font-weight: 700;
-    font-family: inherit;
-}
-
-.ytd-bar-value--met {
-    fill: #4338ca;
-}
-
-.ytd-bar-value--missed {
-    fill: #b45309;
-}
-
-.ytd-bar-value--in-progress {
-    fill: #6366f1;
-}
-
-/* Legend — circular dots, cleaner spacing */
-.ytd-legend {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    flex-wrap: nowrap;
-    padding: 10px 12px 14px;
-}
-
-.ytd-legend-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--color-text-secondary);
-    white-space: nowrap;
-}
-
-.ytd-legend-swatch {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
-.ytd-legend-item--met .ytd-legend-swatch {
-    background: #4f46e5;
-}
-
-.ytd-legend-item--missed .ytd-legend-swatch {
-    background: #f59e0b;
-}
-
-.ytd-legend-item--in-progress .ytd-legend-swatch {
-    background: #a5b4fc;
-}
-
-.ytd-legend-dash {
-    width: 16px;
-    height: 2px;
-    background: repeating-linear-gradient(
-        90deg,
-        var(--brand-from) 0px,
-        var(--brand-from) 5px,
-        transparent 5px,
-        transparent 8px
-    );
-    flex-shrink: 0;
-    opacity: 0.7;
+.ytd-pct--future {
+    color: var(--color-text-muted);
+    font-weight: 400;
 }
