@@ -1,9 +1,8 @@
 .attendance-settings {
-    background: white;
-    border-radius: 12px;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
     padding: 14px 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    margin-bottom: 20px;
+    box-shadow: var(--shadow-card);
     transition: padding 0.2s ease;
 }
 
@@ -21,8 +20,8 @@
 
 .attendance-settings-header h3 {
     margin: 0;
-    color: #1a1a2e;
-    font-size: 16px;
+    color: var(--color-text-primary);
+    font-size: 15px;
     font-weight: 600;
 }
 
@@ -33,7 +32,7 @@
 .settings-label {
     margin: 0 0 10px;
     font-size: 14px;
-    color: #374151;
+    color: var(--color-text-primary);
     font-weight: 500;
 }
 
@@ -48,36 +47,35 @@
     padding: 8px 12px;
     font-size: 14px;
     font-weight: 500;
-    border: 2px solid #e5e7eb;
-    background: white;
-    color: #6b7280;
-    border-radius: 8px;
+    border: 1.5px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-md);
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .days-button:hover {
-    border-color: #667eea;
-    color: #667eea;
+    border-color: var(--brand-from);
+    color: var(--brand-from);
     background: #f5f7ff;
 }
 
 .days-button.active {
-    border-color: #667eea;
-    background: #667eea;
+    border-color: var(--brand-from);
+    background: var(--brand-from);
     color: white;
 }
 
 .settings-target-note {
     margin: 0;
     font-size: 13px;
-    color: #6b7280;
+    color: var(--color-text-secondary);
 }
 
 @media (max-width: 768px) {
     .attendance-settings {
         padding: 12px 16px;
-        margin-bottom: 12px;
     }
 
     .attendance-settings.is-expanded {

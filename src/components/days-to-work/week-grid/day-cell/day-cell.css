@@ -1,22 +1,23 @@
 .day-cell {
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     padding: 14px 10px;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    background: #f9fafb;
-    border: 2px solid #e5e7eb;
-    transition: all 0.15s ease;
+    background: #f7f7fb;
+    border: 1px solid rgba(102, 126, 234, 0.15);
+    transition: all 0.18s ease;
     min-height: 96px;
     user-select: none;
 }
 
 .day-cell:hover:not(.day-cell-disabled) {
-    border-color: #667eea;
-    background: #f5f7ff;
-    transform: translateY(-1px);
+    border-color: rgba(102, 126, 234, 0.4);
+    background: #f0f1fd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.15);
 }
 
 .day-cell-disabled {
@@ -32,42 +33,101 @@
 }
 
 .day-cell-name {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #6b7280;
+    color: var(--color-text-secondary);
 }
 
 .day-cell-date {
     font-size: 22px;
     font-weight: 700;
-    color: #1a1a2e;
+    color: var(--color-text-primary);
     line-height: 1;
+    letter-spacing: -0.02em;
 }
 
 .day-type-chip {
     font-size: 11px;
     font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 20px;
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
     text-align: center;
     white-space: nowrap;
+    letter-spacing: 0.01em;
 }
 
 .day-type-empty {
     font-size: 18px;
-    color: #d1d5db;
+    color: var(--color-border);
 }
 
-/* Day type colour schemes */
-.day-type-office {
-    background: #d1fae5;
-    border-color: #6ee7b7;
-}
+/* ── Day type colour schemes ──────────────────────────────────────────────
+   All cells share the same clean neutral surface (matching the hour grid).
+   Type identity lives entirely in the chip colour — cells stay cohesive.
+   ─────────────────────────────────────────────────────────────────────── */
+
 .day-type-office .day-type-chip {
-    background: #6ee7b7;
-    color: #065f46;
+    background: #4f46e5;
+    color: white;
+    box-shadow: 0 1px 4px rgba(79, 70, 229, 0.35);
+}
+
+.day-type-wfh .day-type-chip {
+    background: #7c3aed;
+    color: white;
+    box-shadow: 0 1px 4px rgba(124, 58, 237, 0.3);
+}
+
+.day-type-offsite .day-type-chip {
+    background: #9333ea;
+    color: white;
+    box-shadow: 0 1px 4px rgba(147, 51, 234, 0.3);
+}
+
+.day-type-annual-leave .day-type-chip {
+    background: #b45309;
+    color: white;
+    box-shadow: 0 1px 4px rgba(180, 83, 9, 0.3);
+}
+
+.day-type-sick .day-type-chip {
+    background: #e11d48;
+    color: white;
+    box-shadow: 0 1px 4px rgba(225, 29, 72, 0.28);
+}
+
+.day-type-public-holiday .day-type-chip {
+    background: #64748b;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .day-cell {
+        padding: 8px 4px;
+        height: 80px;
+        min-height: unset;
+        gap: 4px;
+        overflow: hidden;
+    }
+
+    .day-cell-name {
+        font-size: 9px;
+    }
+
+    .day-cell-date {
+        font-size: 16px;
+    }
+
+    .day-type-chip {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+
+    .day-type-empty {
+        font-size: 14px;
+    }
 }
 
 .day-type-offsite {

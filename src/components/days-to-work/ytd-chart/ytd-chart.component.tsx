@@ -38,6 +38,20 @@ function YtdChart({ monthData, targetPct }: YtdChartProps) {
         aria-label="Monthly attendance chart"
         role="img"
       >
+        <defs>
+          <linearGradient id="ytd-grad-met" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#818cf8" />
+            <stop offset="100%" stopColor="#4338ca" />
+          </linearGradient>
+          <linearGradient id="ytd-grad-missed" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#fbbf24" />
+            <stop offset="100%" stopColor="#d97706" />
+          </linearGradient>
+          <linearGradient id="ytd-grad-progress" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#c7d2fe" />
+            <stop offset="100%" stopColor="#818cf8" />
+          </linearGradient>
+        </defs>
         {/* Horizontal grid lines + Y-axis labels */}
         {Y_TICKS.map((pct) => {
           const y = yForPct(pct);
@@ -78,7 +92,7 @@ function YtdChart({ monthData, targetPct }: YtdChartProps) {
                 width={barW}
                 height={CH}
                 className={`ytd-bar-track${hasData ? '' : ' ytd-bar-track--future'}`}
-                rx={3}
+                rx={4}
               />
               {/* Filled bar */}
               {hasData && data.attendancePct > 0 && (
@@ -88,7 +102,8 @@ function YtdChart({ monthData, targetPct }: YtdChartProps) {
                   width={barW}
                   height={(data.attendancePct / 100) * CH}
                   className={`ytd-bar${data.inProgress ? ' ytd-bar--in-progress' : data.metTarget ? ' ytd-bar--met' : ' ytd-bar--missed'}`}
-                  rx={3}
+                  rx={4}
+                  style={{ fill: data.inProgress ? 'url(#ytd-grad-progress)' : data.metTarget ? 'url(#ytd-grad-met)' : 'url(#ytd-grad-missed)' }}
                   data-testid={`ytd-bar-${MONTHS_SHORT[i].toLowerCase()}`}
                 />
               )}

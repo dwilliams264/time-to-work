@@ -9,48 +9,50 @@
     overflow: visible;
 }
 
-/* Grid lines */
+/* Grid lines — very faint, just enough for reference */
 .ytd-grid-line {
-    stroke: #f3f4f6;
+    stroke: rgba(102, 126, 234, 0.08);
     stroke-width: 1;
 }
 
 .ytd-grid-line--axis {
-    stroke: #e5e7eb;
+    stroke: rgba(102, 126, 234, 0.18);
 }
 
-/* Bars */
+/* Bar tracks — barely visible ghost */
 .ytd-bar-track {
-    fill: #f9fafb;
+    fill: rgba(0, 0, 0, 0.03);
 }
 
 .ytd-bar-track--future {
-    fill: #f3f4f6;
+    fill: rgba(0, 0, 0, 0.02);
 }
 
+/* Bar fills — overridden by inline style gradient, these are fallbacks */
 .ytd-bar--met {
-    fill: #10b981;
+    fill: #4f46e5;
 }
 
 .ytd-bar--missed {
-    fill: #f59e0b;
+    fill: var(--color-warning-from);
 }
 
 .ytd-bar--in-progress {
-    fill: #667eea;
-    opacity: 0.65;
+    fill: #818cf8;
+    opacity: 0.9;
 }
 
 /* Target line */
 .ytd-target-line {
-    stroke: #667eea;
+    stroke: var(--brand-from);
     stroke-width: 1.5;
+    opacity: 0.7;
 }
 
 /* Labels */
 .ytd-label {
     font-size: 8.5px;
-    fill: #9ca3af;
+    fill: var(--color-text-muted);
     font-family: inherit;
 }
 
@@ -59,23 +61,26 @@
 }
 
 .ytd-label--x {
-    fill: #6b7280;
+    fill: var(--color-text-secondary);
+    font-weight: 500;
 }
 
 .ytd-label--future {
-    fill: #d1d5db;
+    fill: var(--color-border);
 }
 
 .ytd-label--in-progress {
-    fill: #667eea;
+    fill: var(--brand-from);
+    font-weight: 600;
     font-style: italic;
 }
 
 .ytd-target-label {
     font-size: 8px;
-    fill: #667eea;
+    fill: var(--brand-from);
     font-weight: 600;
     font-family: inherit;
+    opacity: 0.7;
 }
 
 /* Per-bar value labels */
@@ -86,44 +91,45 @@
 }
 
 .ytd-bar-value--met {
-    fill: #059669;
+    fill: #4338ca;
 }
 
 .ytd-bar-value--missed {
-    fill: #d97706;
+    fill: #b45309;
 }
 
 .ytd-bar-value--in-progress {
-    fill: #4f46e5;
+    fill: #6366f1;
 }
 
-/* Legend */
+/* Legend — circular dots, cleaner spacing */
 .ytd-legend {
     display: flex;
-    gap: 6px;
+    gap: 10px;
     justify-content: center;
     flex-wrap: nowrap;
-    padding: 8px 12px 12px;
+    padding: 10px 12px 14px;
 }
 
 .ytd-legend-item {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
     font-size: 10px;
-    color: #6b7280;
+    font-weight: 500;
+    color: var(--color-text-secondary);
     white-space: nowrap;
 }
 
 .ytd-legend-swatch {
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
     flex-shrink: 0;
 }
 
 .ytd-legend-item--met .ytd-legend-swatch {
-    background: #10b981;
+    background: #4f46e5;
 }
 
 .ytd-legend-item--missed .ytd-legend-swatch {
@@ -131,13 +137,19 @@
 }
 
 .ytd-legend-item--in-progress .ytd-legend-swatch {
-    background: #667eea;
-    opacity: 0.65;
+    background: #a5b4fc;
 }
 
 .ytd-legend-dash {
-    width: 14px;
+    width: 16px;
     height: 2px;
-    background: repeating-linear-gradient(90deg, #667eea 0px, #667eea 5px, transparent 5px, transparent 8px);
+    background: repeating-linear-gradient(
+        90deg,
+        var(--brand-from) 0px,
+        var(--brand-from) 5px,
+        transparent 5px,
+        transparent 8px
+    );
     flex-shrink: 0;
+    opacity: 0.7;
 }

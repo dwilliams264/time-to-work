@@ -1,103 +1,149 @@
 .attendance-stats {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
     overflow: hidden;
 }
 
+/* ── Tab strip — pill segment control ────────────────────────────────── */
 .attendance-stats-tabs {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    border-bottom: 1px solid #e5e7eb;
+    gap: 3px;
+    padding: 7px;
+    background: var(--color-surface-subtle);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .stats-tab {
-    padding: 10px 4px;
-    font-size: 12px;
+    padding: 7px 6px;
+    font-size: 12.5px;
     font-weight: 500;
     border: none;
     background: none;
     cursor: pointer;
-    color: #6b7280;
-    transition: all 0.2s ease;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
+    color: var(--color-text-secondary);
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease;
+    border-radius: var(--radius-sm);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    letter-spacing: 0.01em;
 }
 
 .stats-tab:hover {
-    color: #667eea;
+    color: var(--color-text-primary);
+    background: rgba(102, 126, 234, 0.08);
 }
 
 .stats-tab.active {
-    color: #667eea;
-    border-bottom-color: #667eea;
+    background: var(--color-surface);
+    color: var(--brand-from);
     font-weight: 600;
+    box-shadow:
+        0 1px 4px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(102, 126, 234, 0.15);
 }
 
+.stats-tab:focus-visible {
+    outline: 2px solid var(--brand-from);
+    outline-offset: 1px;
+}
+
+/* ── Content body ─────────────────────────────────────────────────────── */
 .attendance-stats-body {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
 }
 
+/* ── Featured metric — contextual override inside body ───────────────── */
+.attendance-stats-body .stat-card {
+    margin-bottom: 0;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.06) 0%, rgba(118, 75, 162, 0.04) 100%);
+    border: 1px solid rgba(102, 126, 234, 0.14);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+}
+
+/* ── Target badge ─────────────────────────────────────────────────────── */
 .target-badge {
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 600;
-    padding: 6px 12px;
-    border-radius: 20px;
-    text-align: center;
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .target-badge.met {
-    background: #d1fae5;
-    color: #065f46;
+    background: rgba(16, 185, 129, 0.08);
+    color: var(--color-success-text);
+    border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .target-badge.not-met {
-    background: #fee2e2;
-    color: #991b1b;
+    background: rgba(245, 158, 11, 0.08);
+    color: #92400e;
+    border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
 .ytd-empty {
     font-size: 13px;
-    color: #6b7280;
+    color: var(--color-text-secondary);
     text-align: center;
     padding: 16px 0;
     margin: 0;
 }
 
+/* ── Breakdown list ───────────────────────────────────────────────────── */
 .attendance-breakdown {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    padding-top: 8px;
-    border-top: 1px solid #f3f4f6;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-subtle);
+    overflow: hidden;
 }
 
 .breakdown-row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-size: 13px;
-    color: #6b7280;
+    color: var(--color-text-secondary);
+    padding: 9px 12px;
+    background: var(--color-surface);
+    transition: background 0.12s ease;
+}
+
+.breakdown-row:not(:last-child) {
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.breakdown-row:nth-child(even) {
+    background: var(--color-surface-subtle);
 }
 
 .breakdown-row span:last-child {
     font-weight: 600;
-    color: #374151;
+    color: var(--color-text-primary);
+    font-variant-numeric: tabular-nums;
 }
 
 @media (max-width: 768px) {
     .attendance-stats-body {
         padding: 14px;
+        gap: 10px;
     }
 
     .stats-tab {
         font-size: 11px;
-        padding: 8px 2px;
+        padding: 6px 2px;
     }
 }
 
@@ -111,14 +157,14 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: #6b7280;
+    color: var(--color-text-secondary);
     flex-shrink: 0;
 }
 
 .mobile-bar-pct {
     font-size: 22px;
     font-weight: 700;
-    color: #667eea;
+    color: var(--brand-from);
     flex-shrink: 0;
     line-height: 1;
 }
@@ -130,13 +176,12 @@
         bottom: 0;
         left: 0;
         right: 0;
-        border-radius: 12px 12px 0 0;
-        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.12);
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
         z-index: 100;
         overflow: hidden;
     }
 
-    /* Show the compact summary bar */
     .attendance-stats-mobile-bar {
         display: flex;
         align-items: center;
@@ -145,24 +190,29 @@
         position: relative;
     }
 
-    /* Stretch the progress bar to fill remaining space */
     .attendance-stats-mobile-bar .progress-bar {
         flex: 1;
         min-width: 0;
-        /* Override the absolute positioning from progress-bar.css mobile rules */
         position: static;
         height: 8px;
-        border-radius: 20px;
+        border-radius: var(--radius-pill);
         margin: 0;
     }
 
     .attendance-stats-mobile-bar .progress-fill {
-        border-radius: 20px;
+        border-radius: var(--radius-pill);
     }
 
-    /* Hide the full tabbed view on mobile */
     .attendance-stats-tabs,
     .attendance-stats-body {
         display: none;
+    }
+
+    .attendance-stats-mobile-bar .target-badge {
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: var(--radius-sm);
+        flex-shrink: 0;
+        white-space: nowrap;
     }
 }

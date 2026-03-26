@@ -2,20 +2,24 @@
     position: absolute;
     left: 80px;
     right: 12px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 8px;
+    background: linear-gradient(135deg, #7c8cf8 0%, #9d60e0 100%);
+    border-radius: var(--radius-md);
     cursor: move;
     display: flex;
     flex-direction: column;
     min-height: 20px;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-    transition: box-shadow 0.2s ease;
+    box-shadow: var(--shadow-block);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    transition:
+        box-shadow 0.2s ease,
+        transform 0.1s ease;
     z-index: 10;
     touch-action: none;
 }
 
 .time-block:hover {
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    box-shadow: var(--shadow-block-hover);
+    transform: translateY(-1px);
 }
 
 .time-block-content {
@@ -29,12 +33,12 @@
 }
 
 .time-block-title {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
-    opacity: 0.95;
+    letter-spacing: 0.06em;
+    margin-bottom: 3px;
+    opacity: 0.9;
 }
 
 .time-block-time {
@@ -45,7 +49,7 @@
 
 .time-block-duration {
     font-size: 12px;
-    opacity: 0.9;
+    opacity: 0.85;
 }
 
 .resize-handle {
@@ -74,14 +78,14 @@
     position: absolute;
     top: 6px;
     right: 6px;
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     border: none;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.18);
     color: white;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 1;
     display: flex;
     align-items: center;
@@ -91,7 +95,20 @@
 }
 
 .delete-button:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.35);
+}
+
+@media (max-width: 768px) {
+    .time-block {
+        left: 60px;
+        right: 8px;
+    }
+
+    .delete-button {
+        width: 20px;
+        height: 20px;
+        font-size: 14px;
+    }
 }
 
 @media (max-width: 768px) {
