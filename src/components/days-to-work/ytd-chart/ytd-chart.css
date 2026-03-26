@@ -1,0 +1,143 @@
+.ytd-chart-wrapper {
+    margin: -20px; /* full-bleed within the padded stats body */
+}
+
+.ytd-chart {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+}
+
+/* Grid lines */
+.ytd-grid-line {
+    stroke: #f3f4f6;
+    stroke-width: 1;
+}
+
+.ytd-grid-line--axis {
+    stroke: #e5e7eb;
+}
+
+/* Bars */
+.ytd-bar-track {
+    fill: #f9fafb;
+}
+
+.ytd-bar-track--future {
+    fill: #f3f4f6;
+}
+
+.ytd-bar--met {
+    fill: #10b981;
+}
+
+.ytd-bar--missed {
+    fill: #f59e0b;
+}
+
+.ytd-bar--in-progress {
+    fill: #667eea;
+    opacity: 0.65;
+}
+
+/* Target line */
+.ytd-target-line {
+    stroke: #667eea;
+    stroke-width: 1.5;
+}
+
+/* Labels */
+.ytd-label {
+    font-size: 8.5px;
+    fill: #9ca3af;
+    font-family: inherit;
+}
+
+.ytd-label--y {
+    font-size: 8px;
+}
+
+.ytd-label--x {
+    fill: #6b7280;
+}
+
+.ytd-label--future {
+    fill: #d1d5db;
+}
+
+.ytd-label--in-progress {
+    fill: #667eea;
+    font-style: italic;
+}
+
+.ytd-target-label {
+    font-size: 8px;
+    fill: #667eea;
+    font-weight: 600;
+    font-family: inherit;
+}
+
+/* Per-bar value labels */
+.ytd-bar-value {
+    font-size: 7.5px;
+    font-weight: 700;
+    font-family: inherit;
+}
+
+.ytd-bar-value--met {
+    fill: #059669;
+}
+
+.ytd-bar-value--missed {
+    fill: #d97706;
+}
+
+.ytd-bar-value--in-progress {
+    fill: #4f46e5;
+}
+
+/* Legend */
+.ytd-legend {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    flex-wrap: nowrap;
+    padding: 8px 12px 12px;
+}
+
+.ytd-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: #6b7280;
+    white-space: nowrap;
+}
+
+.ytd-legend-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.ytd-legend-item--met .ytd-legend-swatch {
+    background: #10b981;
+}
+
+.ytd-legend-item--missed .ytd-legend-swatch {
+    background: #f59e0b;
+}
+
+.ytd-legend-item--in-progress .ytd-legend-swatch {
+    background: #667eea;
+    opacity: 0.65;
+}
+
+.ytd-legend-dash {
+    width: 14px;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, #667eea 0px, #667eea 5px, transparent 5px, transparent 8px);
+    flex-shrink: 0;
+}

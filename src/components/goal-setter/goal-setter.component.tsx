@@ -57,10 +57,10 @@ function GoalSetter({
   };
 
   return (
-    <div className="goal-setter" data-testid="goal-setter-container">
-      <div className="goal-setter-header" data-testid="goal-setter-header">
+    <div className={`goal-setter${isExpanded ? ' is-expanded' : ''}`} data-testid="goal-setter-container">
+      <div className="goal-setter-header" data-testid="goal-setter-header" onClick={() => setIsExpanded(!isExpanded)}>
         <h3>Daily Goal: {formatDuration(goalMinutes)}</h3>
-        <button className="toggle-button" data-testid="goal-setter-toggle" aria-label={isExpanded ? "Collapse" : "Expand"} onClick={() => setIsExpanded(!isExpanded)}>
+        <button className="toggle-button" data-testid="goal-setter-toggle" aria-label={isExpanded ? "Collapse" : "Expand"} onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}>
           {isExpanded ? '−' : '+'}
         </button>
       </div>

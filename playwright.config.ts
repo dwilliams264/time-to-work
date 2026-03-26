@@ -68,14 +68,18 @@ export default defineConfig({
     /* Configure projects for different test types */
     projects: [
         {
-            name: 'e2e',
+            name: 'desktop',
             use: { ...devices['Desktop Chrome'] },
+        },
+        {
+            name: 'mobile',
+            use: { ...devices['Desktop Chrome'], viewport: { width: 393, height: 851 } },
         },
     ],
 
     /* Run your local dev server before starting the tests */
     webServer: {
-        command: 'yarn dev',
+        command: 'npm run dev',
         url: 'http://localhost:5173',
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,

@@ -1,15 +1,20 @@
 .goal-setter {
     background: white;
-    border-radius: 16px;
-    padding: 24px;
+    border-radius: 12px;
+    padding: 14px 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     margin-bottom: 20px;
+    transition: padding 0.2s ease;
+}
+
+.goal-setter.is-expanded {
+    padding: 20px;
 }
 
 .goal-setter h3 {
     margin: 0 0 16px 0;
     color: #1a1a2e;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
 }
 
@@ -113,15 +118,20 @@
 
 @media (max-width: 768px) {
     .goal-setter {
+        padding: 12px 16px;
+        margin-bottom: 12px;
+    }
+
+    .goal-setter.is-expanded {
         padding: 16px;
     }
 
     .goal-setter h3 {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .goal-setter-header h3 {
-        font-size: 15px;
+        font-size: 14px;
     }
 
     .toggle-button {

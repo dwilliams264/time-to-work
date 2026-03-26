@@ -7,7 +7,7 @@
 .app-header {
     text-align: center;
     color: white;
-    margin-bottom: 32px;
+    margin-bottom: 20px;
 }
 
 .app-header h1 {
@@ -17,39 +17,84 @@
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.page-nav {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.page-nav-link {
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    transition: all 0.2s ease;
+}
+
+.page-nav-link:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.page-nav-link.active {
+    color: white;
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+    font-weight: 600;
+}
+
 .current-date {
     margin: 0;
-    font-size: 16px;
-    opacity: 0.95;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.01em;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    flex: 1;
+    text-align: center;
 }
 
 .date-navigation {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-top: 8px;
+    gap: 0;
+    max-width: 1400px;
+    margin: 0 auto 20px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 12px;
+    padding: 8px;
 }
 
 .nav-button {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
-    font-size: 20px;
-    width: 40px;
-    height: 40px;
+    font-size: 18px;
+    width: 44px;
+    height: 44px;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition:
+        background 0.15s ease,
+        transform 0.1s ease,
+        border-color 0.15s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
+    flex-shrink: 0;
 }
 
 .nav-button:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.4);
     transform: scale(1.05);
 }
 
@@ -58,7 +103,7 @@
 }
 
 .nav-button:disabled {
-    opacity: 0.3;
+    opacity: 0.25;
     cursor: not-allowed;
 }
 
@@ -98,7 +143,7 @@
     .app {
         padding: 0;
         padding-top: 12px;
-        padding-bottom: 80px; /* Space for floating stats bar */
+        padding-bottom: 72px;
     }
 
     .app-header {
@@ -112,21 +157,24 @@
     }
 
     .current-date {
-        font-size: 13px;
+        font-size: 15px;
     }
 
     .date-navigation {
-        gap: 12px;
+        border-radius: 12px;
+        margin: 0 12px 12px;
+        padding: 6px;
     }
 
     .nav-button {
-        width: 36px;
-        height: 36px;
-        font-size: 18px;
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+        border-radius: 8px;
     }
 
     .app-content {
-        gap: 0px;
+        gap: 16px;
         padding: 0 12px;
     }
 
@@ -136,8 +184,6 @@
     }
 
     .main-content {
-        min-height: 60vh;
-        margin: 0 -12px;
-        padding: 0 24px;
+        min-height: unset;
     }
 }
