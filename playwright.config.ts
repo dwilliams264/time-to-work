@@ -68,8 +68,12 @@ export default defineConfig({
     /* Configure projects for different test types */
     projects: [
         {
-            name: 'e2e',
+            name: 'desktop',
             use: { ...devices['Desktop Chrome'] },
+        },
+        {
+            name: 'mobile',
+            use: { ...devices['Desktop Chrome'], viewport: { width: 393, height: 851 } },
         },
     ],
 

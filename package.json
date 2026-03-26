@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test:unit": "vitest run",
     "test": "npm run test:report:clean && playwright test",
-    "test:e2e": "npm run test:report:clean && playwright test --project=e2e",
+    "test:e2e": "npm run test:report:clean && playwright test --project=desktop --project=mobile",
     "test:ui": "npm run test:report:clean && playwright test --ui",
     "test:report": "allure serve allure-results",
     "test:report:clean": "rm -rf allure-results"
