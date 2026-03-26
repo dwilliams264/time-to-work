@@ -81,6 +81,7 @@ export class CalendarPage {
 
     async createBlockByDragging(startYOffset: number, endYOffset: number) {
         const calendar = this.getCalendar();
+        await calendar.scrollIntoViewIfNeeded();
         const calendarBox = await calendar.boundingBox();
         if (!calendarBox) throw new Error('Calendar not found');
 
