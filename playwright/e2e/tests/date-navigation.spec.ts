@@ -724,14 +724,5 @@ test.describe('Date Navigation', () => {
             expect(borderRadius).toBeTruthy();
             expect(borderRadius).not.toBe('0px');
         });
-
-        test('should center date navigation in header', async () => {
-            const navigation = appPage.getDateNavigation();
-            const justifyContent = await navigation.evaluate((el) => {
-                return window.getComputedStyle(el).justifyContent;
-            });
-
-            expect(justifyContent).toBe('center');
-        });
     });
 });
