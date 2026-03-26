@@ -114,3 +114,30 @@
     background: #d1d5db;
     color: #374151;
 }
+
+@media (max-width: 768px) {
+    .day-cell {
+        padding: 8px 4px;
+        height: 80px;
+        min-height: unset;
+        gap: 4px;
+        overflow: hidden;
+    }
+
+    .day-cell-name {
+        font-size: 9px;
+    }
+
+    .day-cell-date {
+        font-size: 16px;
+    }
+
+    .day-type-chip {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+
+    .day-type-empty {
+        font-size: 14px;
+    }
+}

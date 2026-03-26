@@ -1,6 +1,6 @@
 .week-grid {
     background: white;
-    border-radius: 16px;
+    border-radius: 12px;
     padding: 24px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
@@ -30,10 +30,17 @@
     margin-top: 8px;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+    .week-grid {
+        padding: 16px 10px;
+    }
+
     .week-grid-header,
     .week-grid-days {
-        grid-template-columns: repeat(5, 1fr);
         gap: 4px;
+    }
+
+    .week-grid-dow-header {
+        font-size: 10px;
     }
 }

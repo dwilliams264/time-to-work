@@ -10,6 +10,7 @@ export const AUTO_TARGET_MAP: Record<3 | 4 | 5, number> = {
 
 interface DayTypeConfig {
     label: string;
+    shortLabel: string;
     colorClass: string;
     /** true = counts as an attendance day; false = work day only; null = excluded */
     role: 'attendance' | 'work-only' | 'excluded-from-available' | 'excluded-from-total';
@@ -18,31 +19,37 @@ interface DayTypeConfig {
 export const DAY_TYPE_CONFIG: Record<DayType, DayTypeConfig> = {
     office: {
         label: 'Office',
+        shortLabel: 'Office',
         colorClass: 'day-type-office',
         role: 'attendance',
     },
     offsite: {
         label: 'Offsite / Conference',
+        shortLabel: 'Offsite',
         colorClass: 'day-type-offsite',
         role: 'attendance',
     },
     wfh: {
         label: 'Work From Home',
+        shortLabel: 'WFH',
         colorClass: 'day-type-wfh',
         role: 'work-only',
     },
     'annual-leave': {
         label: 'Annual Leave',
+        shortLabel: 'Leave',
         colorClass: 'day-type-annual-leave',
         role: 'excluded-from-available',
     },
     sick: {
         label: 'Sick Leave',
+        shortLabel: 'Sick',
         colorClass: 'day-type-sick',
         role: 'excluded-from-available',
     },
     'public-holiday': {
         label: 'Public Holiday',
+        shortLabel: 'Holiday',
         colorClass: 'day-type-public-holiday',
         role: 'excluded-from-total',
     },

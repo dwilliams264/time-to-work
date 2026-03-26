@@ -1,6 +1,6 @@
 .attendance-stats {
     background: white;
-    border-radius: 16px;
+    border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     overflow: hidden;
 }
@@ -22,6 +22,9 @@
     transition: all 0.2s ease;
     border-bottom: 2px solid transparent;
     margin-bottom: -1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .stats-tab:hover {
@@ -85,4 +88,81 @@
 .breakdown-row span:last-child {
     font-weight: 600;
     color: #374151;
+}
+
+@media (max-width: 768px) {
+    .attendance-stats-body {
+        padding: 14px;
+    }
+
+    .stats-tab {
+        font-size: 11px;
+        padding: 8px 2px;
+    }
+}
+
+/* ── Mobile summary bar (hidden on desktop) ───────────────────────────── */
+.attendance-stats-mobile-bar {
+    display: none;
+}
+
+.mobile-bar-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #6b7280;
+    flex-shrink: 0;
+}
+
+.mobile-bar-pct {
+    font-size: 22px;
+    font-weight: 700;
+    color: #667eea;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+/* ── Mobile: pin as a compact floating bottom bar ─────────────────── */
+@media (max-width: 768px) {
+    .attendance-stats {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-radius: 12px 12px 0 0;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.12);
+        z-index: 100;
+        overflow: hidden;
+    }
+
+    /* Show the compact summary bar */
+    .attendance-stats-mobile-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px 16px;
+        position: relative;
+    }
+
+    /* Stretch the progress bar to fill remaining space */
+    .attendance-stats-mobile-bar .progress-bar {
+        flex: 1;
+        min-width: 0;
+        /* Override the absolute positioning from progress-bar.css mobile rules */
+        position: static;
+        height: 8px;
+        border-radius: 20px;
+        margin: 0;
+    }
+
+    .attendance-stats-mobile-bar .progress-fill {
+        border-radius: 20px;
+    }
+
+    /* Hide the full tabbed view on mobile */
+    .attendance-stats-tabs,
+    .attendance-stats-body {
+        display: none;
+    }
 }

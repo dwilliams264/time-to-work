@@ -15,7 +15,7 @@ function AttendanceSettingsPanel({ settings, onSettingsChange }: AttendanceSetti
   const daysOptions: Array<3 | 4 | 5> = [3, 4, 5];
 
   return (
-    <div className="attendance-settings" data-testid="attendance-settings-container">
+    <div className={`attendance-settings${isExpanded ? ' is-expanded' : ''}`} data-testid="attendance-settings-container">
       <div
         className="attendance-settings-header"
         data-testid="attendance-settings-header"

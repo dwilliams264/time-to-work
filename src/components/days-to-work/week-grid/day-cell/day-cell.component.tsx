@@ -42,7 +42,7 @@ function DayCell({ date, type, onTypeChange, isDisabled }: DayCellProps) {
       </div>
       {config && (
         <span className={`day-type-chip ${config.colorClass}`} data-testid={`day-type-chip-${formatDateStr(date)}`}>
-          {config.label}
+          {config.shortLabel}
         </span>
       )}
       {!config && !isDisabled && (
