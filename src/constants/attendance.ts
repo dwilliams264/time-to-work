@@ -1,6 +1,7 @@
 import type { DayType } from '../types/attendance';
 
 export const DEFAULT_DAYS_PER_WEEK = 5 as const;
+export const DEFAULT_DAYS_IN_OFFICE = 3 as const;
 
 export const AUTO_TARGET_MAP: Record<3 | 4 | 5, number> = {
     3: 100,

@@ -1,5 +1,4 @@
 import type { AttendanceDay, AttendanceSettings, AttendanceResult } from '../types/attendance';
-import { AUTO_TARGET_MAP } from '../constants/attendance';
 
 export interface MonthlyAttendancePoint {
     month: number; // 0-based, 0=January
@@ -78,7 +77,7 @@ export function calculateAttendance(
     const leaveDays = annualLeave + sick;
     const availableWorkDays = totalWorkDays - leaveDays;
     const attendancePct = availableWorkDays > 0 ? Math.round((attendance / availableWorkDays) * 100) : 0;
-    const targetPct = AUTO_TARGET_MAP[settings.daysWorkedPerWeek];
+    const targetPct = Math.round((settings.daysInOffice / settings.daysWorkedPerWeek) * 100);
     const metTarget = attendancePct >= targetPct;
 
     return {

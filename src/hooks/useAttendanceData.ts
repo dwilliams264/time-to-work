@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import type { AttendanceDay, AttendanceSettings, DayType } from '../types/attendance';
 import { AttendanceStorageService } from '../utils/attendanceStorage';
-import { DEFAULT_DAYS_PER_WEEK } from '../constants/attendance';
+import { DEFAULT_DAYS_PER_WEEK, DEFAULT_DAYS_IN_OFFICE } from '../constants/attendance';
 
 const DEFAULT_SETTINGS: AttendanceSettings = {
     daysWorkedPerWeek: DEFAULT_DAYS_PER_WEEK,
+    daysInOffice: DEFAULT_DAYS_IN_OFFICE,
 };
 
 export function useAttendanceData() {

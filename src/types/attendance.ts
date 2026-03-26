@@ -7,6 +7,7 @@ export interface AttendanceDay {
 
 export interface AttendanceSettings {
     daysWorkedPerWeek: 3 | 4 | 5;
+    daysInOffice: number;
 }
 
 export interface AttendanceResult {

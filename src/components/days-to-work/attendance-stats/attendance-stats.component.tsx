@@ -7,7 +7,6 @@ import {
   getThisMonthRange,
 } from '../../../utils/attendanceCalculations';
 import type { MonthlyAttendancePoint } from '../../../utils/attendanceCalculations';
-import { AUTO_TARGET_MAP } from '../../../constants/attendance';
 import StatCard from '../../time-stats/stat-card/stat-card.component';
 import ProgressBar from '../../time-stats/progress-bar/progress-bar.component';
 import YtdChart from '../ytd-chart/ytd-chart.component';
@@ -30,7 +29,7 @@ function AttendanceStats({ attendanceDays, settings }: AttendanceStatsProps) {
   const [activePeriod, setActivePeriod] = useState<Period>('ytd');
 
   const now = new Date();
-  const targetPct = AUTO_TARGET_MAP[settings.daysWorkedPerWeek];
+  const targetPct = Math.round((settings.daysInOffice / settings.daysWorkedPerWeek) * 100);
 
   const rangeMap: Record<Exclude<Period, 'ytd'>, [Date, Date]> = {
     month: getThisMonthRange(now),

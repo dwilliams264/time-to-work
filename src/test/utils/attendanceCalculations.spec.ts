@@ -10,9 +10,9 @@ import {
 } from '../../utils/attendanceCalculations';
 import type { AttendanceDay, AttendanceSettings } from '../../types/attendance';
 
-const SETTINGS_5: AttendanceSettings = { daysWorkedPerWeek: 5 };
-const SETTINGS_4: AttendanceSettings = { daysWorkedPerWeek: 4 };
-const SETTINGS_3: AttendanceSettings = { daysWorkedPerWeek: 3 };
+const SETTINGS_5: AttendanceSettings = { daysWorkedPerWeek: 5, daysInOffice: 3 };
+const SETTINGS_4: AttendanceSettings = { daysWorkedPerWeek: 4, daysInOffice: 3 };
+const SETTINGS_3: AttendanceSettings = { daysWorkedPerWeek: 3, daysInOffice: 3 };
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
