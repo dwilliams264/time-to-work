@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StorageService, type DayData } from '../utils/storage';
 import { DEFAULT_GOAL_MINUTES, DEFAULT_LUNCH_TIME, DEFAULT_LUNCH_MINUTES } from '../constants/calendar';
 
@@ -21,40 +21,47 @@ export function useDayData(storageKey: string) {
         };
     };
 
-    // Cache the initial load to avoid reading localStorage once per useState call
-    const initialRef = useRef<DayData | null>(null);
-    if (!initialRef.current) {
-        initialRef.current = loadData(storageKey);
-    }
-    const initial = initialRef.current;
-
-    const [timeBlocks, setTimeBlocks] = useState<DayData['timeBlocks']>(initial.timeBlocks);
-    const [goalMinutes, setGoalMinutes] = useState<number>(initial.goalMinutes);
-    const [lunchEnabled, setLunchEnabled] = useState<boolean>(initial.lunchEnabled);
-    const [lunchMinutes, setLunchMinutes] = useState<number>(initial.lunchMinutes);
-    const [lunchStartTime, setLunchStartTime] = useState<number>(initial.lunchStartTime);
+    const [dayData, setDayData] = useState<DayData>(() => loadData(storageKey));
+    const [currentKey, setCurrentKey] = useState(storageKey);
 
     // Reload all data when storage key changes (e.g., when navigating between days)
-    useEffect(() => {
-        const data = loadData(storageKey);
-        setTimeBlocks(data.timeBlocks);
-        setGoalMinutes(data.goalMinutes);
-        setLunchEnabled(data.lunchEnabled);
-        setLunchMinutes(data.lunchMinutes);
-        setLunchStartTime(data.lunchStartTime);
-    }, [storageKey]);
+    if (currentKey !== storageKey) {
+        setCurrentKey(storageKey);
+        setDayData(loadData(storageKey));
+    }
+
+    const { timeBlocks, goalMinutes, lunchEnabled, lunchMinutes, lunchStartTime } = dayData;
 
     // Save all data to localStorage whenever any state changes
     useEffect(() => {
-        const data: DayData = {
-            timeBlocks,
-            goalMinutes,
-            lunchEnabled,
-            lunchMinutes,
-            lunchStartTime,
-        };
-        StorageService.saveDayData(storageKey, data);
-    }, [storageKey, timeBlocks, goalMinutes, lunchEnabled, lunchMinutes, lunchStartTime]);
+        StorageService.saveDayData(storageKey, dayData);
+    }, [storageKey, dayData]);
+
+    const setTimeBlocks: React.Dispatch<React.SetStateAction<DayData['timeBlocks']>> = (action) =>
+        setDayData((prev) => ({
+            ...prev,
+            timeBlocks: typeof action === 'function' ? action(prev.timeBlocks) : action,
+        }));
+    const setGoalMinutes: React.Dispatch<React.SetStateAction<number>> = (action) =>
+        setDayData((prev) => ({
+            ...prev,
+            goalMinutes: typeof action === 'function' ? action(prev.goalMinutes) : action,
+        }));
+    const setLunchEnabled: React.Dispatch<React.SetStateAction<boolean>> = (action) =>
+        setDayData((prev) => ({
+            ...prev,
+            lunchEnabled: typeof action === 'function' ? action(prev.lunchEnabled) : action,
+        }));
+    const setLunchMinutes: React.Dispatch<React.SetStateAction<number>> = (action) =>
+        setDayData((prev) => ({
+            ...prev,
+            lunchMinutes: typeof action === 'function' ? action(prev.lunchMinutes) : action,
+        }));
+    const setLunchStartTime: React.Dispatch<React.SetStateAction<number>> = (action) =>
+        setDayData((prev) => ({
+            ...prev,
+            lunchStartTime: typeof action === 'function' ? action(prev.lunchStartTime) : action,
+        }));
 
     return {
         timeBlocks,

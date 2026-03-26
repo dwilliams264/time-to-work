@@ -1,17 +1,14 @@
 import { test, expect } from '@playwright/test';
 import { AppPage } from '../pageobjects/app.page';
 import { CalendarPage } from '../pageobjects/calendar.page';
-import { TimeStatsPage } from '../pageobjects/time-stats.page';
 
 test.describe('Date Navigation', () => {
     let appPage: AppPage;
     let calendarPage: CalendarPage;
-    let timeStatsPage: TimeStatsPage;
 
     test.beforeEach(async ({ page }) => {
         appPage = new AppPage(page);
         calendarPage = new CalendarPage(page);
-        timeStatsPage = new TimeStatsPage(page);
 
         await appPage.navigate();
         await appPage.waitForAppToLoad();
