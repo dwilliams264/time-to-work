@@ -5,12 +5,13 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  pull-requests: write
+  checks: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-      checks: write
     container:
       image: mcr.microsoft.com/playwright:v1.58.1
     steps:
