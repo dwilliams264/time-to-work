@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
     "preview": "vite preview",
     "test:unit": "vitest run",
     "test:e2e": "npm run test:report:clean && playwright test --project=desktop --project=mobile",
@@ -22,7 +21,6 @@
     "react-router-dom": "^7.13.2"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.58.1",
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.7",
@@ -30,12 +28,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^6.0.1",
     "allure-playwright": "^3.6.0",
-    "eslint": "^10.1.0",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.5.2",
-    "globals": "^17.4.0",
     "typescript": "~6.0.2",
-    "typescript-eslint": "^8.57.2",
     "vite": "^8.0.3",
     "vitest": "^4.1.2"
   }
