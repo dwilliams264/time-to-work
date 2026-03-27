@@ -9,7 +9,6 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test:unit": "vitest run",
-    "test": "npm run test:report:clean && playwright test",
     "test:e2e": "npm run test:report:clean && playwright test --project=desktop --project=mobile",
     "test:ui": "npm run test:report:clean && playwright test --ui",
     "test:report": "allure serve allure-results",
@@ -25,7 +24,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
-    "@playwright/test": "^1.49.0",
+    "@playwright/test": "^1.58.1",
     "@types/node": "^25.3.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",

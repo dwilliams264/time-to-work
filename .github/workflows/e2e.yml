@@ -1,16 +1,9 @@
 name: E2E Tests
+
 on:
   pull_request:
-    types: [opened, synchronize]
-    branches:
-      - 'next'
-      - 'main'
+    branches: [main]
   workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
 
 jobs:
   test:
@@ -21,36 +14,14 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.58.1
     steps:
-      - uses: actions/checkout@v4
-      - name: Set Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24.14
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
-      - name: Build
-        id: build
-        run: yarn build
-      - name: Run tests
-        run: npx allure run -- yarn test:e2e
-      - name: Generate test report
-        uses: allure-framework/allure-action@v0
+        run: npm ci
+      - name: Run tests and generate report
+        run: npm run test:e2e
+      - name: Run Allure Action
+        uses: allure-framework/allure-action@v0.6.6
         with:
           report-directory: './allure-report'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload test report
-        id: report
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './allure-report'
-  # Deploy Allure Report to GitHub Pages
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.report.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Deploy to GitHub Pages
-        id: report
-        uses: actions/deploy-pages@v4

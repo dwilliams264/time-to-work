@@ -55,7 +55,6 @@ src/
 | `npm run dev`         | Start development server                    |
 | `npm run build`       | Build for production                        |
 | `npm run lint`        | Run ESLint                                  |
-| `npm run test`        | Run all tests                               |
 | `npm run test:unit`   | Run unit tests (Vitest)                     |
 | `npm run test:e2e`    | Run end-to-end tests (Playwright)           |
 | `npm run test:ui`     | Run Playwright tests in interactive UI mode |
