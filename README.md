@@ -2,8 +2,6 @@
 
 A minimal daily time tracker to help you visualise and manage your work hours.
 
-![React](https://img.shields.io/badge/React-19-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue) ![MIT License](https://img.shields.io/badge/license-MIT-green)
-
 ## Features
 
 - Visual timeline from 6:00 to 22:00
