@@ -134,8 +134,14 @@
 /* Mobile improvements */
 @media (max-width: 768px) {
     .calendar-container {
+        height: auto;
         padding: 16px;
         border-radius: 12px;
+    }
+
+    .calendar {
+        flex: none;
+        height: 500px;
     }
 
     .calendar-header {

@@ -211,6 +211,9 @@
 
 @media (max-width: 768px) {
     .app {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
         padding: 0;
         padding-top: 12px;
         padding-bottom: 72px;
@@ -239,8 +242,9 @@
     }
 
     .date-navigation {
+        width: auto;
         border-radius: var(--radius-lg);
-        margin: 0 12px 12px;
+        margin: 0 16px 12px;
         padding: 5px;
     }
 
@@ -251,16 +255,22 @@
     }
 
     .app-content {
+        flex: none;
+        min-height: unset;
+        grid-template-rows: auto;
         gap: var(--space-md);
-        padding: 0 12px;
+        padding: 0 16px;
     }
 
     .sidebar {
         grid-template-columns: 1fr;
+        max-height: none;
+        overflow-y: visible;
         gap: 12px;
     }
 
     .main-content {
+        height: auto;
         min-height: unset;
     }
 }
