@@ -47,6 +47,7 @@ test.describe('Goal Setter', () => {
     test('should persist goal after page reload', async ({ page }) => {
         await goalSetterPage.setGoal(9, 15);
         await page.reload();
+        
         await appPage.waitForAppToLoad();
         await expect(goalSetterPage.getGoalSetterHeader()).toContainText('9h 15m');
     });
@@ -54,6 +55,7 @@ test.describe('Goal Setter', () => {
     test('should persist lunch break state after page reload', async ({ page }) => {
         await goalSetterPage.enableLunch();
         await page.reload();
+
         await appPage.waitForAppToLoad();
         await goalSetterPage.expandIfCollapsed();
         await expect(goalSetterPage.getLunchCheckbox()).toBeChecked();
