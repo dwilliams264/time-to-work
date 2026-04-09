@@ -20,7 +20,7 @@ test.describe('Time Stats and Progress', () => {
         await appPage.waitForAppToLoad();
     });
 
-    test('should show 0 initially and update when block is added', async () => {
+    test('should show 0 initially and update when block is added', { tag: ['@stats', '@update'] }, async () => {
         const initial = await timeStatsPage.getTimeWorkedValue().textContent();
         expect(initial).toContain('0');
 
@@ -30,7 +30,7 @@ test.describe('Time Stats and Progress', () => {
         expect(updated).toMatch(/\d+[hm]/);
     });
 
-    test('should fill progress bar as work approaches goal', async () => {
+    test('should fill progress bar as work approaches goal', { tag: ['@stats', '@progress', '@goal'] }, async () => {
         await goalSetterPage.setGoal(2, 0);
 
         const progressFill = timeStatsPage.getProgressFill();
@@ -44,23 +44,27 @@ test.describe('Time Stats and Progress', () => {
         expect(Number(after)).toBeGreaterThan(0);
     });
 
-    test('should show completion message and hide remaining when goal is met', async () => {
-        await goalSetterPage.setGoal(0, 30);
-        await calendarPage.createBlockAtPosition(100, 50);
+    test(
+        'should show completion message and hide remaining when goal is met',
+        { tag: ['@stats', '@goal', '@completion'] },
+        async () => {
+            await goalSetterPage.setGoal(0, 30);
+            await calendarPage.createBlockAtPosition(100, 50);
 
-        await expect(timeStatsPage.getCompletionMessage()).toBeAttached();
-        const message = await timeStatsPage.getCompletionMessage().textContent();
-        expect(message).toContain('Goal achieved');
-        await expect(timeStatsPage.getRemainingCard()).not.toBeAttached();
-    });
+            await expect(timeStatsPage.getCompletionMessage()).toBeAttached();
+            const message = await timeStatsPage.getCompletionMessage().textContent();
+            expect(message).toContain('Goal achieved');
+            await expect(timeStatsPage.getRemainingCard()).not.toBeAttached();
+        },
+    );
 
-    test('should show remaining time when under goal', async () => {
+    test('should show remaining time when under goal', { tag: ['@stats', '@goal', '@remaining'] }, async () => {
         await goalSetterPage.setGoal(2, 0);
         await calendarPage.createBlockAtPosition(100, 80);
         await expect(timeStatsPage.getRemainingCard()).toBeAttached();
     });
 
-    test('should show goal breakdown when lunch is enabled', async () => {
+    test('should show goal breakdown when lunch is enabled', { tag: ['@stats', '@goal', '@lunch'] }, async () => {
         await goalSetterPage.enableLunch();
         await expect(timeStatsPage.getGoalBreakdown()).toBeAttached();
         const text = await timeStatsPage.getGoalBreakdown().textContent();
