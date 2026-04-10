@@ -20,20 +20,20 @@ test.describe('Layout', () => {
         await appPage.waitForAppToLoad();
     });
 
-    test('should display main layout with header and date', async () => {
+    test('should display main layout with header and date', { tag: ['@layout', '@header'] }, async () => {
         await expect(appPage.getHeaderTitle()).toContainText('Time to Work');
         await expect(appPage.getCurrentDate()).toBeVisible();
         await expect(appPage.getMainContent()).toBeVisible();
     });
 
-    test('should display all core components', async () => {
+    test('should display all core components', { tag: ['@layout', '@components'] }, async () => {
         await expect(goalSetterPage.getGoalSetterContainer()).toBeVisible();
         await expect(timeStatsPage.getTimeStatsContainer()).toBeVisible();
         await expect(calendarPage.getCalendarContainer()).toBeVisible();
         await expect(calendarPage.getCalendarTitle()).toContainText("Today's Schedule");
     });
 
-    test('should display hour grid from 5 AM to 8 PM', async () => {
+    test('should display hour grid from 5 AM to 8 PM', { tag: ['@layout', '@calendar', '@hours'] }, async () => {
         const hourRows = calendarPage.getHourRows();
         await expect(hourRows.first()).toBeVisible();
         const count = await hourRows.count();

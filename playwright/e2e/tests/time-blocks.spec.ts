@@ -17,32 +17,36 @@ test.describe('Time Blocks', () => {
         await appPage.waitForAppToLoad();
     });
 
-    test('should create a time block by dragging', async () => {
+    test('should create a time block by dragging', { tag: ['@blocks', '@create', '@drag'] }, async () => {
         await calendarPage.createBlockAtPosition(100, 80);
         await expect(calendarPage.getTimeBlock()).toBeVisible();
     });
 
-    test('should display time range and duration on created block', async () => {
-        await calendarPage.createBlockAtPosition(100, 80);
-        const content = await calendarPage.getTimeBlockContent().first().textContent();
-        expect(content).toMatch(/\d{2}:\d{2}\s*-\s*\d{2}:\d{2}/);
-        expect(content).toMatch(/\d+[hm]/);
-    });
+    test(
+        'should display time range and duration on created block',
+        { tag: ['@blocks', '@display', '@duration'] },
+        async () => {
+            await calendarPage.createBlockAtPosition(100, 80);
+            const content = await calendarPage.getTimeBlockContent().first().textContent();
+            expect(content).toMatch(/\d{2}:\d{2}\s*-\s*\d{2}:\d{2}/);
+            expect(content).toMatch(/\d+[hm]/);
+        },
+    );
 
-    test('should create multiple blocks', async () => {
+    test('should create multiple blocks', { tag: ['@blocks', '@multiple'] }, async () => {
         await calendarPage.createBlockAtPosition(50, 60);
         await expect(calendarPage.getTimeBlocks()).toHaveCount(1);
         await calendarPage.createBlockAtPosition(200, 60);
         await expect(calendarPage.getTimeBlocks()).toHaveCount(2);
     });
 
-    test('should delete a block', async () => {
+    test('should delete a block', { tag: ['@blocks', '@delete'] }, async () => {
         await calendarPage.createBlockAtPosition(100, 80);
         await calendarPage.deleteFirstBlock();
         await expect(calendarPage.getTimeBlock()).not.toBeVisible();
     });
 
-    test('should clear all blocks', async () => {
+    test('should clear all blocks', { tag: ['@blocks', '@clear'] }, async () => {
         await calendarPage.createBlockAtPosition(50, 60);
         await expect(calendarPage.getTimeBlocks()).toHaveCount(1);
         await calendarPage.createBlockAtPosition(200, 60);

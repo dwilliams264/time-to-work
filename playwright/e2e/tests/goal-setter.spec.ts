@@ -17,7 +17,7 @@ test.describe('Goal Setter', () => {
         await appPage.waitForAppToLoad();
     });
 
-    test('should toggle expand and collapse', async () => {
+    test('should toggle expand and collapse', { tag: ['@goal', '@ui'] }, async () => {
         await goalSetterPage.expandIfCollapsed();
         await expect(goalSetterPage.getGoalInputs()).toBeVisible();
 
@@ -25,26 +25,30 @@ test.describe('Goal Setter', () => {
         await expect(goalSetterPage.getGoalInputs()).not.toBeVisible();
     });
 
-    test('should set goal with hours and minutes manually', async () => {
+    test('should set goal with hours and minutes manually', { tag: ['@goal', '@input'] }, async () => {
         await goalSetterPage.setGoal(7, 30);
         await expect(goalSetterPage.getGoalSetterHeader()).toContainText('7h 30m');
     });
 
-    test('should apply quick goal preset and override manual goal', async () => {
+    test('should apply quick goal preset and override manual goal', { tag: ['@goal', '@preset'] }, async () => {
         await goalSetterPage.setGoal(5, 0);
         await goalSetterPage.selectQuickGoalMedium();
         await expect(goalSetterPage.getGoalSetterHeader()).toContainText('7h 30m');
     });
 
-    test('should show lunch indicator on calendar when enabled, hide when disabled', async () => {
-        await goalSetterPage.enableLunch();
-        await expect(calendarPage.getLunchIndicator()).toBeVisible();
+    test(
+        'should show lunch indicator on calendar when enabled, hide when disabled',
+        { tag: ['@goal', '@lunch', '@calendar'] },
+        async () => {
+            await goalSetterPage.enableLunch();
+            await expect(calendarPage.getLunchIndicator()).toBeVisible();
 
-        await goalSetterPage.disableLunch();
-        await expect(calendarPage.getLunchIndicator()).not.toBeVisible();
-    });
+            await goalSetterPage.disableLunch();
+            await expect(calendarPage.getLunchIndicator()).not.toBeVisible();
+        },
+    );
 
-    test('should persist goal after page reload', async ({ page }) => {
+    test('should persist goal after page reload', { tag: ['@goal', '@persistence'] }, async ({ page }) => {
         await goalSetterPage.setGoal(9, 15);
         await page.reload();
         

@@ -14,13 +14,17 @@ test.describe('Date Navigation', () => {
         await appPage.waitForAppToLoad();
     });
 
-    test('should disable next button on today and re-enable after going back', async () => {
-        await expect(appPage.getNextDayButton()).toBeDisabled();
-        await appPage.goToPreviousDay();
-        await expect(appPage.getNextDayButton()).toBeEnabled();
-    });
+    test(
+        'should disable next button on today and re-enable after going back',
+        { tag: ['@smoke', '@critical'] },
+        async () => {
+            await expect(appPage.getNextDayButton()).toBeDisabled();
+            await appPage.goToPreviousDay();
+            await expect(appPage.getNextDayButton()).toBeEnabled();
+        },
+    );
 
-    test('should change date when navigating and return on forward', async () => {
+    test('should change date when navigating and return on forward', { tag: ['@smoke', '@navigation'] }, async () => {
         const today = await appPage.getCurrentDateText();
         await appPage.goToPreviousDay();
         const yesterday = await appPage.getCurrentDateText();
@@ -30,7 +34,7 @@ test.describe('Date Navigation', () => {
         expect(await appPage.getCurrentDateText()).toBe(today);
     });
 
-    test('should show empty calendar on a day with no blocks', async () => {
+    test('should show empty calendar on a day with no blocks', { tag: ['@calendar', '@blocks', '@edge'] }, async () => {
         await calendarPage.createBlockAtPosition(100, 80);
         await expect(calendarPage.getTimeBlock()).toBeVisible();
 
@@ -38,7 +42,7 @@ test.describe('Date Navigation', () => {
         await expect(calendarPage.getTimeBlock()).not.toBeVisible();
     });
 
-    test('should keep blocks isolated per day', async () => {
+    test('should keep blocks isolated per day', { tag: ['@calendar', '@blocks', '@isolation'] }, async () => {
         await calendarPage.createBlockAtPosition(100, 80);
 
         await appPage.goToPreviousDay();
@@ -48,7 +52,7 @@ test.describe('Date Navigation', () => {
         await expect(calendarPage.getTimeBlock()).toBeVisible();
     });
 
-    test('should change calendar title based on selected day', async () => {
+    test('should change calendar title based on selected day', { tag: ['@calendar', '@ui'] }, async () => {
         await expect(calendarPage.getCalendarTitle()).toContainText("Today's Schedule");
 
         await appPage.goToPreviousDay();
@@ -58,16 +62,20 @@ test.describe('Date Navigation', () => {
         await expect(calendarPage.getCalendarTitle()).toContainText("Today's Schedule");
     });
 
-    test('should show current time line only on today', async ({ page }) => {
-        await page.clock.install({ time: new Date('2026-03-18T10:00:00') });
-        await appPage.navigate();
-        await appPage.waitForAppToLoad();
-        await expect(calendarPage.getCurrentTimeLine()).toBeVisible();
+    test(
+        'should show current time line only on today',
+        { tag: ['@calendar', '@timeline', '@today'] },
+        async ({ page }) => {
+            await page.clock.install({ time: new Date('2026-03-18T10:00:00') });
+            await appPage.navigate();
+            await appPage.waitForAppToLoad();
+            await expect(calendarPage.getCurrentTimeLine()).toBeVisible();
 
-        await appPage.goToPreviousDay();
-        await expect(calendarPage.getCurrentTimeLine()).not.toBeVisible();
+            await appPage.goToPreviousDay();
+            await expect(calendarPage.getCurrentTimeLine()).not.toBeVisible();
 
-        await appPage.goToNextDay();
-        await expect(calendarPage.getCurrentTimeLine()).toBeVisible();
-    });
+            await appPage.goToNextDay();
+            await expect(calendarPage.getCurrentTimeLine()).toBeVisible();
+        },
+    );
 });
