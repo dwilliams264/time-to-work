@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { AppPage } from '../pageobjects/app.page';
-import { CalendarPage } from '../pageobjects/calendar.page';
-import { TimeStatsPage } from '../pageobjects/time-stats.page';
+import { AppPage } from '../../pageobjects/app.page';
+import { CalendarPage } from '../../pageobjects/calendar.page';
+import { TimeStatsPage } from '../../pageobjects/time-stats.page';
 
 test.describe('Time Blocks', () => {
     let appPage: AppPage;

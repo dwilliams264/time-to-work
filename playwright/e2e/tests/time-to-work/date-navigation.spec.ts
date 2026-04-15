@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { AppPage } from '../pageobjects/app.page';
-import { CalendarPage } from '../pageobjects/calendar.page';
+import { AppPage } from '../../pageobjects/app.page';
+import { CalendarPage } from '../../pageobjects/calendar.page';
 
 test.describe('Date Navigation', () => {
     let appPage: AppPage;

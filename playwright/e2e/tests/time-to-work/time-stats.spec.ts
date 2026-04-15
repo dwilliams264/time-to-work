@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { AppPage } from '../pageobjects/app.page';
-import { GoalSetterPage } from '../pageobjects/goal-setter.page';
-import { TimeStatsPage } from '../pageobjects/time-stats.page';
-import { CalendarPage } from '../pageobjects/calendar.page';
+import { AppPage } from '../../pageobjects/app.page';
+import { GoalSetterPage } from '../../pageobjects/goal-setter.page';
+import { TimeStatsPage } from '../../pageobjects/time-stats.page';
+import { CalendarPage } from '../../pageobjects/calendar.page';
 
 test.describe('Time Stats and Progress', () => {
     let appPage: AppPage;

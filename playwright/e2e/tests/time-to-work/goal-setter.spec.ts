@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { AppPage } from '../pageobjects/app.page';
-import { GoalSetterPage } from '../pageobjects/goal-setter.page';
-import { CalendarPage } from '../pageobjects/calendar.page';
+import { AppPage } from '../../pageobjects/app.page';
+import { GoalSetterPage } from '../../pageobjects/goal-setter.page';
+import { CalendarPage } from '../../pageobjects/calendar.page';
 
 test.describe('Goal Setter', () => {
     let appPage: AppPage;
@@ -51,7 +51,7 @@ test.describe('Goal Setter', () => {
     test('should persist goal after page reload', { tag: ['@goal', '@persistence'] }, async ({ page }) => {
         await goalSetterPage.setGoal(9, 15);
         await page.reload();
-        
+
         await appPage.waitForAppToLoad();
         await expect(goalSetterPage.getGoalSetterHeader()).toContainText('9h 15m');
     });
