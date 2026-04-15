@@ -161,19 +161,6 @@ test.describe('Product Demo', () => {
         await calendarPage.createBlockByDragging(360, 480);
         await page.waitForTimeout(1000);
 
-        // Block 3: Post-lunch 1 PM - 3 PM  (2 h)
-        // createBlockByDragging auto-scrolls when offset > COMFORTABLE_MAX
-        // offset 640 = 1 PM, offset 800 = 3 PM
-        await showCallout(page, '🌤  Post-lunch  ·  1 PM - 3 PM');
-        await calendarPage.createBlockByDragging(640, 800);
-        await page.waitForTimeout(1000);
-
-        // Block 4: Late afternoon 3:30 PM - 5:30 PM  (2 h) → total 7.5 h, goal met
-        // offset 840 = 3:30 PM, offset 1000 = 5:30 PM
-        await showCallout(page, '🌆  Afternoon  ·  3:30 PM - 5:30 PM');
-        await calendarPage.createBlockByDragging(840, 1000);
-        await page.waitForTimeout(1200);
-
         // Scroll back to top so the stats panel is fully in view.
         await calendarPage.getCalendar().scrollIntoViewIfNeeded();
         await page.waitForTimeout(400);
@@ -183,10 +170,11 @@ test.describe('Product Demo', () => {
         await page.waitForTimeout(1000);
         await removeStatsHighlight();
 
-        await page.screencast.showChapter('Goal Achieved! 🎉', {
-            description: '7.5 hours tracked — full day done!',
+        await page.screencast.showChapter('Work Logged! 🎉', {
+            description: '3.5 hours tracked!',
             duration: 2500,
         });
+
         await page.waitForTimeout(2700);
 
         // ── Navigate to Days to Work ──────────────────────────────────────────
