@@ -2,43 +2,72 @@ import { test, Page } from '@playwright/test';
 import { AppPage } from '../pageobjects/app.page';
 import { CalendarPage } from '../pageobjects/calendar.page';
 import { GoalSetterPage } from '../pageobjects/goal-setter.page';
+import { TimeStatsPage } from '../pageobjects/time-stats.page';
 
-// ── Calendar helpers ──────────────────────────────────────────────────────────
-const HOURS_START = 5; // must match src/constants/time.ts
-const HOUR_HEIGHT = 80; // px
+// ── Overlay helpers ───────────────────────────────────────────────────────────
+// These are screencast presentation utilities, not app interactions.
 
-function hourToOffset(hour: number): number {
-    return (hour - HOURS_START) * HOUR_HEIGHT;
+/**
+ * Draw a pulsing amber glow around the element identified by `testId`.
+ * Scrolls the element into view first so bounding-box coordinates are valid.
+ * Returns a dispose function that removes the overlay.
+ */
+async function highlightElement(page: Page, testId: string, label?: string): Promise<() => Promise<void>> {
+    const el = page.getByTestId(testId);
+    await el.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(150);
+
+    const bb = await el.boundingBox();
+    if (!bb) return async () => {};
+
+    const pad = 6;
+    const t = bb.y - pad;
+    const l = bb.x - pad;
+    const w = bb.width + pad * 2;
+    const h = bb.height + pad * 2;
+
+    const labelHtml = label
+        ? `<div style="position:fixed;top:${t + h + 6}px;left:${l + w / 2}px;
+               transform:translateX(-50%);background:rgba(15,15,15,0.88);color:#fff;
+               padding:5px 14px;border-radius:6px;
+               font:600 13px/1.4 system-ui,sans-serif;white-space:nowrap;
+               letter-spacing:0.2px;z-index:10000;">${label}</div>`
+        : '';
+
+    const html = `
+        <div style="position:fixed;top:${t}px;left:${l}px;width:${w}px;height:${h}px;
+            border:2px solid #f59e0b;border-radius:10px;pointer-events:none;
+            box-shadow:0 0 0 4px rgba(245,158,11,0.2),0 0 20px rgba(245,158,11,0.35);
+            animation:hlPulse 1.2s ease-in-out infinite;z-index:9999;"></div>
+        ${labelHtml}
+        <style>@keyframes hlPulse{
+            0%,100%{box-shadow:0 0 0 4px rgba(245,158,11,.2),0 0 20px rgba(245,158,11,.35)}
+            50%{box-shadow:0 0 0 9px rgba(245,158,11,.07),0 0 32px rgba(245,158,11,.55)}
+        }</style>`;
+
+    const disposable = await page.screencast.showOverlay(html);
+    return async () => {
+        await disposable.dispose();
+    };
 }
 
-/** Scroll the page so that `offset` pixels from the calendar top sits at `targetY` in the viewport. */
-async function scrollCalendarTo(page: Page, offset: number, targetY = 180): Promise<void> {
-    const bb = await page.getByTestId('calendar-grid').boundingBox();
-    if (!bb) return;
-    const delta = bb.y + offset - targetY;
-    if (Math.abs(delta) > 40) {
-        await page.evaluate((d) => window.scrollBy(0, d), delta);
-    }
+/**
+ * Show a bottom-centre pill callout that auto-removes after `duration` ms.
+ */
+async function showCallout(page: Page, text: string, duration = 2800): Promise<void> {
+    await page.screencast.showOverlay(
+        `<div style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+            background:rgba(15,15,15,0.88);color:#fff;padding:10px 26px;
+            border-radius:50px;font:600 15px/1.4 system-ui,sans-serif;
+            letter-spacing:0.2px;border:1px solid rgba(255,255,255,0.12);
+            white-space:nowrap;z-index:9998;">${text}</div>`,
+        { duration },
+    );
 }
 
-/** Drag to create a time block between two clock hours (e.g. 9, 12 for 9 AM – 12 PM). */
-async function createDemoBlock(page: Page, startHour: number, endHour: number): Promise<void> {
-    const startOffset = hourToOffset(startHour);
-    const endOffset = hourToOffset(endHour);
+// ── Date helper ───────────────────────────────────────────────────────────────
 
-    await scrollCalendarTo(page, startOffset);
-
-    const bb = await page.getByTestId('calendar-grid').boundingBox();
-    if (!bb) throw new Error('calendar-grid bounding box not found');
-
-    const cx = bb.x + bb.width / 2;
-    await page.mouse.move(cx, bb.y + startOffset);
-    await page.mouse.down();
-    await page.mouse.move(cx, bb.y + endOffset, { steps: 10 });
-    await page.mouse.up();
-}
-
-/** Returns up to `count` recent weekday dates as YYYY-MM-DD strings, newest first. */
+/** Returns up to `count` recent weekday dates as YYYY-MM-DD strings, oldest first. */
 function getRecentWeekdays(count: number): string[] {
     const days: string[] = [];
     const d = new Date();
@@ -50,7 +79,7 @@ function getRecentWeekdays(count: number): string[] {
         }
         d.setDate(d.getDate() - 1);
     }
-    return days;
+    return days.reverse();
 }
 
 // ── Test ──────────────────────────────────────────────────────────────────────
@@ -60,11 +89,13 @@ test.describe('Product Demo', () => {
     let appPage: AppPage;
     let calendarPage: CalendarPage;
     let goalSetterPage: GoalSetterPage;
+    let timeStatsPage: TimeStatsPage;
 
     test.beforeEach(async ({ page }) => {
         appPage = new AppPage(page);
         calendarPage = new CalendarPage(page);
         goalSetterPage = new GoalSetterPage(page);
+        timeStatsPage = new TimeStatsPage(page);
 
         await appPage.navigate();
         await appPage.waitForAppToLoad();
@@ -78,103 +109,164 @@ test.describe('Product Demo', () => {
             path: 'demo-recordings/product-demo.webm',
             size: { width: 1280, height: 800 },
         });
-        await page.screencast.showActions({ duration: 800, fontSize: 20, position: 'bottom' });
+        await page.screencast.showActions({ duration: 700, fontSize: 18, position: 'bottom' });
 
+        // ── Intro ─────────────────────────────────────────────────────────────
         await page.screencast.showChapter('Time to Work', {
             description: 'Track your hours. Own your day.',
             duration: 3000,
         });
         await page.waitForTimeout(3200);
 
-        // ── Time to Work: Set goal ────────────────────────────────────────────
+        // ── Set Daily Goal ────────────────────────────────────────────────────
         await page.screencast.showChapter('Set Your Daily Goal', {
             description: 'Choose how many hours you want to work today',
-            duration: 2500,
+            duration: 2000,
         });
-        await page.waitForTimeout(2700);
+        await page.waitForTimeout(2200);
 
-        await goalSetterPage.selectQuickGoalLong(); // 8.5 h
-        await page.waitForTimeout(800);
+        // Highlight the goal-setter panel then set a 4-hour goal via the inputs.
+        const removeGoalHighlight = await highlightElement(page, 'goal-setter-container', 'Daily Goal');
+        await page.waitForTimeout(600);
+        await goalSetterPage.setGoal(4, 0);
+        await page.waitForTimeout(500);
+        await removeGoalHighlight();
+
+        // Enable the lunch indicator.
+        const removeLunchHighlight = await highlightElement(page, 'goal-setter-lunch-checkbox', 'Include lunch break');
+        await page.waitForTimeout(500);
         await goalSetterPage.enableLunch();
-        await page.waitForTimeout(800);
+        await page.waitForTimeout(400);
+        await removeLunchHighlight();
 
-        // ── Time to Work: Add sessions ────────────────────────────────────────
+        // ── Add Work Sessions ─────────────────────────────────────────────────
         await page.screencast.showChapter('Add Your Work Sessions', {
             description: 'Drag on the calendar to log your time',
-            duration: 2500,
+            duration: 2000,
         });
-        await page.waitForTimeout(2700);
+        await page.waitForTimeout(2200);
 
-        // Morning block:   8 AM – 12 PM  (4 h)
-        await createDemoBlock(page, 8, 12);
+        // Highlight the calendar before the first drag.
+        const removeCalHighlight = await highlightElement(page, 'calendar-grid', 'Drag to create time blocks');
+        await page.waitForTimeout(800);
+        await removeCalHighlight();
+
+        // Block 1: 7 AM – 9 AM  (2 h)
+        // Offsets use HOURS_START=5, HOUR_HEIGHT=80: (hour - 5) * 80
+        // offset 160 = 7 AM, offset 320 = 9 AM
+        await showCallout(page, '☀️  Morning session  ·  7 AM – 9 AM');
+        await calendarPage.createBlockByDragging(160, 320);
+        await page.waitForTimeout(1000);
+
+        // Block 2: 9:30 AM – 11 AM  (1.5 h)
+        // offset 360 = 9:30 AM, offset 480 = 11 AM
+        await showCallout(page, '🌤  Mid-morning  ·  9:30 AM – 11 AM');
+        await calendarPage.createBlockByDragging(360, 480);
+        await page.waitForTimeout(1000);
+
+        // Block 3: 11:30 AM – 12:30 PM  (1 h) → total 4.5 h, exceeds 4 h goal
+        // offset 520 = 11:30 AM, offset 600 = 12:30 PM
+        await showCallout(page, '🕛  Pre-lunch  ·  11:30 AM – 12:30 PM');
+        await calendarPage.createBlockByDragging(520, 600);
         await page.waitForTimeout(1200);
 
-        // Afternoon block: 1 PM –  5 PM  (4 h)
-        await createDemoBlock(page, 13, 17);
-        await page.waitForTimeout(1200);
-
-        // Evening block:   6 PM –  7 PM  (1 h) → total 9 h, goal exceeded
-        await createDemoBlock(page, 18, 19);
-        await page.waitForTimeout(1500);
+        // Spotlight the stats panel reacting live to the blocks.
+        const removeStatsHighlight = await highlightElement(page, 'time-stats-container', 'Live progress tracking');
+        await page.waitForTimeout(1000);
+        await removeStatsHighlight();
 
         await page.screencast.showChapter('Goal Achieved! 🎉', {
-            description: '9 hours tracked — goal smashed!',
+            description: '4.5 hours tracked — morning nailed!',
             duration: 2500,
         });
         await page.waitForTimeout(2700);
 
-        // ── Days to Work ──────────────────────────────────────────────────────
+        // ── Navigate to Days to Work ──────────────────────────────────────────
+        const removeNavHighlight = await highlightElement(page, 'nav-days-to-work', 'Switch to attendance tracking');
+        await page.waitForTimeout(700);
+        await removeNavHighlight();
         await page.getByTestId('nav-days-to-work').click();
         await page.waitForTimeout(1000);
 
+        // ── Track Office Attendance ───────────────────────────────────────────
         await page.screencast.showChapter('Track Your Office Attendance', {
             description: 'Log how you work each day of the month',
-            duration: 2500,
+            duration: 2000,
         });
-        await page.waitForTimeout(2700);
+        await page.waitForTimeout(2200);
 
-        // Click the 6 most-recent weekdays in chronological order.
-        // Click counts cycle through: office(1) → wfh(2) → annual-leave(3)
-        const weekdays = getRecentWeekdays(6).reverse();
+        const removeWeekGridHighlight = await highlightElement(page, 'week-grid', 'Click a day to set its type');
+        await page.waitForTimeout(700);
+        await removeWeekGridHighlight();
+
+        // Mark the 6 most-recent weekdays with a variety of types.
+        // Cycle: office(1 click), office(1), wfh(2), annual-leave(3), office(1), office(1)
+        const weekdays = getRecentWeekdays(6);
         const clickCounts = [1, 1, 2, 3, 1, 1];
 
         for (let i = 0; i < weekdays.length; i++) {
             const cell = page.getByTestId(`day-cell-${weekdays[i]}`);
+            await cell.scrollIntoViewIfNeeded();
+            await page.waitForTimeout(100);
             for (let c = 0; c < clickCounts[i]; c++) {
                 await cell.click();
-                await page.waitForTimeout(200);
+                await page.waitForTimeout(150);
             }
-            await page.waitForTimeout(500);
+            await page.waitForTimeout(350);
         }
-        await page.waitForTimeout(800);
+        await page.waitForTimeout(600);
 
-        // ── Days to Work: Configure target ────────────────────────────────────
+        // ── Configure Target ──────────────────────────────────────────────────
         await page.screencast.showChapter('Configure Your Target', {
             description: "Set how many days per week you're in the office",
-            duration: 2500,
+            duration: 2000,
         });
-        await page.waitForTimeout(2700);
+        await page.waitForTimeout(2200);
 
-        await page.getByTestId('attendance-settings-header').click();
-        await page.waitForTimeout(600);
-        await page.getByTestId('days-button-5').click();
+        const removeSettingsHighlight = await highlightElement(
+            page,
+            'attendance-settings-container',
+            'Attendance settings',
+        );
         await page.waitForTimeout(500);
-        await page.getByTestId('office-days-button-3').click();
-        await page.waitForTimeout(800);
+        await page.getByTestId('attendance-settings-header').click();
+        await page.waitForTimeout(500);
+        await removeSettingsHighlight();
 
-        // ── Days to Work: Stats overview ──────────────────────────────────────
+        const removeDaysHighlight = await highlightElement(page, 'days-per-week-selector', 'Days per week');
+        await page.waitForTimeout(300);
+        await page.getByTestId('days-button-5').click();
+        await page.waitForTimeout(400);
+        await removeDaysHighlight();
+
+        const removeOfficeDaysHighlight = await highlightElement(page, 'office-days-selector', 'Days in office target');
+        await page.waitForTimeout(300);
+        await page.getByTestId('office-days-button-3').click();
+        await page.waitForTimeout(500);
+        await removeOfficeDaysHighlight();
+
+        // ── Attendance Stats Overview ─────────────────────────────────────────
         await page.screencast.showChapter('Your Attendance at a Glance', {
             description: 'Track your YTD, monthly, and weekly stats',
-            duration: 2500,
+            duration: 2000,
         });
-        await page.waitForTimeout(2700);
+        await page.waitForTimeout(2200);
 
+        const removeAttStatsHighlight = await highlightElement(
+            page,
+            'attendance-stats-container',
+            'Live attendance stats',
+        );
+        await page.waitForTimeout(600);
+        await removeAttStatsHighlight();
+
+        await page.getByTestId('stats-tab-month').scrollIntoViewIfNeeded();
         await page.getByTestId('stats-tab-month').click();
-        await page.waitForTimeout(800);
+        await page.waitForTimeout(700);
         await page.getByTestId('stats-tab-ytd').click();
-        await page.waitForTimeout(800);
+        await page.waitForTimeout(700);
         await page.getByTestId('stats-tab-week').click();
-        await page.waitForTimeout(800);
+        await page.waitForTimeout(700);
 
         // ── Outro ─────────────────────────────────────────────────────────────
         await page.screencast.showChapter('Time to Work', {
