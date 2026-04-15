@@ -54,13 +54,13 @@ async function highlightElement(page: Page, testId: string, label?: string): Pro
 /**
  * Show a bottom-centre pill callout that auto-removes after `duration` ms.
  */
-async function showCallout(page: Page, text: string, duration = 2800): Promise<void> {
+async function showCallout(page: Page, text: string, duration = 1400): Promise<void> {
     await page.screencast.showOverlay(
         `<div style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
             background:rgba(15,15,15,0.88);color:#fff;padding:10px 26px;
             border-radius:50px;font:600 15px/1.4 system-ui,sans-serif;
             letter-spacing:0.2px;border:1px solid rgba(255,255,255,0.12);
-            white-space:nowrap;z-index:9998;">${text}</div>`,
+            white-space:nowrap;pointer-events:none;z-index:9998;">${text}</div>`,
         { duration },
     );
 }
@@ -89,13 +89,11 @@ test.describe('Product Demo', () => {
     let appPage: AppPage;
     let calendarPage: CalendarPage;
     let goalSetterPage: GoalSetterPage;
-    let timeStatsPage: TimeStatsPage;
 
     test.beforeEach(async ({ page }) => {
         appPage = new AppPage(page);
         calendarPage = new CalendarPage(page);
         goalSetterPage = new GoalSetterPage(page);
-        timeStatsPage = new TimeStatsPage(page);
 
         await appPage.navigate();
         await appPage.waitForAppToLoad();
@@ -109,7 +107,6 @@ test.describe('Product Demo', () => {
             path: 'demo-recordings/product-demo.webm',
             size: { width: 1280, height: 800 },
         });
-        await page.screencast.showActions({ duration: 700, fontSize: 18, position: 'bottom' });
 
         // ── Intro ─────────────────────────────────────────────────────────────
         await page.screencast.showChapter('Time to Work', {
@@ -125,18 +122,18 @@ test.describe('Product Demo', () => {
         });
         await page.waitForTimeout(2200);
 
-        // Highlight the goal-setter panel then set a 4-hour goal via the inputs.
+        // Highlight the goal-setter panel then set a 7h 30m (typical working day) goal.
         const removeGoalHighlight = await highlightElement(page, 'goal-setter-container', 'Daily Goal');
         await page.waitForTimeout(600);
-        await goalSetterPage.setGoal(4, 0);
+        await goalSetterPage.setGoal(7, 30);
         await page.waitForTimeout(500);
         await removeGoalHighlight();
 
         // Enable the lunch indicator.
         const removeLunchHighlight = await highlightElement(page, 'goal-setter-lunch-checkbox', 'Include lunch break');
-        await page.waitForTimeout(500);
+        await page.waitForTimeout(600);
         await goalSetterPage.enableLunch();
-        await page.waitForTimeout(400);
+        await page.waitForTimeout(500);
         await removeLunchHighlight();
 
         // ── Add Work Sessions ─────────────────────────────────────────────────
@@ -151,24 +148,35 @@ test.describe('Product Demo', () => {
         await page.waitForTimeout(800);
         await removeCalHighlight();
 
-        // Block 1: 7 AM – 9 AM  (2 h)
+        // Block 1: 7 AM - 9 AM  (2 h)
         // Offsets use HOURS_START=5, HOUR_HEIGHT=80: (hour - 5) * 80
         // offset 160 = 7 AM, offset 320 = 9 AM
-        await showCallout(page, '☀️  Morning session  ·  7 AM – 9 AM');
+        await showCallout(page, '☀️  Morning session  ·  7 AM - 9 AM');
         await calendarPage.createBlockByDragging(160, 320);
         await page.waitForTimeout(1000);
 
-        // Block 2: 9:30 AM – 11 AM  (1.5 h)
+        // Block 2: 9:30 AM - 11 AM  (1.5 h)
         // offset 360 = 9:30 AM, offset 480 = 11 AM
-        await showCallout(page, '🌤  Mid-morning  ·  9:30 AM – 11 AM');
+        await showCallout(page, '🌤  Mid-morning  ·  9:30 AM - 11 AM');
         await calendarPage.createBlockByDragging(360, 480);
         await page.waitForTimeout(1000);
 
-        // Block 3: 11:30 AM – 12:30 PM  (1 h) → total 4.5 h, exceeds 4 h goal
-        // offset 520 = 11:30 AM, offset 600 = 12:30 PM
-        await showCallout(page, '🕛  Pre-lunch  ·  11:30 AM – 12:30 PM');
-        await calendarPage.createBlockByDragging(520, 600);
+        // Block 3: Post-lunch 1 PM - 3 PM  (2 h)
+        // createBlockByDragging auto-scrolls when offset > COMFORTABLE_MAX
+        // offset 640 = 1 PM, offset 800 = 3 PM
+        await showCallout(page, '🌤  Post-lunch  ·  1 PM - 3 PM');
+        await calendarPage.createBlockByDragging(640, 800);
+        await page.waitForTimeout(1000);
+
+        // Block 4: Late afternoon 3:30 PM - 5:30 PM  (2 h) → total 7.5 h, goal met
+        // offset 840 = 3:30 PM, offset 1000 = 5:30 PM
+        await showCallout(page, '🌆  Afternoon  ·  3:30 PM - 5:30 PM');
+        await calendarPage.createBlockByDragging(840, 1000);
         await page.waitForTimeout(1200);
+
+        // Scroll back to top so the stats panel is fully in view.
+        await calendarPage.getCalendar().scrollIntoViewIfNeeded();
+        await page.waitForTimeout(400);
 
         // Spotlight the stats panel reacting live to the blocks.
         const removeStatsHighlight = await highlightElement(page, 'time-stats-container', 'Live progress tracking');
@@ -176,7 +184,7 @@ test.describe('Product Demo', () => {
         await removeStatsHighlight();
 
         await page.screencast.showChapter('Goal Achieved! 🎉', {
-            description: '4.5 hours tracked — morning nailed!',
+            description: '7.5 hours tracked — full day done!',
             duration: 2500,
         });
         await page.waitForTimeout(2700);

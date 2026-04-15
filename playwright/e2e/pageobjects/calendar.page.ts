@@ -89,9 +89,9 @@ export class CalendarPage {
         const endY = calendarBox.y + endYOffset;
         const centerX = calendarBox.x + calendarBox.width / 2;
 
-        await this.page.mouse.move(centerX, startY);
+        await this.page.mouse.move(centerX, startY, { steps: 5 });
         await this.page.mouse.down();
-        await this.page.mouse.move(centerX, endY);
+        await this.page.mouse.move(centerX, endY, { steps: 20 });
         await this.page.mouse.up();
     }
 
