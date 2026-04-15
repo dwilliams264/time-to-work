@@ -55,7 +55,7 @@ test.describe('Day Status Cycling', () => {
         // expect: Day cell shows 'Offsite' status label
         await expect(dayTypeChip).toHaveText('Offsite');
         // expect: April attendance % updates (Offsite counts toward office attendance)
-        await expect(aprYtdPct).toHaveText('0%');
+        await expect(aprYtdPct).toHaveText('9%');
 
         // 6. Click the 'Wed 1 Apr' day button a fifth time
         await dayCell.click();
