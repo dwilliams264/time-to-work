@@ -149,16 +149,13 @@ test.describe('Product Demo', () => {
         await removeCalHighlight();
 
         // Block 1: 7 AM - 9 AM  (2 h)
-        // Offsets use HOURS_START=5, HOUR_HEIGHT=80: (hour - 5) * 80
-        // offset 160 = 7 AM, offset 320 = 9 AM
-        await showCallout(page, '☀️  Morning session  ·  7 AM - 9 AM');
-        await calendarPage.createBlockByDragging(160, 320);
+        await showCallout(page, '☀️  Morning session  ·  5:30 AM - 7 AM');
+        await calendarPage.createBlockAtPosition(50, 120);
         await page.waitForTimeout(1000);
 
         // Block 2: 9:30 AM - 11 AM  (1.5 h)
-        // offset 360 = 9:30 AM, offset 480 = 11 AM
-        await showCallout(page, '🌤  Mid-morning  ·  9:30 AM - 11 AM');
-        await calendarPage.createBlockByDragging(360, 480);
+        await showCallout(page, '🌤  Morning session  ·  7:15 AM - 8:45 AM');
+        await calendarPage.createBlockAtPosition(200, 120);
         await page.waitForTimeout(1000);
 
         // Scroll back to top so the stats panel is fully in view.
@@ -171,7 +168,7 @@ test.describe('Product Demo', () => {
         await removeStatsHighlight();
 
         await page.screencast.showChapter('Work Logged! 🎉', {
-            description: '3.5 hours tracked!',
+            description: '3 hours tracked!',
             duration: 2500,
         });
 
