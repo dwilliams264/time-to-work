@@ -2,7 +2,6 @@ import { test, Page } from '@playwright/test';
 import { AppPage } from '../pageobjects/app.page';
 import { CalendarPage } from '../pageobjects/calendar.page';
 import { GoalSetterPage } from '../pageobjects/goal-setter.page';
-import { TimeStatsPage } from '../pageobjects/time-stats.page';
 
 // ── Overlay helpers ───────────────────────────────────────────────────────────
 // These are screencast presentation utilities, not app interactions.
