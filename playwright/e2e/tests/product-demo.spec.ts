@@ -261,13 +261,6 @@ test.describe('Product Demo', () => {
         await page.getByTestId('stats-tab-week').click();
         await page.waitForTimeout(700);
 
-        // ── Outro ─────────────────────────────────────────────────────────────
-        await page.screencast.showChapter('Time to Work', {
-            description: 'Track your hours. Own your day.',
-            duration: 3500,
-        });
-        await page.waitForTimeout(3700);
-
         await page.screencast.stop();
     });
 });
