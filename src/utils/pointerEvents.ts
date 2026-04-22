@@ -3,17 +3,19 @@
  */
 
 /**
- * Gets the Y coordinate from either a mouse or touch event
+ * Gets the Y coordinate from either a mouse or touch event, adjusted for scroll.
+ * scrollTop should be the scrollTop of the container element (0 when the page itself scrolls).
  */
 export function getPointerY(
     event: React.MouseEvent | React.TouchEvent,
     containerRect: DOMRect,
     offset: number = 0,
+    scrollTop: number = 0,
 ): number {
     if ('touches' in event) {
-        return event.touches[0].clientY - containerRect.top - offset;
+        return event.touches[0].clientY - containerRect.top + scrollTop - offset;
     }
-    return event.clientY - containerRect.top - offset;
+    return event.clientY - containerRect.top + scrollTop - offset;
 }
 
 /**

@@ -30,7 +30,7 @@ export function useBlockCreation(
             }
 
             const rect = calendarRef.current.getBoundingClientRect();
-            const y = getPointerY(e, rect, CALENDAR_PADDING_TOP);
+            const y = getPointerY(e, rect, CALENDAR_PADDING_TOP, calendarRef.current.scrollTop);
             const minutes = yToTime(y);
 
             setDragStart(minutes);
@@ -247,7 +247,7 @@ export function useCalendarInteractions(
             if (!calendarRef.current) return;
 
             const rect = calendarRef.current.getBoundingClientRect();
-            const y = getPointerY(e, rect, CALENDAR_PADDING_TOP);
+            const y = getPointerY(e, rect, CALENDAR_PADDING_TOP, calendarRef.current.scrollTop);
             const minutes = yToTime(y);
 
             // Handle different interaction types in priority order

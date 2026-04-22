@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import type { TimeBlock } from '../../types';
 import {
   HOURS_START,
@@ -71,6 +71,17 @@ function DayCalendar({
 
   // Track current time
   const currentTime = useCurrentTime(TIME_UPDATE_INTERVAL);
+
+  // Scroll to current time (or start of day) on mount
+  useEffect(() => {
+    if (!calendarRef.current) return;
+    const currentMinutes = getCurrentTimeMinutes(new Date(), HOURS_START);
+    const targetMinutes = isToday && currentMinutes >= 0 ? currentMinutes : 0;
+    const targetY = timeToY(targetMinutes) + CALENDAR_PADDING_TOP;
+    const viewportHeight = calendarRef.current.clientHeight;
+    calendarRef.current.scrollTop = Math.max(0, targetY - viewportHeight / 2);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const currentTimeMinutes = getCurrentTimeMinutes(currentTime, HOURS_START);
   const showCurrentTimeLine =
