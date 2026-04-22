@@ -11,6 +11,7 @@ import type { MonthlyAttendancePoint } from '../../../utils/attendanceCalculatio
 import StatCard from '../../time-stats/stat-card/stat-card.component';
 import ProgressBar from '../../time-stats/progress-bar/progress-bar.component';
 import MobileSummaryBar from '../../shared/mobile-summary-bar/mobile-summary-bar.component';
+import TargetBadge from '../../shared/target-badge/target-badge.component';
 import YtdChart from '../ytd-chart/ytd-chart.component';
 import './attendance-stats.css';
 
@@ -112,13 +113,12 @@ function AttendanceStats({ attendanceDays, settings }: AttendanceStatsProps) {
                 isComplete={result!.metTarget}
               />
 
-              <div
-                className={`target-badge${result!.metTarget ? ' met' : ' not-met'}`}
-                data-testid="attendance-target-badge"
-                role="status"
+              <TargetBadge
+                met={result!.metTarget}
+                testId="attendance-target-badge"
               >
                 {result!.metTarget ? '✓ Target met' : '✗ Target not met'} ({result!.targetPct}%)
-              </div>
+              </TargetBadge>
 
               <div className="attendance-breakdown" data-testid="attendance-breakdown">
                 <div className="breakdown-row">
@@ -151,12 +151,9 @@ function AttendanceStats({ attendanceDays, settings }: AttendanceStatsProps) {
         isComplete={mobileMonthResult.metTarget}
         testId="attendance-stats-mobile-bar"
         badge={
-          <div
-            className={`target-badge${mobileMonthResult.metTarget ? ' met' : ' not-met'}`}
-            role="status"
-          >
+          <TargetBadge met={mobileMonthResult.metTarget}>
             {mobileMonthResult.metTarget ? '✓ Target met' : '✗ Target not met'}
-          </div>
+          </TargetBadge>
         }
       />
       )}

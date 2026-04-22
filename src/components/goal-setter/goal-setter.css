@@ -29,29 +29,6 @@
     margin: 0;
 }
 
-.toggle-button {
-    background: var(--color-surface-subtle);
-    border: 1.5px solid var(--color-border);
-    color: var(--color-text-secondary);
-    width: 30px;
-    height: 30px;
-    border-radius: var(--radius-sm);
-    font-size: 18px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    line-height: 1;
-}
-
-.toggle-button:hover {
-    background: var(--color-border);
-    border-color: var(--color-text-muted);
-    color: var(--color-text-primary);
-}
-
 .goal-inputs {
     display: flex;
     align-items: center;
@@ -127,12 +104,6 @@
     .goal-setter h3,
     .goal-setter-header h3 {
         font-size: 14px;
-    }
-
-    .toggle-button {
-        width: 28px;
-        height: 28px;
-        font-size: 16px;
     }
 
     .goal-inputs {

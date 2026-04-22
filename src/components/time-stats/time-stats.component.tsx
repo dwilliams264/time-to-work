@@ -3,6 +3,7 @@ import { useIsMobile } from '../../hooks/useIsMobile';
 import StatCard from './stat-card/stat-card.component';
 import ProgressBar from './progress-bar/progress-bar.component';
 import MobileSummaryBar from '../shared/mobile-summary-bar/mobile-summary-bar.component';
+import TargetBadge from '../shared/target-badge/target-badge.component';
 import './time-stats.css';
 
 interface TimeStatsProps {
@@ -76,15 +77,15 @@ function TimeStats({ totalMinutes, goalMinutes, lunchEnabled, lunchMinutes }: Ti
       testId="time-stats-mobile-bar"
       badge={
         isComplete ? (
-          <div className="target-badge met" role="status" aria-live="polite" data-testid="time-stats-completion-message">
+          <TargetBadge met={true} ariaLive="polite" testId="time-stats-completion-message">
             ✓ Goal met
-          </div>
+          </TargetBadge>
         ) : (
-          <div className={`target-badge${isOverGoal ? ' met' : ' not-met'}`} role="status" data-testid="time-stats-remaining">
+          <TargetBadge met={isOverGoal} testId="time-stats-remaining">
             {isOverGoal
               ? `+${formatDuration(-remainingMinutes)} over`
               : `−${formatDuration(remainingMinutes)} left`}
-          </div>
+          </TargetBadge>
         )
       }
     />

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import DayCalendar from '../../components/day-calendar/day-calendar.component';
 import GoalSetter from '../../components/goal-setter/goal-setter.component';
 import TimeStats from '../../components/time-stats/time-stats.component';
+import NavigationHeader from '../../components/shared/navigation-header/navigation-header.component';
 import type { TimeBlock } from '../../types';
 import { formatDate } from '../../utils/timeFormatters';
 import { snapBlockToValid, calculateTotalWorkTime } from '../../utils/blockOperations';
@@ -88,26 +89,18 @@ function TimeToWork() {
 
   return (
     <>
-      <div className="date-navigation" data-testid="date-navigation">
-        <button
-          className="nav-button"
-          onClick={goToPreviousDay}
-          data-testid="previous-day-button"
-          aria-label="Previous day"
-        >
-          ←
-        </button>
-        <p className="current-date" data-testid="app-current-date">{currentDate}</p>
-        <button
-          className="nav-button"
-          onClick={goToNextDay}
-          disabled={isToday}
-          data-testid="next-day-button"
-          aria-label="Next day"
-        >
-          →
-        </button>
-      </div>
+      <NavigationHeader
+        label={currentDate}
+        onPrev={goToPreviousDay}
+        onNext={goToNextDay}
+        canGoForward={!isToday}
+        testId="date-navigation"
+        prevTestId="previous-day-button"
+        nextTestId="next-day-button"
+        labelTestId="app-current-date"
+        prevAriaLabel="Previous day"
+        nextAriaLabel="Next day"
+      />
 
       <div className="app-content">
         <div className="sidebar" data-testid="app-sidebar">
