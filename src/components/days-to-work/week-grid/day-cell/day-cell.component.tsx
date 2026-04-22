@@ -1,5 +1,6 @@
 import type { DayType } from '../../../../types/attendance';
 import { DAY_TYPE_CONFIG, DAY_TYPE_CYCLE } from '../../../../constants/attendance';
+import { DAY_NAMES_SHORT, MONTH_NAMES_SHORT } from '../../../../constants/dates';
 import './day-cell.css';
 
 interface DayCellProps {
@@ -9,13 +10,10 @@ interface DayCellProps {
   isDisabled: boolean;
 }
 
-const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
 function DayCell({ date, type, onTypeChange, isDisabled }: DayCellProps) {
-  const dayName = DAY_NAMES[date.getDay()];
+  const dayName = DAY_NAMES_SHORT[date.getDay()];
   const dateNum = date.getDate();
-  const monthName = MONTH_NAMES[date.getMonth()];
+  const monthName = MONTH_NAMES_SHORT[date.getMonth()];
 
   const handleClick = () => {
     if (isDisabled) return;

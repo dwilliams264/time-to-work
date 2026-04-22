@@ -1,7 +1,6 @@
 import type { MonthlyAttendancePoint } from '../../../utils/attendanceCalculations';
+import { MONTH_NAMES_SHORT } from '../../../constants/dates';
 import './ytd-chart.css';
-
-const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 export interface YtdChartProps {
   /** 12-element array (index 0=Jan). null = no data (future month). */
@@ -18,8 +17,8 @@ function YtdChart({ monthData, targetPct }: YtdChartProps) {
         const state = isFuture ? 'future' : data!.inProgress ? 'progress' : data!.metTarget ? 'met' : 'missed';
 
         return (
-          <div key={i} className="ytd-row" data-testid={`ytd-bar-${MONTHS_SHORT[i].toLowerCase()}`}>
-            <span className="ytd-month">{MONTHS_SHORT[i]}</span>
+          <div key={i} className="ytd-row" data-testid={`ytd-bar-${MONTH_NAMES_SHORT[i].toLowerCase()}`}>
+            <span className="ytd-month">{MONTH_NAMES_SHORT[i]}</span>
             <div className="ytd-track">
               {!isFuture && pct > 0 && (
                 <div

@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { formatDuration } from '../../utils/timeFormatters';
 import { QUICK_GOALS, MAX_GOAL_HOURS, MAX_LUNCH_HOURS } from '../../constants/calendar';
 import TimeInputGroup from './time-input-group/time-input-group.component';
+import CollapsiblePanel from '../shared/collapsible-panel/collapsible-panel.component';
 import './goal-setter.css';
 
 interface GoalSetterProps {
@@ -25,8 +25,6 @@ function GoalSetter({
   onLunchEnabledChange,
   onLunchMinutesChange
 }: GoalSetterProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
-
   const hours = Math.floor(goalMinutes / 60);
   const minutes = goalMinutes % 60;
   const lunchHours = Math.floor(lunchMinutes / 60);
@@ -57,69 +55,65 @@ function GoalSetter({
   };
 
   return (
-    <div className={`goal-setter${isExpanded ? ' is-expanded' : ''}`} data-testid="goal-setter-container">
-      <div className="goal-setter-header" data-testid="goal-setter-header" onClick={() => setIsExpanded(!isExpanded)}>
-        <h3>Daily Goal: {formatDuration(goalMinutes)}</h3>
-        <button className="toggle-button" data-testid="goal-setter-toggle" aria-label={isExpanded ? "Collapse" : "Expand"} onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}>
-          {isExpanded ? '−' : '+'}
+    <CollapsiblePanel
+      className="goal-setter"
+      headerClassName="goal-setter-header"
+      testId="goal-setter-container"
+      headerTestId="goal-setter-header"
+      toggleTestId="goal-setter-toggle"
+      header={<h3>Daily Goal: {formatDuration(goalMinutes)}</h3>}
+    >
+      <div className="goal-inputs" data-testid="goal-setter-inputs">
+        <TimeInputGroup
+          hours={hours}
+          minutes={minutes}
+          onHoursChange={handleHoursChange}
+          onMinutesChange={handleMinutesChange}
+          maxHours={MAX_GOAL_HOURS}
+          hoursId="hours"
+          minutesId="minutes"
+        />
+      </div>
+      <div className="quick-goals">
+        <button onClick={() => setQuickGoal(QUICK_GOALS.LONG)} data-testid="goal-setter-quick-long" aria-label="Set goal to 8.5 hours">
+          8.5h
+        </button>
+        <button onClick={() => setQuickGoal(QUICK_GOALS.MEDIUM)} data-testid="goal-setter-quick-medium" aria-label="Set goal to 7.5 hours">
+          7.5h
+        </button>
+        <button onClick={() => setQuickGoal(QUICK_GOALS.SHORT)} data-testid="goal-setter-quick-short" aria-label="Set goal to 6.5 hours">
+          6.5h
         </button>
       </div>
-      
-      {isExpanded && (
-        <>
-          <div className="goal-inputs" data-testid="goal-setter-inputs">
+
+      <div className="lunch-break-section" data-testid="goal-setter-lunch-section">
+        <label className="checkbox-label">
+          <input
+            type="checkbox"
+            checked={lunchEnabled}
+            onChange={(e) => onLunchEnabledChange(e.target.checked)}
+            className="lunch-checkbox"
+            data-testid="goal-setter-lunch-checkbox"
+          />
+          <span>Include lunch</span>
+        </label>
+
+        {lunchEnabled && (
+          <div className="lunch-inputs" data-testid="goal-setter-lunch-inputs">
             <TimeInputGroup
-              hours={hours}
-              minutes={minutes}
-              onHoursChange={handleHoursChange}
-              onMinutesChange={handleMinutesChange}
-              maxHours={MAX_GOAL_HOURS}
-              hoursId="hours"
-              minutesId="minutes"
+              hours={lunchHours}
+              minutes={lunchMins}
+              onHoursChange={handleLunchHoursChange}
+              onMinutesChange={handleLunchMinsChange}
+              maxHours={MAX_LUNCH_HOURS}
+              size="small"
+              hoursId="lunch-hours"
+              minutesId="lunch-minutes"
             />
           </div>
-          <div className="quick-goals">
-            <button onClick={() => setQuickGoal(QUICK_GOALS.LONG)} data-testid="goal-setter-quick-long" aria-label="Set goal to 8.5 hours">
-              8.5h
-            </button>
-            <button onClick={() => setQuickGoal(QUICK_GOALS.MEDIUM)} data-testid="goal-setter-quick-medium" aria-label="Set goal to 7.5 hours">
-              7.5h
-            </button>
-            <button onClick={() => setQuickGoal(QUICK_GOALS.SHORT)} data-testid="goal-setter-quick-short" aria-label="Set goal to 6.5 hours">
-              6.5h
-            </button>
-          </div>
-
-          <div className="lunch-break-section" data-testid="goal-setter-lunch-section">
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                checked={lunchEnabled}
-                onChange={(e) => onLunchEnabledChange(e.target.checked)}
-                className="lunch-checkbox"
-                data-testid="goal-setter-lunch-checkbox"
-              />
-              <span>Include lunch</span>
-            </label>
-
-            {lunchEnabled && (
-              <div className="lunch-inputs" data-testid="goal-setter-lunch-inputs">
-                <TimeInputGroup
-                  hours={lunchHours}
-                  minutes={lunchMins}
-                  onHoursChange={handleLunchHoursChange}
-                  onMinutesChange={handleLunchMinsChange}
-                  maxHours={MAX_LUNCH_HOURS}
-                  size="small"
-                  hoursId="lunch-hours"
-                  minutesId="lunch-minutes"
-                />
-              </div>
-            )}
-          </div>
-        </>
-      )}
-    </div>
+        )}
+      </div>
+    </CollapsiblePanel>
   );
 }
 
