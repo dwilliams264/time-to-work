@@ -140,8 +140,11 @@
     }
 
     .calendar {
+        /* No fixed height — expands to full content (1200px from inline style).
+           Page-level scroll is used on mobile; touch-action: none means all
+           touches within the calendar create/move blocks. */
         flex: none;
-        height: 500px;
+        overflow-y: visible;
     }
 
     .calendar-header {
