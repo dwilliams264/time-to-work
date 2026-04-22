@@ -1,7 +1,7 @@
-import { formatDuration } from '../../utils/timeFormatters';
-import { QUICK_GOALS, MAX_GOAL_HOURS, MAX_LUNCH_HOURS } from '../../constants/calendar';
+import { formatDuration } from '../../../utils/timeFormatters';
+import { QUICK_GOALS, MAX_GOAL_HOURS, MAX_LUNCH_HOURS } from '../../../constants/calendar';
 import TimeInputGroup from './time-input-group/time-input-group.component';
-import CollapsiblePanel from '../shared/collapsible-panel/collapsible-panel.component';
+import CollapsiblePanel from '../../shared/collapsible-panel/collapsible-panel.component';
 import './goal-setter.css';
 
 interface GoalSetterProps {

@@ -1,15 +1,12 @@
 # Time to Work
 
-A minimal daily time tracker to help you visualise and manage your work hours.
+A small work planning app with two views: attendance tracking and daily time tracking.
 
 ## Features
 
-- Visual timeline from 6:00 to 22:00
-- Click and drag to create time blocks
-- Move and resize blocks freely
-- Set daily work hour goals with a progress bar
-- Current time indicator
-- Responsive — works on desktop and mobile
+- `Days to Work` for office attendance targets, monthly views, and summary stats
+- `Time to Work` for daily time blocks, work goals, and lunch tracking
+- Responsive layouts for desktop and mobile
 
 ## Getting Started
 
@@ -26,22 +23,20 @@ Visit [http://localhost:5173](http://localhost:5173).
 
 ## Usage
 
-- **Create a block** — click and drag on the calendar
-- **Move a block** — drag it to a new position
-- **Resize a block** — drag the top or bottom edge
-- **Delete a block** — click the × button on the block
-- **Set a goal** — use the goal setter in the sidebar; quick presets available for common targets
+- Use `/` for attendance planning and `/time-to-work` for daily scheduling
+- Update attendance settings in the sidebar and mark days in the grid
+- Drag on the daily calendar to create, move, resize, and remove time blocks
 
 ## Project Structure
 
 ```
 src/
-├── components/     # UI components (calendar, goal setter, stats)
-├── hooks/          # Custom React hooks
-├── pages/          # Page-level components
-├── constants/      # App-wide constants
-├── types/          # TypeScript types
-├── utils/          # Time calculation and formatting helpers
+├── components/     # UI components
+├── pages/          # Route-level entry points
+├── hooks/          # State and interaction hooks
+├── utils/          # Time and attendance helpers
+├── constants/      # Shared configuration
+├── types/          # App types
 ├── App.tsx
 └── main.tsx
 ```

@@ -1,5 +1,5 @@
-import { timeToY } from '../../../utils/timeCalculations';
-import { formatTime } from '../../../utils/timeFormatters';
+import { timeToY } from '../../../../utils/timeCalculations';
+import { formatTime } from '../../../../utils/timeFormatters';
 import './lunch-indicator.css';
 
 interface LunchIndicatorProps {

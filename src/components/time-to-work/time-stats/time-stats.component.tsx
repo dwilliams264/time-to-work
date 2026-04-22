@@ -1,9 +1,9 @@
-import { formatDuration } from '../../utils/timeFormatters';
-import { useIsMobile } from '../../hooks/useIsMobile';
-import StatCard from './stat-card/stat-card.component';
-import ProgressBar from './progress-bar/progress-bar.component';
-import MobileSummaryBar from '../shared/mobile-summary-bar/mobile-summary-bar.component';
-import TargetBadge from '../shared/target-badge/target-badge.component';
+import { formatDuration } from '../../../utils/timeFormatters';
+import { useIsMobile } from '../../../hooks/useIsMobile';
+import StatCard from '../../shared/stat-card/stat-card.component';
+import ProgressBar from '../../shared/progress-bar/progress-bar.component';
+import MobileSummaryBar from '../../shared/mobile-summary-bar/mobile-summary-bar.component';
+import TargetBadge from '../../shared/target-badge/target-badge.component';
 import './time-stats.css';
 
 interface TimeStatsProps {

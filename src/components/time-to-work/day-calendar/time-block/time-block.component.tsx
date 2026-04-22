@@ -1,7 +1,7 @@
-import type { TimeBlock } from '../../../types';
-import { timeToY } from '../../../utils/timeCalculations';
-import { formatTime, formatDuration } from '../../../utils/timeFormatters';
-import { HOUR_HEIGHT, CALENDAR_PADDING_TOP } from '../../../constants/calendar';
+import type { TimeBlock } from '../../../../types';
+import { timeToY } from '../../../../utils/timeCalculations';
+import { formatTime, formatDuration } from '../../../../utils/timeFormatters';
+import { HOUR_HEIGHT, CALENDAR_PADDING_TOP } from '../../../../constants/calendar';
 import './time-block.css';
 
 interface TimeBlockProps {
