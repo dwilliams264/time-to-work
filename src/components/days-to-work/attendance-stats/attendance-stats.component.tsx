@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useIsMobile } from '../../../hooks/useIsMobile';
 import type { AttendanceDay, AttendanceSettings } from '../../../types/attendance';
 import {
   calculateAttendance,
@@ -9,6 +10,7 @@ import {
 import type { MonthlyAttendancePoint } from '../../../utils/attendanceCalculations';
 import StatCard from '../../time-stats/stat-card/stat-card.component';
 import ProgressBar from '../../time-stats/progress-bar/progress-bar.component';
+import MobileSummaryBar from '../../shared/mobile-summary-bar/mobile-summary-bar.component';
 import YtdChart from '../ytd-chart/ytd-chart.component';
 import './attendance-stats.css';
 
@@ -27,6 +29,7 @@ interface AttendanceStatsProps {
 
 function AttendanceStats({ attendanceDays, settings }: AttendanceStatsProps) {
   const [activePeriod, setActivePeriod] = useState<Period>('ytd');
+  const isMobile = useIsMobile();
 
   const now = new Date();
   const targetPct = Math.round((settings.daysInOffice / settings.daysWorkedPerWeek) * 100);
@@ -74,25 +77,10 @@ function AttendanceStats({ attendanceDays, settings }: AttendanceStatsProps) {
   const periods: Period[] = ['ytd', 'month', 'week'];
 
   return (
-    <div className="attendance-stats" data-testid="attendance-stats-container">
-      {/* Mobile-only compact summary pinned at the bottom */}
-      <div className="attendance-stats-mobile-bar" data-testid="attendance-stats-mobile-bar" aria-label="This month attendance summary">
-        <div className="mobile-bar-label">This Month</div>
-        <div className="mobile-bar-pct" data-testid="mobile-bar-pct">{mobileMonthResult.attendancePct}%</div>
-        <ProgressBar
-          percentage={Math.min(100, (mobileMonthResult.attendancePct / mobileMonthResult.targetPct) * 100)}
-          isComplete={mobileMonthResult.metTarget}
-        />
-        <div
-          className={`target-badge${mobileMonthResult.metTarget ? ' met' : ' not-met'}`}
-          role="status"
-        >
-          {mobileMonthResult.metTarget ? '✓ Target met' : '✗ Target not met'}
-        </div>
-      </div>
-
-      {/* Full tabbed interface — visible on tablet/desktop, hidden on mobile */}
-      <div className="attendance-stats-tabs" data-testid="attendance-stats-tabs" role="tablist">
+    <>
+      <div className="attendance-stats" data-testid="attendance-stats-container">
+        {/* Full tabbed interface — visible on tablet/desktop, hidden on mobile */}
+        <div className="attendance-stats-tabs" data-testid="attendance-stats-tabs" role="tablist">
         {periods.map((p) => (
           <button
             key={p}
@@ -105,55 +93,74 @@ function AttendanceStats({ attendanceDays, settings }: AttendanceStatsProps) {
             {PERIOD_LABELS[p]}
           </button>
         ))}
+        </div>
+
+        <div className="attendance-stats-body" data-testid="attendance-stats-body">
+          {activePeriod === 'ytd' ? (
+            <YtdChart monthData={monthData} targetPct={targetPct} />
+          ) : (
+            <>
+              <StatCard
+                title="Attendance"
+                value={`${result!.attendancePct}%`}
+                variant="primary"
+                testId="attendance-stat-pct"
+              />
+
+              <ProgressBar
+                percentage={Math.min(100, (result!.attendancePct / result!.targetPct) * 100)}
+                isComplete={result!.metTarget}
+              />
+
+              <div
+                className={`target-badge${result!.metTarget ? ' met' : ' not-met'}`}
+                data-testid="attendance-target-badge"
+                role="status"
+              >
+                {result!.metTarget ? '✓ Target met' : '✗ Target not met'} ({result!.targetPct}%)
+              </div>
+
+              <div className="attendance-breakdown" data-testid="attendance-breakdown">
+                <div className="breakdown-row">
+                  <span>Attendance days</span>
+                  <span data-testid="stat-attendance-days">{result!.attendanceDays}</span>
+                </div>
+                <div className="breakdown-row">
+                  <span>Available work days</span>
+                  <span data-testid="stat-available-days">{result!.availableWorkDays}</span>
+                </div>
+                <div className="breakdown-row">
+                  <span>WFH days</span>
+                  <span data-testid="stat-wfh-days">{result!.wfhDays}</span>
+                </div>
+                <div className="breakdown-row">
+                  <span>Leave days</span>
+                  <span data-testid="stat-leave-days">{result!.leaveDays}</span>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
-      <div className="attendance-stats-body" data-testid="attendance-stats-body">
-        {activePeriod === 'ytd' ? (
-          <YtdChart monthData={monthData} targetPct={targetPct} />
-        ) : (
-          <>
-            <StatCard
-              title="Attendance"
-              value={`${result!.attendancePct}%`}
-              variant="primary"
-              testId="attendance-stat-pct"
-            />
-
-            <ProgressBar
-              percentage={Math.min(100, (result!.attendancePct / result!.targetPct) * 100)}
-              isComplete={result!.metTarget}
-            />
-
-            <div
-              className={`target-badge${result!.metTarget ? ' met' : ' not-met'}`}
-              data-testid="attendance-target-badge"
-              role="status"
-            >
-              {result!.metTarget ? '✓ Target met' : '✗ Target not met'} ({result!.targetPct}%)
-            </div>
-
-            <div className="attendance-breakdown" data-testid="attendance-breakdown">
-              <div className="breakdown-row">
-                <span>Attendance days</span>
-                <span data-testid="stat-attendance-days">{result!.attendanceDays}</span>
-              </div>
-              <div className="breakdown-row">
-                <span>Available work days</span>
-                <span data-testid="stat-available-days">{result!.availableWorkDays}</span>
-              </div>
-              <div className="breakdown-row">
-                <span>WFH days</span>
-                <span data-testid="stat-wfh-days">{result!.wfhDays}</span>
-              </div>
-              <div className="breakdown-row">
-                <span>Leave days</span>
-                <span data-testid="stat-leave-days">{result!.leaveDays}</span>
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+      {isMobile && (
+      <MobileSummaryBar
+        title="This Month"
+        value={`${mobileMonthResult.attendancePct}%`}
+        progressPercentage={Math.min(100, (mobileMonthResult.attendancePct / mobileMonthResult.targetPct) * 100)}
+        isComplete={mobileMonthResult.metTarget}
+        testId="attendance-stats-mobile-bar"
+        badge={
+          <div
+            className={`target-badge${mobileMonthResult.metTarget ? ' met' : ' not-met'}`}
+            role="status"
+          >
+            {mobileMonthResult.metTarget ? '✓ Target met' : '✗ Target not met'}
+          </div>
+        }
+      />
+      )}
+    </>
   );
 }
 

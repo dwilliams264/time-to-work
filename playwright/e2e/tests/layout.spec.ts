@@ -28,7 +28,7 @@ test.describe('Layout', () => {
 
     test('should display all core components', { tag: ['@layout', '@components'] }, async () => {
         await expect(goalSetterPage.getGoalSetterContainer()).toBeVisible();
-        await expect(timeStatsPage.getTimeStatsContainer()).toBeVisible();
+        await expect(timeStatsPage.getTimeStatsContainer().or(timeStatsPage.getMobileSummaryBar())).toBeVisible();
         await expect(calendarPage.getCalendarContainer()).toBeVisible();
         await expect(calendarPage.getCalendarTitle()).toContainText("Today's Schedule");
     });

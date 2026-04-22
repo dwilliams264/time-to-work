@@ -71,27 +71,7 @@
 }
 
 /* ── Target badge ─────────────────────────────────────────────────────── */
-.target-badge {
-    font-size: 12.5px;
-    font-weight: 600;
-    padding: 8px 12px;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.target-badge.met {
-    background: rgba(16, 185, 129, 0.08);
-    color: var(--color-success-text);
-    border: 1px solid rgba(16, 185, 129, 0.2);
-}
-
-.target-badge.not-met {
-    background: rgba(245, 158, 11, 0.08);
-    color: #92400e;
-    border: 1px solid rgba(245, 158, 11, 0.2);
-}
+/* Base styles live in mobile-summary-bar.css; desktop body override below */
 
 .ytd-empty {
     font-size: 13px;
@@ -136,83 +116,7 @@
 }
 
 @media (max-width: 768px) {
-    .attendance-stats-body {
-        padding: 14px;
-        gap: 10px;
-    }
-
-    .stats-tab {
-        font-size: 11px;
-        padding: 6px 2px;
-    }
-}
-
-/* ── Mobile summary bar (hidden on desktop) ───────────────────────────── */
-.attendance-stats-mobile-bar {
-    display: none;
-}
-
-.mobile-bar-label {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-text-secondary);
-    flex-shrink: 0;
-}
-
-.mobile-bar-pct {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--brand-from);
-    flex-shrink: 0;
-    line-height: 1;
-}
-
-/* ── Mobile: pin as a compact floating bottom bar ─────────────────── */
-@media (max-width: 768px) {
     .attendance-stats {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
-        z-index: 100;
-        overflow: hidden;
-    }
-
-    .attendance-stats-mobile-bar {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 10px 16px 16px;
-        position: relative;
-    }
-
-    .attendance-stats-mobile-bar .progress-bar {
-        flex: 1;
-        min-width: 0;
-        position: static;
-        height: 8px;
-        border-radius: var(--radius-pill);
-        margin: 0;
-    }
-
-    .attendance-stats-mobile-bar .progress-fill {
-        border-radius: var(--radius-pill);
-    }
-
-    .attendance-stats-tabs,
-    .attendance-stats-body {
         display: none;
-    }
-
-    .attendance-stats-mobile-bar .target-badge {
-        font-size: 11px;
-        padding: 4px 8px;
-        border-radius: var(--radius-sm);
-        flex-shrink: 0;
-        white-space: nowrap;
     }
 }
