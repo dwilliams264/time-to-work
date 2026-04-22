@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import DayCalendar from '../../components/day-calendar/day-calendar.component';
-import GoalSetter from '../../components/goal-setter/goal-setter.component';
-import TimeStats from '../../components/time-stats/time-stats.component';
+import DayCalendar from '../../components/time-to-work/day-calendar/day-calendar.component';
+import GoalSetter from '../../components/time-to-work/goal-setter/goal-setter.component';
+import TimeStats from '../../components/time-to-work/time-stats/time-stats.component';
 import NavigationHeader from '../../components/shared/navigation-header/navigation-header.component';
 import type { TimeBlock } from '../../types';
 import { formatDate } from '../../utils/timeFormatters';

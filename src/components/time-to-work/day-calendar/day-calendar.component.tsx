@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import type { TimeBlock } from '../../types';
+import type { TimeBlock } from '../../../types';
 import {
   HOURS_START,
   TOTAL_HOURS,
@@ -7,10 +7,10 @@ import {
   MIN_BLOCK_DURATION,
   TIME_UPDATE_INTERVAL,
   CALENDAR_PADDING_TOP,
-} from '../../constants/calendar';
-import { timeToY, getCurrentTimeMinutes } from '../../utils/timeCalculations';
-import { formatDuration } from '../../utils/timeFormatters';
-import { useCalendarInteractions, useCurrentTime } from '../../hooks/useCalendarInteractions';
+} from '../../../constants/calendar';
+import { timeToY, getCurrentTimeMinutes } from '../../../utils/timeCalculations';
+import { formatDuration } from '../../../utils/timeFormatters';
+import { useCalendarInteractions, useCurrentTime } from '../../../hooks/useCalendarInteractions';
 import TimeBlockComponent from './time-block/time-block.component';
 import HourRow from './hour-row/hour-row.component';
 import LunchIndicator from './lunch-indicator/lunch-indicator.component';

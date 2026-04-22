@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import ProgressBar from '../../time-stats/progress-bar/progress-bar.component';
+import ProgressBar from '../progress-bar/progress-bar.component';
 import './mobile-summary-bar.css';
 
 interface MobileSummaryBarProps {

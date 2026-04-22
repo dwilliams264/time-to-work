@@ -8,8 +8,8 @@ import {
   getThisMonthRange,
 } from '../../../utils/attendanceCalculations';
 import type { MonthlyAttendancePoint } from '../../../utils/attendanceCalculations';
-import StatCard from '../../time-stats/stat-card/stat-card.component';
-import ProgressBar from '../../time-stats/progress-bar/progress-bar.component';
+import StatCard from '../../shared/stat-card/stat-card.component';
+import ProgressBar from '../../shared/progress-bar/progress-bar.component';
 import MobileSummaryBar from '../../shared/mobile-summary-bar/mobile-summary-bar.component';
 import TargetBadge from '../../shared/target-badge/target-badge.component';
 import YtdChart from '../ytd-chart/ytd-chart.component';
