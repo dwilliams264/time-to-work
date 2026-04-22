@@ -24,7 +24,10 @@ export class TimeStatsPage {
     }
 
     getTimeWorkedValue() {
-        return this.page.getByTestId('time-stats-time-worked').locator('.stat-value');
+        return this.page
+            .getByTestId('time-stats-time-worked')
+            .locator('.stat-value')
+            .or(this.page.getByTestId('time-stats-mobile-bar').locator('.mobile-summary-value'));
     }
 
     getRemainingCard() {
@@ -44,11 +47,11 @@ export class TimeStatsPage {
     }
 
     getProgressBar() {
-        return this.getTimeStatsContainer().getByTestId('time-stats-progress-bar');
+        return this.page.getByTestId('time-stats-progress-bar');
     }
 
     getProgressFill() {
-        return this.getTimeStatsContainer().getByTestId('time-stats-progress-fill');
+        return this.page.getByTestId('time-stats-progress-fill');
     }
 
     getCompletionMessage() {

@@ -76,11 +76,11 @@ function TimeStats({ totalMinutes, goalMinutes, lunchEnabled, lunchMinutes }: Ti
       testId="time-stats-mobile-bar"
       badge={
         isComplete ? (
-          <div className="target-badge met" role="status" aria-live="polite">
+          <div className="target-badge met" role="status" aria-live="polite" data-testid="time-stats-completion-message">
             ✓ Goal met
           </div>
         ) : (
-          <div className={`target-badge${isOverGoal ? ' met' : ' not-met'}`} role="status">
+          <div className={`target-badge${isOverGoal ? ' met' : ' not-met'}`} role="status" data-testid="time-stats-remaining">
             {isOverGoal
               ? `+${formatDuration(-remainingMinutes)} over`
               : `−${formatDuration(remainingMinutes)} left`}
