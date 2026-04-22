@@ -40,11 +40,11 @@ export class TimeStatsPage {
     }
 
     getProgressBar() {
-        return this.page.getByTestId('time-stats-progress-bar');
+        return this.getTimeStatsContainer().getByTestId('time-stats-progress-bar');
     }
 
     getProgressFill() {
-        return this.page.getByTestId('time-stats-progress-fill');
+        return this.getTimeStatsContainer().getByTestId('time-stats-progress-fill');
     }
 
     getCompletionMessage() {

@@ -1,6 +1,7 @@
 import { formatDuration } from '../../utils/timeFormatters';
 import StatCard from './stat-card/stat-card.component';
 import ProgressBar from './progress-bar/progress-bar.component';
+import MobileSummaryBar from '../shared/mobile-summary-bar/mobile-summary-bar.component';
 import './time-stats.css';
 
 interface TimeStatsProps {
@@ -24,6 +25,7 @@ function TimeStats({ totalMinutes, goalMinutes, lunchEnabled, lunchMinutes }: Ti
   const totalTimeAtWork = lunchEnabled ? goalMinutes + lunchMinutes : goalMinutes;
 
   return (
+    <>
     <div className="time-stats" data-testid="time-stats-container">
       <StatCard title="Time Worked" value={formatDuration(totalMinutes)} variant="primary" testId="time-stats-time-worked" />
 
@@ -60,6 +62,28 @@ function TimeStats({ totalMinutes, goalMinutes, lunchEnabled, lunchMinutes }: Ti
         </div>
       )}
     </div>
+
+    <MobileSummaryBar
+      title="Time Worked"
+      value={formatDuration(totalMinutes)}
+      progressPercentage={progressPercentage}
+      isComplete={isComplete}
+      testId="time-stats-mobile-bar"
+      badge={
+        isComplete ? (
+          <div className="target-badge met" role="status" aria-live="polite">
+            ✓ Goal met
+          </div>
+        ) : (
+          <div className={`target-badge${isOverGoal ? ' met' : ' not-met'}`} role="status">
+            {isOverGoal
+              ? `+${formatDuration(-remainingMinutes)} over`
+              : `−${formatDuration(remainingMinutes)} left`}
+          </div>
+        )
+      }
+    />
+  </>
   );
 }
 

@@ -18,35 +18,3 @@
 .progress-fill.complete {
     background: linear-gradient(90deg, var(--color-success-from) 0%, var(--color-success-to) 100%);
 }
-
-@media (max-width: 768px) {
-    .progress-bar {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        margin: 0;
-        border-radius: 0;
-    }
-
-    .progress-fill {
-        border-radius: 0;
-    }
-}
-
-@media (max-width: 768px) {
-    .progress-bar {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        margin: 0;
-        border-radius: 0;
-    }
-
-    .progress-fill {
-        border-radius: 0;
-    }
-}
