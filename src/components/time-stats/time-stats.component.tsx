@@ -1,4 +1,5 @@
 import { formatDuration } from '../../utils/timeFormatters';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import StatCard from './stat-card/stat-card.component';
 import ProgressBar from './progress-bar/progress-bar.component';
 import MobileSummaryBar from '../shared/mobile-summary-bar/mobile-summary-bar.component';
@@ -20,12 +21,14 @@ function TimeStats({ totalMinutes, goalMinutes, lunchEnabled, lunchMinutes }: Ti
   const progressPercentage = Math.min(100, (totalMinutes / goalMinutes) * 100);
   const isComplete = totalMinutes >= goalMinutes;
   const isOverGoal = totalMinutes > goalMinutes;
+  const isMobile = useIsMobile();
   
   // Total time at work (for display purposes when lunch is enabled)
   const totalTimeAtWork = lunchEnabled ? goalMinutes + lunchMinutes : goalMinutes;
 
   return (
     <>
+    {!isMobile && (
     <div className="time-stats" data-testid="time-stats-container">
       <StatCard title="Time Worked" value={formatDuration(totalMinutes)} variant="primary" testId="time-stats-time-worked" />
 
@@ -62,7 +65,9 @@ function TimeStats({ totalMinutes, goalMinutes, lunchEnabled, lunchMinutes }: Ti
         </div>
       )}
     </div>
+    )}
 
+    {isMobile && (
     <MobileSummaryBar
       title="Time Worked"
       value={formatDuration(totalMinutes)}
@@ -83,6 +88,7 @@ function TimeStats({ totalMinutes, goalMinutes, lunchEnabled, lunchMinutes }: Ti
         )
       }
     />
+    )}
   </>
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useIsMobile } from '../../../hooks/useIsMobile';
 import type { AttendanceDay, AttendanceSettings } from '../../../types/attendance';
 import {
   calculateAttendance,
@@ -28,6 +29,7 @@ interface AttendanceStatsProps {
 
 function AttendanceStats({ attendanceDays, settings }: AttendanceStatsProps) {
   const [activePeriod, setActivePeriod] = useState<Period>('ytd');
+  const isMobile = useIsMobile();
 
   const now = new Date();
   const targetPct = Math.round((settings.daysInOffice / settings.daysWorkedPerWeek) * 100);
@@ -141,6 +143,7 @@ function AttendanceStats({ attendanceDays, settings }: AttendanceStatsProps) {
         </div>
       </div>
 
+      {isMobile && (
       <MobileSummaryBar
         title="This Month"
         value={`${mobileMonthResult.attendancePct}%`}
@@ -156,6 +159,7 @@ function AttendanceStats({ attendanceDays, settings }: AttendanceStatsProps) {
           </div>
         }
       />
+      )}
     </>
   );
 }

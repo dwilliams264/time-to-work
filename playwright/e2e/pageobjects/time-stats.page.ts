@@ -11,6 +11,10 @@ export class TimeStatsPage {
         return this.page.getByTestId('time-stats-container');
     }
 
+    getMobileSummaryBar() {
+        return this.page.getByTestId('time-stats-mobile-bar');
+    }
+
     getStatCards() {
         return this.page.locator('.stat-card');
     }
