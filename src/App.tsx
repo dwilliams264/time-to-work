@@ -36,10 +36,12 @@ function App() {
         </nav>
       </header>
 
-      <Routes>
-        <Route path="/" element={<DaysToWork />} />
-        <Route path="/time-to-work" element={<TimeToWork />} />
-      </Routes>
+      <main id="main">
+        <Routes>
+          <Route path="/" element={<DaysToWork />} />
+          <Route path="/time-to-work" element={<TimeToWork />} />
+        </Routes>
+      </main>
     </div>
   );
 }

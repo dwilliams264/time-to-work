@@ -27,6 +27,30 @@ Visit [http://localhost:5173](http://localhost:5173).
 - Update attendance settings in the sidebar and mark days in the grid
 - Drag on the daily calendar to create, move, resize, and remove time blocks
 
+### Keyboard Navigation
+
+The application is fully keyboard accessible:
+
+- **Tab** / **Shift+Tab** — Navigate between interactive elements
+- **Enter** or **Space** — Activate buttons and toggle states
+- **Arrow Up/Down** — Move time blocks and lunch indicator (15-min increments)
+- **Delete** or **Backspace** — Remove focused time block
+- **Tab** from page load — Access skip navigation link
+
+For complete keyboard shortcuts and accessibility features, see [ACCESSIBILITY.md](ACCESSIBILITY.md).
+
+## Accessibility
+
+This application targets **WCAG 2.1 AA compliance** with comprehensive support for:
+
+- ✅ Full keyboard navigation
+- ✅ Screen reader compatibility
+- ✅ Focus indicators
+- ✅ Reduced motion support
+- ✅ ARIA live regions for dynamic updates
+
+See [ACCESSIBILITY.md](ACCESSIBILITY.md) for detailed implementation guide and testing procedures.
+
 ## Project Structure
 
 ```

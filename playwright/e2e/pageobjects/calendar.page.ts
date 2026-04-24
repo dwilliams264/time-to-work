@@ -82,6 +82,9 @@ export class CalendarPage {
     async createBlockByDragging(startYOffset: number, endYOffset: number) {
         const calendar = this.getCalendar();
 
+        // Ensure calendar is in viewport (important for mobile with page-level scroll)
+        await calendar.scrollIntoViewIfNeeded();
+
         // Reset internal scroll so drag coordinates are time-independent.
         await calendar.evaluate((el) => {
             (el as HTMLElement).scrollTop = 0;
