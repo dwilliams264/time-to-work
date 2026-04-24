@@ -23,6 +23,14 @@ function DayCell({ date, type, onTypeChange, isDisabled }: DayCellProps) {
     onTypeChange(nextType ?? null);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (isDisabled) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleClick();
+    }
+  };
+
   const config = type ? DAY_TYPE_CONFIG[type] : null;
 
   return (
@@ -30,9 +38,11 @@ function DayCell({ date, type, onTypeChange, isDisabled }: DayCellProps) {
       className={`day-cell${config ? ` ${config.colorClass}` : ''}${isDisabled ? ' day-cell-disabled' : ''}`}
       data-testid={`day-cell-${formatDateStr(date)}`}
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
       role="button"
       aria-label={`${dayName} ${dateNum} ${monthName}${type ? `: ${config!.label}` : ''}`}
       aria-disabled={isDisabled}
+      tabIndex={isDisabled ? -1 : 0}
     >
       <div className="day-cell-header">
         <span className="day-cell-name">{dayName}</span>

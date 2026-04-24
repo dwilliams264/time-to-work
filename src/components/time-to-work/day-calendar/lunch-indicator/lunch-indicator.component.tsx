@@ -6,12 +6,31 @@ interface LunchIndicatorProps {
   startTime: number;
   duration: number;
   onStartMove: () => void;
+  onTimeChange: (startTime: number) => void;
 }
 
 /**
  * Lunch break indicator on the calendar
+ * Supports keyboard navigation: Arrow Up/Down to adjust time by 15-minute increments
  */
-function LunchIndicator({ startTime, duration, onStartMove }: LunchIndicatorProps) {
+function LunchIndicator({ startTime, duration, onStartMove, onTimeChange }: LunchIndicatorProps) {
+  const MOVE_STEP_MINUTES = 15; // Move by 15-minute increments
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    switch (e.key) {
+      case 'ArrowUp':
+        e.preventDefault();
+        // Move lunch earlier
+        onTimeChange(Math.max(0, startTime - MOVE_STEP_MINUTES));
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        // Move lunch later
+        onTimeChange(startTime + MOVE_STEP_MINUTES);
+        break;
+    }
+  };
+
   return (
     <div
       className="lunch-indicator"
@@ -27,6 +46,10 @@ function LunchIndicator({ startTime, duration, onStartMove }: LunchIndicatorProp
         e.stopPropagation();
         onStartMove();
       }}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="button"
+      aria-label={`Lunch break at ${formatTime(startTime)}. Press Arrow Up or Down to adjust time.`}
       data-testid="calendar-lunch-indicator"
     >
       <div className="lunch-content">
