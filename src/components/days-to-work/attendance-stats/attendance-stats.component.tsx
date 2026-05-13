@@ -6,6 +6,7 @@ import {
   getMonthlyAttendance,
   getThisWeekRange,
   getThisMonthRange,
+  getThisYearRange,
 } from '../../../utils/attendanceCalculations';
 import type { MonthlyAttendancePoint } from '../../../utils/attendanceCalculations';
 import StatCard from '../../shared/stat-card/stat-card.component';
@@ -71,6 +72,10 @@ function AttendanceStats({ attendanceDays, settings }: AttendanceStatsProps) {
     return null;
   });
 
+  // Overall YTD result (Jan 1 → today)
+  const [ytdStart, ytdEnd] = getThisYearRange(now);
+  const ytdResult = calculateAttendance(attendanceDays, ytdStart, ytdEnd, settings);
+
   // Always compute this-month result for the mobile summary bar
   const [mobileMonthStart, mobileMonthEnd] = getThisMonthRange(now);
   const mobileMonthResult = calculateAttendance(attendanceDays, mobileMonthStart, mobileMonthEnd, settings);
@@ -98,7 +103,28 @@ function AttendanceStats({ attendanceDays, settings }: AttendanceStatsProps) {
 
         <div className="attendance-stats-body" data-testid="attendance-stats-body">
           {activePeriod === 'ytd' ? (
-            <YtdChart monthData={monthData} targetPct={targetPct} />
+            <>
+              <StatCard
+                title="Attendance"
+                value={`${ytdResult.attendancePct}%`}
+                variant="primary"
+                testId="ytd-stat-pct"
+              />
+
+              <ProgressBar
+                percentage={Math.min(100, (ytdResult.attendancePct / ytdResult.targetPct) * 100)}
+                isComplete={ytdResult.metTarget}
+              />
+
+              <TargetBadge
+                met={ytdResult.metTarget}
+                testId="ytd-target-badge"
+              >
+                {ytdResult.metTarget ? '✓ Target met' : '✗ Target not met'} ({ytdResult.targetPct}%)
+              </TargetBadge>
+
+              <YtdChart monthData={monthData} targetPct={targetPct} />
+            </>
           ) : (
             <>
               <StatCard
