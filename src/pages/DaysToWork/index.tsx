@@ -6,8 +6,6 @@ import AttendanceSettingsPanel from '../../components/days-to-work/attendance-se
 import AttendanceStats from '../../components/days-to-work/attendance-stats/attendance-stats.component';
 import WeekGrid from '../../components/days-to-work/week-grid/week-grid.component';
 
-const MAX_MONTHS_BACK = 2;
-
 function getMonthWeekdays(year: number, month: number): Date[] {
   const days: Date[] = [];
   const date = new Date(year, month, 1);
@@ -27,6 +25,9 @@ function DaysToWork() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
+  // Allow navigation back up to 12 months (1 year of stored data)
+  const maxMonthsBack = 12;
+
   const [monthOffset, setMonthOffset] = useState(0);
 
   const displayDate = new Date(today.getFullYear(), today.getMonth() + monthOffset, 1);
@@ -35,7 +36,7 @@ function DaysToWork() {
   const days = getMonthWeekdays(displayYear, displayMonth);
   const label = `${MONTH_NAMES_FULL[displayMonth]} ${displayYear}`;
 
-  const canGoBack = monthOffset > -MAX_MONTHS_BACK;
+  const canGoBack = monthOffset > -maxMonthsBack;
   const canGoForward = monthOffset < 0;
 
   return (
