@@ -1,4 +1,4 @@
-import { HOUR_HEIGHT } from '../../../constants/calendar';
+import { HOUR_HEIGHT } from '../../../../constants/calendar';
 import './hour-row.css';
 
 interface HourRowProps {

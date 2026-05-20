@@ -11,6 +11,10 @@ export class TimeStatsPage {
         return this.page.getByTestId('time-stats-container');
     }
 
+    getMobileSummaryBar() {
+        return this.page.getByTestId('time-stats-mobile-bar');
+    }
+
     getStatCards() {
         return this.page.locator('.stat-card');
     }
@@ -20,7 +24,10 @@ export class TimeStatsPage {
     }
 
     getTimeWorkedValue() {
-        return this.page.getByTestId('time-stats-time-worked').locator('.stat-value');
+        return this.page
+            .getByTestId('time-stats-time-worked')
+            .locator('.stat-value')
+            .or(this.page.getByTestId('time-stats-mobile-bar').locator('.mobile-summary-value'));
     }
 
     getRemainingCard() {

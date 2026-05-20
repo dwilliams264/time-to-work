@@ -16,7 +16,7 @@ export interface DayData {
  */
 export class StorageService {
     private static readonly PREFIX = 'timeToWork_';
-    private static readonly MAX_STORAGE_DAYS = 90;
+    private static readonly MAX_STORAGE_DAYS = 365;
 
     /**
      * Generates a storage key for a specific date

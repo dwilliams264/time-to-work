@@ -1,15 +1,10 @@
 import { useState } from 'react';
 import { useAttendanceData } from '../../hooks/useAttendanceData';
+import NavigationHeader from '../../components/shared/navigation-header/navigation-header.component';
+import { MONTH_NAMES_FULL } from '../../constants/dates';
 import AttendanceSettingsPanel from '../../components/days-to-work/attendance-settings/attendance-settings.component';
 import AttendanceStats from '../../components/days-to-work/attendance-stats/attendance-stats.component';
 import WeekGrid from '../../components/days-to-work/week-grid/week-grid.component';
-
-const MONTH_NAMES = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
-];
-
-const MAX_MONTHS_BACK = 2;
 
 function getMonthWeekdays(year: number, month: number): Date[] {
   const days: Date[] = [];
@@ -30,42 +25,35 @@ function DaysToWork() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
+  // Allow navigation back up to 12 months (1 year of stored data)
+  const maxMonthsBack = 12;
+
   const [monthOffset, setMonthOffset] = useState(0);
 
   const displayDate = new Date(today.getFullYear(), today.getMonth() + monthOffset, 1);
   const displayYear = displayDate.getFullYear();
   const displayMonth = displayDate.getMonth();
   const days = getMonthWeekdays(displayYear, displayMonth);
-  const label = `${MONTH_NAMES[displayMonth]} ${displayYear}`;
+  const label = `${MONTH_NAMES_FULL[displayMonth]} ${displayYear}`;
 
-  const canGoBack = monthOffset > -MAX_MONTHS_BACK;
+  const canGoBack = monthOffset > -maxMonthsBack;
   const canGoForward = monthOffset < 0;
 
   return (
     <>
-      <div className="date-navigation" data-testid="week-navigation">
-        <button
-          className="nav-button"
-          onClick={() => setMonthOffset((o) => o - 1)}
-          disabled={!canGoBack}
-          aria-label="Previous month"
-          data-testid="week-grid-prev"
-        >
-          ←
-        </button>
-        <p className="current-date" data-testid="week-grid-label">
-          {label}
-        </p>
-        <button
-          className="nav-button"
-          onClick={() => setMonthOffset((o) => o + 1)}
-          disabled={!canGoForward}
-          aria-label="Next month"
-          data-testid="week-grid-next"
-        >
-          →
-        </button>
-      </div>
+      <NavigationHeader
+        label={label}
+        onPrev={() => setMonthOffset((o) => o - 1)}
+        onNext={() => setMonthOffset((o) => o + 1)}
+        canGoBack={canGoBack}
+        canGoForward={canGoForward}
+        testId="week-navigation"
+        prevTestId="week-grid-prev"
+        nextTestId="week-grid-next"
+        labelTestId="week-grid-label"
+        prevAriaLabel="Previous month"
+        nextAriaLabel="Next month"
+      />
 
       <div className="app-content" data-testid="days-to-work-content">
         <div className="sidebar" data-testid="days-to-work-sidebar">

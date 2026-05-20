@@ -1,5 +1,6 @@
 import type { DayType } from '../../../../types/attendance';
 import { DAY_TYPE_CONFIG, DAY_TYPE_CYCLE } from '../../../../constants/attendance';
+import { DAY_NAMES_SHORT, MONTH_NAMES_SHORT } from '../../../../constants/dates';
 import './day-cell.css';
 
 interface DayCellProps {
@@ -9,13 +10,10 @@ interface DayCellProps {
   isDisabled: boolean;
 }
 
-const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
 function DayCell({ date, type, onTypeChange, isDisabled }: DayCellProps) {
-  const dayName = DAY_NAMES[date.getDay()];
+  const dayName = DAY_NAMES_SHORT[date.getDay()];
   const dateNum = date.getDate();
-  const monthName = MONTH_NAMES[date.getMonth()];
+  const monthName = MONTH_NAMES_SHORT[date.getMonth()];
 
   const handleClick = () => {
     if (isDisabled) return;
@@ -25,6 +23,14 @@ function DayCell({ date, type, onTypeChange, isDisabled }: DayCellProps) {
     onTypeChange(nextType ?? null);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (isDisabled) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleClick();
+    }
+  };
+
   const config = type ? DAY_TYPE_CONFIG[type] : null;
 
   return (
@@ -32,9 +38,11 @@ function DayCell({ date, type, onTypeChange, isDisabled }: DayCellProps) {
       className={`day-cell${config ? ` ${config.colorClass}` : ''}${isDisabled ? ' day-cell-disabled' : ''}`}
       data-testid={`day-cell-${formatDateStr(date)}`}
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
       role="button"
       aria-label={`${dayName} ${dateNum} ${monthName}${type ? `: ${config!.label}` : ''}`}
       aria-disabled={isDisabled}
+      tabIndex={isDisabled ? -1 : 0}
     >
       <div className="day-cell-header">
         <span className="day-cell-name">{dayName}</span>

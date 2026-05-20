@@ -1,0 +1,79 @@
+/* ── Shared badge styles now live in target-badge/target-badge.css ────── */
+
+.mobile-summary-bar {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-summary-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px 16px;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Small uppercase label — "THIS MONTH", "TIME WORKED" */
+    .mobile-summary-label {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--color-text-secondary);
+        flex-shrink: 0;
+    }
+
+    /* Large bold value — "63%", "7h 30m" */
+    .mobile-summary-value {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--brand-from);
+        flex-shrink: 0;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* Progress bar stretches to fill available space */
+    .mobile-summary-bar .progress-bar {
+        position: relative;
+        flex: 1;
+        min-width: 0;
+        height: 8px;
+        border-radius: var(--radius-pill);
+        margin: 0;
+        overflow: hidden;
+    }
+
+    .mobile-summary-bar .progress-fill {
+        border-radius: var(--radius-pill);
+    }
+
+    /* Compact target badge */
+    .mobile-summary-bar .target-badge {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 5px 10px;
+        border-radius: var(--radius-pill);
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    /* Completion emoji (time-to-work bar) */
+    .mobile-summary-bar .completion-message {
+        margin: 0;
+        padding: 0;
+        background: none;
+        border: none;
+        color: var(--color-success-from);
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+}

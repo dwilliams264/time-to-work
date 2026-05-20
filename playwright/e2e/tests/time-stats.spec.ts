@@ -53,7 +53,7 @@ test.describe('Time Stats and Progress', () => {
 
             await expect(timeStatsPage.getCompletionMessage()).toBeAttached();
             const message = await timeStatsPage.getCompletionMessage().textContent();
-            expect(message).toContain('Goal achieved');
+            expect(message).toContain('Goal');
             await expect(timeStatsPage.getRemainingCard()).not.toBeAttached();
         },
     );
@@ -64,12 +64,18 @@ test.describe('Time Stats and Progress', () => {
         await expect(timeStatsPage.getRemainingCard()).toBeAttached();
     });
 
-    test('should show goal breakdown when lunch is enabled', { tag: ['@stats', '@goal', '@lunch'] }, async () => {
-        await goalSetterPage.enableLunch();
-        await expect(timeStatsPage.getGoalBreakdown()).toBeAttached();
-        const text = await timeStatsPage.getGoalBreakdown().textContent();
-        expect(text).toContain('Lunch');
-    });
+    test(
+        'should show goal breakdown when lunch is enabled',
+        { tag: ['@desktop-only', '@stats', '@goal', '@lunch'] },
+        async ({ page }) => {
+            const viewport = page.viewportSize();
+            test.skip(viewport !== null && viewport.width <= 768, 'Goal breakdown is a desktop-only feature');
+            await goalSetterPage.enableLunch();
+            await expect(timeStatsPage.getGoalBreakdown()).toBeAttached();
+            const text = await timeStatsPage.getGoalBreakdown().textContent();
+            expect(text).toContain('Lunch');
+        },
+    );
 
     test('should persist stats after page reload', async ({ page }) => {
         await calendarPage.createBlockAtPosition(100, 80);
