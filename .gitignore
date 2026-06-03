@@ -28,3 +28,6 @@ dist-ssr
 /test-results/
 /allure-results/
 /allure-report/
+
+# TestChronicle
+testchronicle.config.json
